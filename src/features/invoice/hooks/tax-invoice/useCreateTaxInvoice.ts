@@ -1,17 +1,24 @@
 "use client";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import { INVOICES } from "../../constants/invoice.constants";
+import {
+	INVOICES,
+	NO_TAX_RATE,
+	TAX_RATE,
+} from "../../constants/invoice.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TTaxInvoiceDTO } from "../../types/invoice.types";
-import { taxInvoiceSchmea } from "../../schema/tax-invoice.schema";
-import { useTaxInvoiceLineStore } from "../../store/tax-invoice-line.store";
+import {
+	createTaxInvoiceSchema,
+	TCreateTaxInvoiceDTO,
+	TTaxInvoiceDTO,
+} from "../../schema/tax-invoice.schema";
 
 export const useCreateTaxInvoice = () => {
-	const { invoiceLines } = useTaxInvoiceLineStore();
-	const { isPending } = useApiMutation<TTaxInvoiceDTO, TCreateTaxInvoiceDTO>({
+	const { mutate, isPending } = useApiMutation<
+		TTaxInvoiceDTO,
+		TCreateTaxInvoiceDTO
+	>({
 		axiosRequestMethod: "post",
 		queryKey: [INVOICES],
 		requestURL: `/${INVOICES}`,
@@ -20,42 +27,33 @@ export const useCreateTaxInvoice = () => {
 
 	const currentDate = new Date();
 
-	const createTaxInvoiceSchema = taxInvoiceSchmea;
-
-	type TCreateTaxInvoiceDTO = z.infer<typeof createTaxInvoiceSchema>;
-
 	const CreateTaxInvoiceForm = useForm<TCreateTaxInvoiceDTO>({
 		resolver: zodResolver(createTaxInvoiceSchema),
 		mode: "onChange",
 		defaultValues: {
-			ActualDeliveryDate: currentDate.toISOString().split("T")[0],
-			ClassifiedTaxCategory: undefined,
-			TaxRate: "0",
-			BuyerInfo: "",
-			DiscountAmount: "",
-			DocumentCurrencyCode: "SAR",
-			InvoiceType: "0100000",
-			InvoiceTypeCode: undefined,
-			IssueDate: currentDate.toISOString().split("T")[0],
-			IssueTime: currentDate.toLocaleTimeString("en-US", {
+			actual_delivery_date: currentDate.toISOString().split("T")[0],
+			classified_tax_category: undefined,
+			tax_rate: "",
+			customer: "",
+			discount_amount: null,
+			document_currency_code: "SAR",
+			invoice_type: "0100000",
+			invoice_type_code: undefined,
+			issue_date: currentDate.toISOString().split("T")[0],
+			issue_time: currentDate.toLocaleTimeString("en-US", {
 				hour12: false,
 			}),
-			LineExtensionAmount: "",
-			Note: "",
-			PayableAmount: "",
-			SellerInfo: "10",
-			TaxableAmount: "",
-			TaxAmount: "",
-			TaxInclusiveAmount: "",
-			InstructionNote: "",
-			OriginalInvoiceID: undefined,
-			PaymentMeansCode: "",
-			invoiceLines: [],
+			note: "",
+			instruction_note: "",
+			original_invoice_id: undefined,
+			payment_means_code: "",
+			invoice_lines: [],
 		},
 	});
 
 	const onCreateTaxInvoice = (values: TCreateTaxInvoiceDTO) => {
-		console.log({ ...values, invoiceLines: invoiceLines || [] });
+		const taxRate = values.tax_rate === "0" ? NO_TAX_RATE : TAX_RATE;
+		mutate({ ...values, tax_rate: taxRate });
 	};
 
 	return {

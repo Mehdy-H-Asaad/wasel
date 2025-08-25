@@ -6,11 +6,12 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import {
-	clients,
 	INVOICE_IDS,
 	PAYMENTS_TYPES,
 	TAX_CATEGORIES,
+	NO_TAX_RATE,
 	VAT_DOCUMENTS,
+	TAX_RATE,
 } from "@/features/invoice/constants/invoice.constants";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
 import {
@@ -22,27 +23,52 @@ import {
 	SelectLabel,
 	SelectItem,
 } from "@/components/ui/select";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { useTaxInvoiceLineStore } from "@/features/invoice/store/tax-invoice-line.store";
+import { useGetClients } from "@/features/clients/hooks/useGetClients";
+import { handleNumberInput } from "@/shared/utils/handle-number-input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { ChevronDownIcon } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 export const CreateTaxInvoiceOptions = () => {
 	const form = useFormContext<TCreateTaxInvoiceDTO>();
-	const { removeAll } = useTaxInvoiceLineStore();
+
 	const VATDocuments = useWatch({
 		control: form.control,
-		name: "InvoiceTypeCode",
+		name: "invoice_type_code",
 	});
+
+	const classified_tax_category = useWatch({
+		control: form.control,
+		name: "classified_tax_category",
+	});
+
+	useEffect(() => {
+		if (classified_tax_category === "Z") {
+			form.setValue("tax_rate", NO_TAX_RATE);
+		} else {
+			form.setValue("tax_rate", TAX_RATE);
+		}
+	}, [classified_tax_category]);
+
+	const { clients } = useGetClients();
 
 	return (
 		<div className="flex flex-col gap-4 dark:bg-main-black p-8 rounded-xl bg-white">
-			<div className="text-4xl font-bold">Tax Invoice Options</div>
+			<div className="text-2xl font-bold">Tax Invoice Options</div>
 			<div className="flex flex-col gap-4">
 				<div className="border grid grid-cols-4 gap-10 p-8 rounded-2xl">
 					<FormField
 						control={form.control}
-						name="BuyerInfo"
+						name="customer"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Client - Company *</FormLabel>
@@ -58,12 +84,12 @@ export const CreateTaxInvoiceOptions = () => {
 									<SelectContent>
 										<SelectGroup>
 											<SelectLabel>Clients</SelectLabel>
-											{clients.map(client => (
+											{clients?.map(client => (
 												<SelectItem
-													value={client.value.toString()}
-													key={client.value}
+													value={client.id.toString()}
+													key={client.id}
 												>
-													{client.label}
+													{client.registration_name}
 												</SelectItem>
 											))}
 										</SelectGroup>
@@ -76,7 +102,7 @@ export const CreateTaxInvoiceOptions = () => {
 
 					<FormField
 						control={form.control}
-						name="InvoiceTypeCode"
+						name="invoice_type_code"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>VAT Documents *</FormLabel>
@@ -109,7 +135,7 @@ export const CreateTaxInvoiceOptions = () => {
 					/>
 					<FormField
 						control={form.control}
-						name="PaymentMeansCode"
+						name="payment_means_code"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Payment Type *</FormLabel>
@@ -143,14 +169,13 @@ export const CreateTaxInvoiceOptions = () => {
 
 					<FormField
 						control={form.control}
-						name="ClassifiedTaxCategory"
+						name="classified_tax_category"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Tax Category *</FormLabel>
 								<Select
 									onValueChange={value => {
 										field.onChange(value);
-										removeAll();
 									}}
 									defaultValue={field.value}
 								>
@@ -180,35 +205,53 @@ export const CreateTaxInvoiceOptions = () => {
 
 					<FormField
 						control={form.control}
-						name="ActualDeliveryDate"
+						name="actual_delivery_date"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Delivery Date</FormLabel>
-								<FormControl>
-									<Input {...field} placeholder="Delivery Date" />
-								</FormControl>
+								<div className="flex flex-col gap-2">
+									<FormLabel>Actual Delivery Date</FormLabel>
+									<Popover>
+										<FormControl>
+											<PopoverTrigger asChild>
+												<Button
+													variant="outline"
+													id="date"
+													className="w-full justify-between font-normal"
+												>
+													{field.value
+														? new Date(field.value).toLocaleDateString()
+														: "Select date"}
+													<ChevronDownIcon />
+												</Button>
+											</PopoverTrigger>
+										</FormControl>
+										<PopoverContent
+											className="w-auto overflow-hidden p-0"
+											align="start"
+										>
+											<Calendar
+												mode="single"
+												selected={
+													field.value ? new Date(field.value) : undefined
+												}
+												captionLayout="dropdown"
+												onSelect={date => {
+													field.onChange(date?.toISOString().split("T")[0]);
+												}}
+											/>
+										</PopoverContent>
+									</Popover>
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="Note"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Note</FormLabel>
-								<FormControl>
-									<Input {...field} placeholder="Note" />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+
 					{VATDocuments === "381" || VATDocuments === "383" ? (
 						<>
 							<FormField
 								control={form.control}
-								name="OriginalInvoiceID"
+								name="original_invoice_id"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Invoice ID *</FormLabel>
@@ -241,7 +284,7 @@ export const CreateTaxInvoiceOptions = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="InstructionNote"
+								name="instruction_note"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Instruction Note *</FormLabel>
@@ -254,6 +297,37 @@ export const CreateTaxInvoiceOptions = () => {
 							/>
 						</>
 					) : null}
+					<FormField
+						control={form.control}
+						name="discount_amount"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Discount Amount</FormLabel>
+								<FormControl>
+									<Input
+										{...field}
+										value={field.value ?? ""}
+										onChange={event => handleNumberInput({ event, field })}
+										placeholder="Discount Amount"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="note"
+						render={({ field }) => (
+							<FormItem className="col-span-4 ">
+								<FormLabel>Note</FormLabel>
+								<FormControl>
+									<Textarea {...field} placeholder="Note" className="h-40" />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 				</div>
 			</div>
 		</div>

@@ -1,14 +1,12 @@
 "use client";
 import { Form } from "@/components/ui/form";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MainButton } from "@/components/common/MainButton";
+import { CreateSimplifiedTaxInvoiceOptions } from "./CreateSimplifiedTaxInvoiceOptions";
 import { InvoiceLinesDataTable } from "../invoice-lines/invoice-line-data-table/InvoiceLineDataTable";
 import { InvoiceDetails } from "../../invoice-details/InvoiceDetails";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { useCreateSimplifiedTaxInvoice } from "@/features/invoice/hooks/simplified-tax-invoice/useCreateSimplifiedTaxInvoice";
-import { CreateSimplifiedTaxInvoiceOptions } from "./CreateSimplifiedTaxInvoiceOptions";
-import { SimplifiedTaxInvoiceCalculations } from "./SimplifiedTaxInvoiceCalculations";
-import { useTaxInvoiceLineStore } from "@/features/invoice/store/tax-invoice-line.store";
 export const CreateSimplifiedTaxInvoice = () => {
 	const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
 
@@ -18,16 +16,10 @@ export const CreateSimplifiedTaxInvoice = () => {
 		onCreateSimplifiedTaxInvoice,
 	} = useCreateSimplifiedTaxInvoice();
 
-	const { invoiceLines } = useTaxInvoiceLineStore();
-
 	const handlePreview = () => {
 		setIsPreviewing(!isPreviewing);
 		window.scrollTo({ top: 0 });
 	};
-
-	useEffect(() => {
-		CreateSimplifiedTaxInvoiceForm.setValue("invoiceLines", invoiceLines);
-	}, [invoiceLines, CreateSimplifiedTaxInvoiceForm]);
 
 	return (
 		<Form {...CreateSimplifiedTaxInvoiceForm}>
@@ -42,7 +34,7 @@ export const CreateSimplifiedTaxInvoice = () => {
 						<div className="flex items-center justify-between gap-4">
 							<div className="flex items-center gap-4">
 								<FaFileInvoiceDollar size={40} />
-								<div className="font-bold text-5xl">
+								<div className="font-bold text-4xl">
 									Create Simplified Tax Invoice
 								</div>
 							</div>
@@ -55,7 +47,6 @@ export const CreateSimplifiedTaxInvoice = () => {
 						<div className="flex flex-col gap-10 ">
 							<CreateSimplifiedTaxInvoiceOptions />
 							<InvoiceLinesDataTable />
-							<SimplifiedTaxInvoiceCalculations />
 							<div className="flex items-center gap-4 self-end">
 								<MainButton onClick={handlePreview}>Preview Invoice</MainButton>
 							</div>

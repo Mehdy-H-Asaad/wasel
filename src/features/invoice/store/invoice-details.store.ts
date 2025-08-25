@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { TInvoiceDTO } from "../types/invoice.types";
+import { TInvoiceDTO } from "../schema/invoice.schema";
 
 export type TInvoceDetailsStore = {
 	invoice: TInvoiceDTO;

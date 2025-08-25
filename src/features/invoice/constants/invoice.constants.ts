@@ -1,16 +1,7 @@
 export const INVOICES = "invoices";
 export const TAX_RATE = "15";
 export const NO_TAX_RATE = "0";
-export const clients = [
-	{
-		value: 1,
-		label: "Company A",
-	},
-	{
-		value: 2,
-		label: "Company B",
-	},
-];
+
 export const VAT_DOCUMENTS = [
 	{
 		value: 388,
@@ -28,12 +19,28 @@ export const VAT_DOCUMENTS = [
 
 export const PAYMENTS_TYPES = [
 	{
-		value: 1,
-		label: "Type A",
+		value: 10,
+		label: "Cash",
 	},
 	{
-		value: 2,
-		label: "Type B",
+		value: 20,
+		label: "Cheque",
+	},
+	{
+		value: 30,
+		label: "Credit Card",
+	},
+	{
+		value: 31,
+		label: "Debit Card",
+	},
+	{
+		value: 42,
+		label: "Bank Account",
+	},
+	{
+		value: 48,
+		label: "Bank Card",
 	},
 ];
 
@@ -47,6 +54,54 @@ export const INVOICE_IDS = [
 		label: "Invoice ID B",
 	},
 ];
+
+export const TAX_EXEMPTION_REASONS_CODES = [
+	{
+		value: "VATEX-SA-29",
+		label: "VATEX-SA-29",
+	},
+	{
+		value: "VATEXT-SA-29-7",
+		label: "VATEXT-SA-29-7",
+	},
+	{
+		value: "VATEX-SA-30",
+		label: "VATEX-SA-30",
+	},
+	{
+		value: "VATEX-SA-32",
+		label: "VATEX-SA-32",
+	},
+	{
+		value: "VATEX-SA-33",
+		label: "VATEX-SA-33",
+	},
+	{
+		value: "VATEX-SA-34-1",
+		label: "VATEX-SA-34-1",
+	},
+	{
+		value: "VATEX-SA-34-2",
+		label: "VATEX-SA-34-2",
+	},
+	{
+		value: "VATEX-SA-34-3",
+		label: "VATEX-SA-34-3",
+	},
+	{
+		value: "VATEX-SA-34-4",
+		label: "VATEX-SA-34-4",
+	},
+	{
+		value: "VATEX-SA-HEA",
+		label: "VATEX-SA-HEA",
+	},
+	{
+		value: "VATEX-SA-MLTRY",
+		label: "VATEX-SA-MLTRY",
+	},
+];
+
 export const TAX_CATEGORIES = [
 	{
 		value: "S",
@@ -55,30 +110,5 @@ export const TAX_CATEGORIES = [
 	{
 		value: "Z",
 		label: "Zero Tax",
-	},
-];
-export const NAMES = [
-	{
-		value: "Product A",
-		label: "Product A",
-	},
-	{
-		value: "Product B",
-		label: "Product B",
-	},
-];
-
-export const UNITS = [
-	{
-		value: "PCE",
-		label: "Piece",
-	},
-	{
-		value: "KGM",
-		label: "Kilogram",
-	},
-	{
-		value: "LTR",
-		label: "Liter",
 	},
 ];

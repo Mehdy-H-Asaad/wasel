@@ -1,18 +1,14 @@
 export type TClientDTO = {
 	id: number;
-	BuildingNumber: string;
-	CityName: string;
-	CitySubdivisionName: string;
-	CompanyID: string;
-	Country: string;
-	PartyIdentification: {
-		schemeID: string;
-		value: string;
-	};
-	PostalZone: string;
-	RegistrationName: string;
-	StreetName: string;
+	registration_name: string;
+	vat_number: string;
+	street: string;
+	building_number: string;
+	division: string;
+	city: string;
+	postal_code: string;
+	party_identification_scheme: string;
+	party_identification_value: string;
 	email?: string;
 	phone?: string;
-	name?: string; // ONLY FOR SIMPLIFIED TAX INVOICE CLIENTS WITH ZERO TAX
 };

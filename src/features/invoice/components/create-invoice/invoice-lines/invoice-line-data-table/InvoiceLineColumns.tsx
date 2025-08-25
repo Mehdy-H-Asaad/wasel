@@ -1,49 +1,55 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { TTaxInvoiceLineDTO } from "@/features/invoice/types/invoice.types";
+import { TTaxInvoiceLineDTO } from "@/features/invoice/schema/invoice-lines.schema";
 import { InvoiceLineActionCell } from "./InvoiceLineActionCell";
 
-export const InvoiceLinesColumns: ColumnDef<TTaxInvoiceLineDTO>[] = [
+export type TInvoiceLineColumns = TTaxInvoiceLineDTO & {
+	lineExtensionAmount: number;
+	taxAmount: number;
+	roundingAmount: number;
+	item_name: string;
+	item_price: number;
+};
+
+export const InvoiceLinesColumns: ColumnDef<TInvoiceLineColumns>[] = [
 	{
-		accessorKey: "Name",
+		accessorKey: "item_name",
+		accessorFn: row => row.item_name,
 		header: "Item Name",
 	},
 	{
-		accessorKey: "BaseAmount",
-		header: "Base Amount",
+		accessorKey: "item_price",
+		header: "Item Price",
+		cell: ({ row }) => <div>SAR {row.original.item_price.toFixed(2)}</div>,
 	},
 	{
-		accessorKey: "InvoicedQuantity.unitCode",
-		header: "Unit",
-	},
-	{
-		accessorKey: "InvoicedQuantity.value",
+		accessorKey: "quantity",
 		header: "Quantity",
 	},
 	{
-		accessorKey: "DiscountAmount",
+		accessorKey: "discount_amount",
 		header: "Discount Amount",
+		cell: ({ row }) => (
+			<div>SAR {row.original.discount_amount?.toFixed(2)}</div>
+		),
 	},
 	{
-		accessorKey: "LineExtensionAmount",
+		accessorKey: "line_extension_amount",
 		header: "Subtotal Before Tax",
+		cell: ({ row }) => (
+			<div>SAR {row.original.lineExtensionAmount.toFixed(2)}</div>
+		),
 	},
 	{
-		accessorKey: "TaxAmount",
+		accessorKey: "tax_amount",
 		header: "Tax Amount",
+		cell: ({ row }) => <div>SAR {row.original.taxAmount.toFixed(2)}</div>,
 	},
 	{
-		accessorKey: "RoundingAmount",
+		accessorKey: "rounding_amount",
 		header: "Rounding Amount",
-	},
-	{
-		accessorKey: "TaxExemptionReasonCode",
-		header: "Tax Exemption Reason Code",
-	},
-	{
-		accessorKey: "TaxExemptionReason",
-		header: "Tax Exemption Reason",
+		cell: ({ row }) => <div>SAR {row.original.roundingAmount.toFixed(2)}</div>,
 	},
 
 	{

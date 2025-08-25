@@ -2,5 +2,5 @@ export type TStockDTO = {
 	id: number;
 	name: string;
 	price: number;
-	// unit: EUnit;
+	unit_code: string;
 };

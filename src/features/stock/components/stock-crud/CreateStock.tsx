@@ -47,11 +47,22 @@ export const CreateStock = () => {
 									<Input
 										{...field}
 										placeholder="Price"
-										onChange={event =>
-											handleNumberInput({ field, event, type: "number" })
-										}
+										onChange={event => handleNumberInput({ field, event })}
 										value={field.value ?? ""}
 									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={CreateStockForm.control}
+						name="unit_code"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Unit</FormLabel>
+								<FormControl>
+									<Input {...field} placeholder="Unit" />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

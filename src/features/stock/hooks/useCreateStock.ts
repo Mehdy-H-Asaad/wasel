@@ -26,6 +26,7 @@ export const useCreateStock = () => {
 		defaultValues: {
 			name: "",
 			price: undefined,
+			unit_code: "",
 		},
 	});
 

@@ -20,6 +20,10 @@ export const StockColumns: ColumnDef<TStockDTO>[] = [
 			);
 		},
 	},
+	{
+		accessorKey: "unit_code",
+		header: "Unit",
+	},
 
 	{
 		id: "actions",

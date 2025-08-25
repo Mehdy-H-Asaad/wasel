@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { TTaxInvoiceDTO } from "../../types/invoice.types";
+import { TTaxInvoiceDTO } from "../../schema/tax-invoice.schema";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -15,41 +15,41 @@ import { MainButton } from "@/components/common/MainButton";
 
 export const InvoicesColumns: ColumnDef<TTaxInvoiceDTO>[] = [
 	{
-		accessorFn: row => row.BuyerInfo?.RegistrationName || "-",
+		accessorFn: row => row.customer || "-",
 		id: "buyer-company",
 		header: "Client - Company",
 	},
 
 	{
-		accessorKey: "InvoiceType",
+		accessorKey: "invoice_type",
 		header: "Invoice Type",
 		cell: ({ row }) => (
 			<div>
-				{row.original.InvoiceType === "0100000"
+				{row.original.invoice_type === "0100000"
 					? "Tax Invoice"
 					: "Simplified Tax Invoice"}
 			</div>
 		),
 	},
 	{
-		accessorKey: "InvoiceTypeCode",
+		accessorKey: "invoice_type_code",
 		header: "Tax Compliance Documents",
 		cell: ({ row }) => (
 			<div>
-				{row.original.InvoiceTypeCode === "388"
+				{row.original.invoice_type_code === "388"
 					? "Tax Invoice"
-					: row.original.InvoiceTypeCode === "383"
+					: row.original.invoice_type_code === "383"
 					? "Debit Note"
 					: "Credit Note"}
 			</div>
 		),
 	},
 	{
-		accessorKey: "IssueDate",
+		accessorKey: "issue_date",
 		header: "Issue Date",
 	},
 	{
-		accessorKey: "PayableAmount",
+		accessorKey: "payable_amount",
 		header: "Payable Amount",
 	},
 	{

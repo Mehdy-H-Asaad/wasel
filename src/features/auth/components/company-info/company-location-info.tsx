@@ -1,6 +1,6 @@
 "use client";
 import { useFormContext } from "react-hook-form";
-import { TCreateCompanyInfoDTO } from "../../types/auth.types";
+import { TCreateCompanyInfoDTO } from "../../schema/company-info.schema";
 import {
 	FormControl,
 	FormField,

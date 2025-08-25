@@ -5,7 +5,7 @@ import { authSchema } from "../schema/auth.schema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TUserDTO } from "../types/auth.types";
+import { TAuthUserDTO } from "../types/auth.types";
 import { useRouter } from "next/navigation";
 import { useAuthNextStepStore } from "../store/auth-next-step.store";
 import { useAuthEmailOtpStore } from "../store/auth-email-otp.store";
@@ -15,7 +15,7 @@ export const useSignup = () => {
 	const { setStep } = useAuthNextStepStore();
 	const { setEmail } = useAuthEmailOtpStore();
 	const { mutate, isPending } = useApiMutation<
-		Omit<TUserDTO, "password">,
+		Pick<TAuthUserDTO, "data">,
 		TSignupDTO
 	>({
 		axiosRequestMethod: "post",
@@ -24,7 +24,8 @@ export const useSignup = () => {
 		successMsg: "Signup successful",
 		axiosType: "public",
 		onSuccess: data => {
-			setEmail(data.email);
+			console.log(data);
+			setEmail(data.data.email);
 			setStep(2);
 			router.replace("/signup/otp");
 		},

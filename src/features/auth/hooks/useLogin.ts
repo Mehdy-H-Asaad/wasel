@@ -5,20 +5,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema } from "../schema/auth.schema";
 import { z } from "zod";
-import { TUserDTO } from "../types/auth.types";
+import { TAuthUserDTO } from "../types/auth.types";
 import { useRouter } from "next/navigation";
+import { useAuthUserStore } from "../store/auth-user.store";
 
 export const useLogin = () => {
 	const router = useRouter();
-
-	const { mutate, isPending } = useApiMutation<TLoginDTO, TUserDTO>({
+	const { setAccessToken, setUser } = useAuthUserStore();
+	const { mutate, isPending } = useApiMutation<TAuthUserDTO, TLoginDTO>({
 		axiosRequestMethod: "post",
 		queryKey: [LOGIN_QUERY_KEY],
 		requestURL: `/auth/login`,
 		successMsg: "Login successful",
 		axiosType: "public",
-		onSuccess: () => {
+		onSuccess: data => {
 			router.push("/admin");
+			setAccessToken(data.data.access_token);
+			setUser(data.data.user);
 		},
 	});
 

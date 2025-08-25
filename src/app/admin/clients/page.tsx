@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { ClientsDataTable } from "@/features/clients/components/data-table/ClientsDataTable";
 import { CLIENTS } from "@/features/clients/constants/client.constant";
-import { axiosClient } from "@/shared/api/axios";
+import { axiosPrivateClient } from "@/shared/api/axios";
 import { getQueryClient } from "@/shared/providers/get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import React, { Suspense } from "react";
@@ -19,7 +19,7 @@ const ClientsPage = async () => {
 	await queryClient.prefetchQuery({
 		queryKey: [CLIENTS],
 		queryFn: async () => {
-			const { data } = await axiosClient.get(`/${CLIENTS}`);
+			const { data } = await axiosPrivateClient.get(`/${CLIENTS}`);
 			return data;
 		},
 	});

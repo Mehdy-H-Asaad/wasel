@@ -1,24 +1,17 @@
-import {
-	requiredShortCode,
-	requiredString,
-} from "@/shared/shcema/validation.schema";
+import { requiredString } from "@/shared/shcema/validation.schema";
 import { z } from "zod";
 
-const PartyIdentificationSchema = z.object({
-	schemeID: requiredString(100),
-	value: requiredString(100),
+export const clientSchema = z.object({
+	registration_name: requiredString(100),
+	vat_number: requiredString(100),
+	street: requiredString(100),
+	building_number: requiredString(100),
+	division: requiredString(100),
+	city: requiredString(100),
+	postal_code: requiredString(100),
+	party_identification_scheme: requiredString(100),
+	party_identification_value: requiredString(100),
+	// email: z.string().email("Invalid email"),
 });
 
-export const clientSchema = z.object({
-	PartyIdentification: PartyIdentificationSchema,
-	email: requiredString(100).email("Email is not valid"),
-	phone: requiredString(100),
-	Country: requiredShortCode(2),
-	StreetName: requiredString(100),
-	BuildingNumber: requiredString(100),
-	CitySubdivisionName: requiredString(100),
-	CityName: requiredString(100),
-	PostalZone: requiredString(10020),
-	CompanyID: requiredString(100),
-	RegistrationName: requiredString(100),
-});
+export type TCreateClientDTO = z.infer<typeof clientSchema>;

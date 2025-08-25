@@ -1,6 +1,6 @@
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { GrGroup } from "react-icons/gr";
-import { IoAnalyticsOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoAnalyticsOutline } from "react-icons/io5";
 import { FiBox } from "react-icons/fi";
 
 export const adminNavLinks = [
@@ -23,10 +23,5 @@ export const adminNavLinks = [
 		title: "Stock",
 		href: "/admin/stock",
 		icon: <FiBox size={20} />,
-	},
-	{
-		title: "Settings",
-		href: "/admin/settings",
-		icon: <IoSettingsOutline size={20} />,
 	},
 ];

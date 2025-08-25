@@ -1,5 +1,5 @@
 import { QueryClient, QueryKey, QueryOptions } from "@tanstack/react-query";
-import { axiosClient } from "../api/axios";
+import { axiosPublicClient, axiosPrivateClient } from "../api/axios";
 import { AxiosRequestConfig, AxiosError } from "axios";
 
 type TUsePrefetchQueryProps<T> = {
@@ -7,6 +7,7 @@ type TUsePrefetchQueryProps<T> = {
 	requestURL: string;
 	axiosConfig?: AxiosRequestConfig;
 	queryClient: QueryClient;
+	axiosType: "public" | "private";
 } & QueryOptions<T>;
 
 type TServerResponse<T> = {
@@ -18,13 +19,17 @@ export const useCustomPrefetchQuery = <T>({
 	queryKey,
 	requestURL,
 	queryClient,
+	axiosType = "private",
 	...prefetchQueryOptions
 }: TUsePrefetchQueryProps<TServerResponse<T>>) => {
 	return queryClient.prefetchQuery({
 		queryKey: queryKey,
 		queryFn: async () => {
 			try {
-				const { data }: { data: TServerResponse<T> } = await axiosClient.get(
+				const client =
+					axiosType === "public" ? axiosPublicClient : axiosPrivateClient;
+
+				const { data }: { data: TServerResponse<T> } = await client.get(
 					requestURL,
 					axiosConfig
 				);

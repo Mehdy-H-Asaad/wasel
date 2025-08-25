@@ -1,4 +1,5 @@
-import { axiosClient } from "@/shared/api/axios";
+"use client";
+import { axiosPrivateClient, axiosPublicClient } from "@/shared/api/axios";
 import { UseQueryOptions, useQuery, QueryKey } from "@tanstack/react-query";
 import { AxiosError, AxiosRequestConfig } from "axios";
 
@@ -9,6 +10,7 @@ type TUseApiQueryOptions<TResponse> = {
 	enabled?: boolean;
 	showErrorToast?: boolean;
 	errorMessage?: string;
+	axiosType?: "public" | "private";
 } & Omit<UseQueryOptions<TResponse>, "queryKey" | "queryFn">;
 
 type TServerResponse<T> = {
@@ -24,6 +26,7 @@ export const useApiQuery = <TResponse>({
 	requestURL,
 	axiosConfig,
 	enabled = true,
+	axiosType = "private",
 	errorMessage = "Something went wrong",
 	...queryOptions
 }: TUseApiQueryOptions<TServerResponse<TResponse>>) => {
@@ -31,8 +34,13 @@ export const useApiQuery = <TResponse>({
 		queryKey,
 		queryFn: async () => {
 			try {
-				const { data }: { data: TServerResponse<TResponse> } =
-					await axiosClient.get(requestURL, axiosConfig);
+				const client =
+					axiosType === "public" ? axiosPublicClient : axiosPrivateClient;
+
+				const { data }: { data: TServerResponse<TResponse> } = await client.get(
+					requestURL,
+					axiosConfig
+				);
 				return data;
 			} catch (error: unknown) {
 				if (error instanceof AxiosError && error.response) {

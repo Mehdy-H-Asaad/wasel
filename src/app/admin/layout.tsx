@@ -1,4 +1,4 @@
-import { AdminHeader } from "@/features/admin/components/layout/AdminHeader";
+import { AdminSidebar } from "@/features/admin/components/layout/admin-sidebar";
 
 export default function AdminLayout({
 	children,
@@ -7,8 +7,9 @@ export default function AdminLayout({
 }>) {
 	return (
 		<>
-			<AdminHeader />
-			<div className="container ">{children}</div>
+			<AdminSidebar>
+				<div className="container max-w-7xl mx-auto">{children}</div>
+			</AdminSidebar>
 		</>
 	);
 }

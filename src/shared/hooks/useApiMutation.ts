@@ -5,7 +5,7 @@ import {
 	useMutation,
 	UseMutationOptions,
 } from "@tanstack/react-query";
-import { axiosClient, axiosPublicClient } from "../api/axios";
+import { axiosPrivateClient, axiosPublicClient } from "../api/axios";
 import { AxiosRequestConfig, AxiosError } from "axios";
 import { getQueryClient } from "../providers/get-query-client";
 
@@ -14,6 +14,10 @@ type THTTPRequestMethod = "put" | "post" | "delete" | "patch";
 type TApiError = {
 	message: string;
 	code: number;
+};
+
+type TServerResponse<T> = {
+	data: T;
 };
 
 type TUseApiMutation<TData, TVariables, TContext> = {
@@ -40,23 +44,28 @@ export const useApiMutation = <TData, TVariables = void, TContext = unknown>({
 	queryKey,
 	axiosType = "private",
 	...mutationOptions
-}: TUseApiMutation<TData, TVariables, TContext>) => {
-	const mutation = useMutation({
+}: TUseApiMutation<TServerResponse<TData>, TVariables, TContext>) => {
+	const mutation = useMutation<
+		TServerResponse<TData>,
+		TApiError,
+		TVariables,
+		TContext
+	>({
 		mutationKey: mutationKey,
 		mutationFn: async (values: TVariables) => {
 			try {
-				const { data } =
-					axiosType === "public"
-						? await axiosPublicClient[axiosRequestMethod](
-								requestURL,
-								values,
-								axiosRequestConfig
-						  )
-						: await axiosClient[axiosRequestMethod](
-								requestURL,
-								values,
-								axiosRequestConfig
-						  );
+				const client =
+					axiosType === "public" ? axiosPublicClient : axiosPrivateClient;
+
+				const { data }: { data: TServerResponse<TData> } = await client[
+					axiosRequestMethod
+				](
+					requestURL,
+					axiosRequestMethod === "delete"
+						? { ...axiosRequestConfig, data: values }
+						: values,
+					axiosRequestConfig
+				);
 
 				return data;
 			} catch (error: unknown) {
@@ -86,5 +95,5 @@ export const useApiMutation = <TData, TVariables = void, TContext = unknown>({
 		},
 	});
 
-	return { ...mutation, queryClient };
+	return { ...mutation, queryClient, data: mutation.data?.data };
 };

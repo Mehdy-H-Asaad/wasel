@@ -41,7 +41,7 @@ export const CreateClient = () => {
 					<div className="grid grid-cols-4 gap-10">
 						<FormField
 							control={CreateClientForm.control}
-							name="RegistrationName"
+							name="registration_name"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Client - Company</FormLabel>
@@ -54,33 +54,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Email" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={CreateClientForm.control}
-							name="phone"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Phone</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Phone" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={CreateClientForm.control}
-							name="PartyIdentification.schemeID"
+							name="party_identification_scheme"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Client Identification</FormLabel>
@@ -110,7 +84,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="PartyIdentification.value"
+							name="party_identification_value"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Identification Value</FormLabel>
@@ -118,7 +92,7 @@ export const CreateClient = () => {
 										<Input
 											{...field}
 											disabled={
-												!CreateClientForm.watch("PartyIdentification.schemeID")
+												!CreateClientForm.watch("party_identification_scheme")
 											}
 											placeholder="Identification Value"
 										/>
@@ -129,7 +103,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="CompanyID"
+							name="vat_number"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>VAT Number</FormLabel>
@@ -142,20 +116,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="Country"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Country</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Country" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={CreateClientForm.control}
-							name="CityName"
+							name="city"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>City</FormLabel>
@@ -168,7 +129,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="CitySubdivisionName"
+							name="division"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>District</FormLabel>
@@ -181,7 +142,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="StreetName"
+							name="street"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Street</FormLabel>
@@ -194,7 +155,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="BuildingNumber"
+							name="building_number"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Building Number</FormLabel>
@@ -207,7 +168,7 @@ export const CreateClient = () => {
 						/>
 						<FormField
 							control={CreateClientForm.control}
-							name="PostalZone"
+							name="postal_code"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Postal Code</FormLabel>

@@ -6,18 +6,18 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useAuthNextStepStore } from "../../store/auth-next-step.store";
 import { OTP_QUERY_KEY } from "../../constants/auth.constants";
-import { TSignupResponseDTO } from "../../types/auth.types";
+import { TAuthUserDTO } from "../../types/auth.types";
 import { otpSchema } from "../../schema/otp.schema";
 import { useAuthEmailOtpStore } from "../../store/auth-email-otp.store";
 import { useAuthUserStore } from "../../store/auth-user.store";
 
 export const useSignUpEmailOTP = () => {
 	const router = useRouter();
-	const { setAccessToken } = useAuthUserStore();
+	const { setAccessToken, setUser } = useAuthUserStore();
 	const { setStep } = useAuthNextStepStore();
 	const { email } = useAuthEmailOtpStore();
 	const { mutate, isPending, data } = useApiMutation<
-		TSignupResponseDTO,
+		TAuthUserDTO,
 		TEmailOtpDTO
 	>({
 		requestURL: `/auth/verify-email`,
@@ -27,6 +27,7 @@ export const useSignUpEmailOTP = () => {
 		axiosType: "public",
 		onSuccess: data => {
 			setAccessToken(data.access_token);
+			setUser(data.data);
 			setStep(3);
 			router.replace("/signup/company-info");
 		},

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const companyInfoSchema = z.object({
-	registraion_name: z.string().min(1),
+	registration_name: z.string().min(1),
 	vat_number: z.string().min(1),
 	invoicing_type: z.string().min(1),
 	address: z.string().min(1),
@@ -15,3 +15,5 @@ export const companyInfoSchema = z.object({
 	party_identification_value: z.string().min(1),
 	phone: z.string().min(1),
 });
+
+export type TCreateCompanyInfoDTO = z.infer<typeof companyInfoSchema>;

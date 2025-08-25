@@ -9,4 +9,5 @@ export const stockSchema = z.object({
 		})
 		.positive()
 		.min(1, "Required"),
+	unit_code: z.string().min(1, "Required"),
 });

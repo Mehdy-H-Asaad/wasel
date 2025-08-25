@@ -5,47 +5,35 @@ import { ClientActionsCell } from "./ClientActionsCell";
 
 export const ClientsColumns: ColumnDef<TClientDTO>[] = [
 	{
-		accessorKey: "RegistrationName",
+		accessorKey: "registration_name",
 		header: "Client - Company",
 	},
 	{
-		accessorKey: "email",
-		header: "Email",
-	},
-	{
-		accessorKey: "phone",
-		header: "Phone",
-	},
-	{
-		accessorKey: "PartyIdentification.schemeID",
+		accessorKey: "party_identification_scheme",
 		header: "Client Identification",
 	},
 	{
-		accessorKey: "PartyIdentification.value",
+		accessorKey: "party_identification_value",
 		header: "Identification Value ",
 	},
 	{
-		accessorKey: "CompanyID",
+		accessorKey: "vat_number",
 		header: "VAT Number ",
 	},
 	{
-		accessorKey: "Country",
-		header: "Country",
-	},
-	{
-		accessorKey: "CityName",
+		accessorKey: "city",
 		header: "City",
 	},
 	{
-		accessorKey: "CitySubdivisionName",
+		accessorKey: "division",
 		header: "District",
 	},
 	{
-		accessorKey: "StreetName",
+		accessorKey: "street",
 		header: "Street",
 	},
 	{
-		accessorKey: "PostalZone",
+		accessorKey: "postal_code",
 		header: "Postal Code",
 	},
 

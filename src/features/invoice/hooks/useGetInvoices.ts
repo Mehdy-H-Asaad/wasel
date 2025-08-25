@@ -1,6 +1,6 @@
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { INVOICES } from "../constants/invoice.constants";
-import { TInvoiceDTO } from "../types/invoice.types";
+import { TInvoiceDTO } from "../schema/invoice.schema";
 
 export const useGetInvoices = () => {
 	const { data, isFetching, metaData } = useApiQuery<TInvoiceDTO>({

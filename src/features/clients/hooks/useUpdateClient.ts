@@ -22,20 +22,15 @@ export const useUpdateClient = (client: TClientDTO) => {
 	const UpdateClientForm = useForm<TUpdateClientDTO>({
 		resolver: zodResolver(updateClientSchema),
 		defaultValues: {
-			BuildingNumber: client.BuildingNumber,
-			CityName: client.CityName,
-			CitySubdivisionName: client.CitySubdivisionName,
-			CompanyID: client.CompanyID,
-			Country: client.Country,
-			PartyIdentification: {
-				schemeID: client.PartyIdentification.schemeID,
-				value: client.PartyIdentification.value,
-			},
-			PostalZone: client.PostalZone,
-			RegistrationName: client.RegistrationName,
-			StreetName: client.StreetName,
-			email: client.email,
-			phone: client.phone,
+			registration_name: client.registration_name,
+			vat_number: client.vat_number,
+			street: client.street,
+			building_number: client.building_number,
+			division: client.division,
+			city: client.city,
+			postal_code: client.postal_code,
+			party_identification_scheme: client.party_identification_scheme,
+			party_identification_value: client.party_identification_value,
 		},
 	});
 

@@ -1,36 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import z from "zod";
-import { useTaxInvoiceLineStore } from "../../store/tax-invoice-line.store";
-import { invoiceLinesSchema } from "../../schema/invoice-lines.schema";
-import { toast } from "sonner";
+import {
+	invoiceLinesSchema,
+	TCreateTaxInvoiceLineDTO,
+} from "../../schema/invoice-lines.schema";
 
 export const useCreateTaxInvoiceLine = () => {
-	const CreateTaxInvoicLineForm = useForm<z.infer<typeof invoiceLinesSchema>>({
+	const CreateTaxInvoicLineForm = useForm<TCreateTaxInvoiceLineDTO>({
 		resolver: zodResolver(invoiceLinesSchema),
 		defaultValues: {
-			BaseAmount: "",
-			DiscountAmount: "",
-			InvoicedQuantity: { unitCode: "", value: "" },
-			LineExtensionAmount: "",
-			Name: "",
-			RoundingAmount: "",
-			TaxAmount: "",
-			TaxExemptionReason: "",
-			TaxExemptionReasonCode: "",
-			id: "",
+			discount_amount: undefined,
+			item_id: 0,
+			quantity: undefined,
 		},
 	});
-	const { addInvoiceLine } = useTaxInvoiceLineStore();
 
-	const onAddInvoiceLine = (values: z.infer<typeof invoiceLinesSchema>) => {
-		addInvoiceLine({
-			...values,
-			id: crypto.randomUUID(),
-		});
-		toast.success("Invoice line added successfully");
-		CreateTaxInvoicLineForm.reset();
-	};
-
-	return { CreateTaxInvoicLineForm, onAddInvoiceLine };
+	return { CreateTaxInvoicLineForm };
 };

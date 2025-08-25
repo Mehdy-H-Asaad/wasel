@@ -68,7 +68,7 @@ export const UpdateClient = (client: TClientDTO) => {
 					<div className="grid grid-cols-4 gap-10">
 						<FormField
 							control={UpdateClientForm.control}
-							name="RegistrationName"
+							name="registration_name"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Client - Company</FormLabel>
@@ -81,7 +81,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="email"
+							name="party_identification_value"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Email</FormLabel>
@@ -94,7 +94,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="phone"
+							name="party_identification_scheme"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Phone</FormLabel>
@@ -107,7 +107,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="PartyIdentification.schemeID"
+							name="party_identification_scheme"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Client Identification</FormLabel>
@@ -137,7 +137,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="PartyIdentification.value"
+							name="party_identification_value"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Identification Value</FormLabel>
@@ -145,7 +145,7 @@ export const UpdateClient = (client: TClientDTO) => {
 										<Input
 											{...field}
 											disabled={
-												!UpdateClientForm.watch("PartyIdentification.schemeID")
+												!UpdateClientForm.watch("party_identification_scheme")
 											}
 											placeholder="Identification Value"
 										/>
@@ -156,7 +156,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="CompanyID"
+							name="vat_number"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>VAT Number</FormLabel>
@@ -169,20 +169,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="Country"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Country</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Country" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={UpdateClientForm.control}
-							name="CityName"
+							name="city"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>City</FormLabel>
@@ -195,7 +182,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="CitySubdivisionName"
+							name="division"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>District</FormLabel>
@@ -208,7 +195,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="StreetName"
+							name="street"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Street</FormLabel>
@@ -221,7 +208,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="BuildingNumber"
+							name="building_number"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Building Number</FormLabel>
@@ -234,7 +221,7 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
-							name="PostalZone"
+							name="postal_code"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Postal Code</FormLabel>

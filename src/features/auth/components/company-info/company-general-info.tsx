@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import { TCreateCompanyInfoDTO } from "../../types/auth.types";
+import { TCreateCompanyInfoDTO } from "../../schema/company-info.schema";
 import {
 	FormControl,
 	FormDescription,
@@ -26,7 +26,7 @@ export const CompanyGeneralInfo = () => {
 	const { setStep } = useAuthNextStepStore();
 
 	const {
-		registraion_name,
+		registration_name,
 		phone,
 		vat_number,
 		invoicing_type,
@@ -36,7 +36,7 @@ export const CompanyGeneralInfo = () => {
 	} = useWatch({ control: form.control });
 
 	const isValid =
-		registraion_name &&
+		registration_name &&
 		phone &&
 		vat_number &&
 		invoicing_type &&
@@ -46,7 +46,7 @@ export const CompanyGeneralInfo = () => {
 
 	const handleNext = () => {
 		form.trigger([
-			"registraion_name",
+			"registration_name",
 			"phone",
 			"vat_number",
 			"invoicing_type",
@@ -68,7 +68,7 @@ export const CompanyGeneralInfo = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-10 gap-y-20 mt-6">
 				<FormField
 					control={form.control}
-					name="registraion_name"
+					name="registration_name"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Company Name</FormLabel>

@@ -25,6 +25,7 @@ export const useUpdateStock = (stock: TStockDTO) => {
 		defaultValues: {
 			name: stock.name,
 			price: stock.price,
+			unit_code: stock.unit_code,
 		},
 	});
 

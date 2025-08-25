@@ -1,1 +1,1 @@
-export const STOCKS = "stocks";
+export const STOCKS = "items";

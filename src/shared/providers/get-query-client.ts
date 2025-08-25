@@ -12,6 +12,7 @@ function makeQueryClient() {
 			},
 			queries: {
 				staleTime: 60 * 1000,
+				retry: false,
 			},
 
 			dehydrate: {

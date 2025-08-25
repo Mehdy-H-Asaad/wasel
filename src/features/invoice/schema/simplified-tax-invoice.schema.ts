@@ -1,78 +1,70 @@
 import { z } from "zod";
 import { invoiceSchema } from "./invoice.schema";
 
-export const buyerInfoSchema = z
-	.object({
-		PartyIdentification: z.object({
-			schemeID: z.string().max(50),
-			value: z.string().max(50),
-		}),
-		RegistrationName: z.string().max(50),
-	})
-	.optional();
+export const simplifiedTaxInvoiceSchema = invoiceSchema.pick({
+	id: true,
+	customer: true,
+	invoice_type: true,
+	invoice_type_code: true,
+	issue_date: true,
+	issue_time: true,
+	document_currency_code: true,
+	discount_amount: true,
+	actual_delivery_date: true,
+	payment_means_code: true,
+	note: true,
+	instruction_note: true,
+	original_invoice_id: true,
+	classified_tax_category: true,
+	tax_rate: true,
+	invoice_lines: true,
+	registration_name: true,
+	party_identification_scheme: true,
+	party_identification_value: true,
+});
 
-export const simplifiedTaxInvoiceSchema = invoiceSchema
-	.pick({
-		SellerInfo: true,
-		BuyerInfo: true,
-		InvoiceType: true,
-		InvoiceTypeCode: true,
-		IssueDate: true,
-		IssueTime: true,
-		DocumentCurrencyCode: true,
-		LineExtensionAmount: true,
-		DiscountAmount: true,
-		TaxableAmount: true,
-		TaxAmount: true,
-		TaxInclusiveAmount: true,
-		PayableAmount: true,
-		ActualDeliveryDate: true,
-		PaymentMeansCode: true,
-		Note: true,
-		InstructionNote: true,
-		OriginalInvoiceID: true,
-		ClassifiedTaxCategory: true,
-		TaxRate: true,
-		invoiceLines: true,
-	})
-	.extend({
-		BuyerInfo: buyerInfoSchema.optional(),
+export const createSimplifiedTaxInvoiceSchema = simplifiedTaxInvoiceSchema
+	.omit({
+		id: true,
 	})
 	.superRefine((data, ctx) => {
-		if (data.InvoiceTypeCode === "381" || data.InvoiceTypeCode === "383") {
-			if (!data.OriginalInvoiceID) {
+		if (data.invoice_type_code === "381" || data.invoice_type_code === "383") {
+			if (!data.original_invoice_id) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					path: ["OriginalInvoiceID"],
+					path: ["original_invoice_id"],
 					message: "Original Invoice ID is required for credit or debit notes.",
 				});
 			}
-			if (!data.InstructionNote) {
+			if (!data.instruction_note) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					path: ["InstructionNote"],
+					path: ["instruction_note"],
 					message: "Instruction Note is required for credit or debit notes.",
 				});
 			}
 		}
-		if (data.ClassifiedTaxCategory === "Z") {
-			if (!data.BuyerInfo?.RegistrationName) {
+		if (data.classified_tax_category === "Z") {
+			if (!data.registration_name) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					path: ["BuyerInfo.RegistrationName"],
+					path: ["registration_name"],
 					message: "Client Name is required for simplified tax invoice.",
 				});
 			}
-			if (!data.BuyerInfo?.PartyIdentification.value) {
+			if (!data.party_identification_value) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					path: ["BuyerInfo.PartyIdentification.value"],
+					path: ["party_identification_value"],
 					message: "National ID is required for simplified tax invoice.",
 				});
 			}
 		}
 	});
 
-export type TCreateSimplifiedTaxInvoiceDTO = z.infer<
+export type TSimplifiedTaxInvoiceDTO = z.infer<
 	typeof simplifiedTaxInvoiceSchema
+>;
+export type TCreateSimplifiedTaxInvoiceDTO = z.infer<
+	typeof createSimplifiedTaxInvoiceSchema
 >;

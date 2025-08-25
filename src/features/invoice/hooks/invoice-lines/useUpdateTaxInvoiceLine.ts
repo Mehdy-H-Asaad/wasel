@@ -1,34 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import z from "zod";
-import { useTaxInvoiceLineStore } from "../../store/tax-invoice-line.store";
-import { invoiceLinesSchema } from "../../schema/invoice-lines.schema";
-import { TUpdateTaxInvoiceLineDTO } from "../../types/invoice.types";
-import { toast } from "sonner";
+import {
+	invoiceLinesSchema,
+	TUpdateTaxInvoiceLineDTO,
+} from "../../schema/invoice-lines.schema";
 
 export const useUpdateTaxInvoiceLine = () => {
-	const UpdateTaxInvoicLineForm = useForm<z.infer<typeof invoiceLinesSchema>>({
+	const UpdateTaxInvoicLineForm = useForm<TUpdateTaxInvoiceLineDTO>({
 		resolver: zodResolver(invoiceLinesSchema),
-
 		defaultValues: {
-			id: "",
-			BaseAmount: "",
-			DiscountAmount: "",
-			InvoicedQuantity: { unitCode: "", value: "" },
-			LineExtensionAmount: "",
-			Name: "",
-			RoundingAmount: "",
-			TaxAmount: "",
-			TaxExemptionReason: "",
-			TaxExemptionReasonCode: "",
+			discount_amount: undefined,
+			item_id: 0,
+			quantity: undefined,
 		},
 	});
-	const { updateInvoiceLine } = useTaxInvoiceLineStore();
 
-	const onUpdateInvoiceLine = (values: TUpdateTaxInvoiceLineDTO) => {
-		toast.success("Invoice line updated successfully");
-		updateInvoiceLine(values);
-	};
-
-	return { UpdateTaxInvoicLineForm, onUpdateInvoiceLine };
+	return { UpdateTaxInvoicLineForm };
 };

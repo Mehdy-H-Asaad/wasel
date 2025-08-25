@@ -1,4 +1,4 @@
-export const CLIENTS = "clients";
+export const CLIENTS = "customers";
 export const CLIENT_IDENTIFCATIONS = [
 	{
 		label: "Commercial Registration number",

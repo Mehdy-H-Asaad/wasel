@@ -5,7 +5,7 @@ import { useState } from "react";
 import { LIMIT } from "@/shared/data/constants";
 import { DataTableSkeleton } from "@/components/common/DataTableSkeleton";
 import { useGetInvoices } from "../../hooks/useGetInvoices";
-import { TTaxInvoiceDTO } from "../../types/invoice.types";
+import { TTaxInvoiceDTO } from "../../schema/tax-invoice.schema";
 import { InvoicesColumns } from "./InvoicesColumns";
 import { CreateInvoiceDialog } from "../create-invoice/CreateInvoiceDialog";
 

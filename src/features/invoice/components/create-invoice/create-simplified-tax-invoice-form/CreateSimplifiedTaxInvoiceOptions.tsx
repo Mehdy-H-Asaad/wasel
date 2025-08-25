@@ -7,8 +7,10 @@ import {
 } from "@/components/ui/form";
 import {
 	INVOICE_IDS,
+	NO_TAX_RATE,
 	PAYMENTS_TYPES,
 	TAX_CATEGORIES,
+	TAX_RATE,
 	VAT_DOCUMENTS,
 } from "@/features/invoice/constants/invoice.constants";
 
@@ -25,37 +27,46 @@ import React, { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { TCreateSimplifiedTaxInvoiceDTO } from "@/features/invoice/schema/simplified-tax-invoice.schema";
-import { handleNumberInput } from "@/shared/utils/handle-number-input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronDownIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
 
 export const CreateSimplifiedTaxInvoiceOptions = () => {
 	const form = useFormContext<TCreateSimplifiedTaxInvoiceDTO>();
 
 	const VATDocuments = useWatch({
 		control: form.control,
-		name: "InvoiceTypeCode",
+		name: "invoice_type_code",
 	});
 
-	const { ClassifiedTaxCategory } = useWatch({ control: form.control });
+	const classified_tax_category = useWatch({
+		control: form.control,
+		name: "classified_tax_category",
+	});
 
 	useEffect(() => {
-		if (ClassifiedTaxCategory === "Z") {
-			form.setValue("BuyerInfo.PartyIdentification.schemeID", "NAT");
+		if (classified_tax_category === "Z") {
+			form.setValue("tax_rate", NO_TAX_RATE);
+			form.setValue("party_identification_scheme", "NAT");
 		} else {
-			form.setValue(
-				"BuyerInfo",
-				{} as TCreateSimplifiedTaxInvoiceDTO["BuyerInfo"]
-			);
+			form.setValue("tax_rate", TAX_RATE);
 		}
-	}, [ClassifiedTaxCategory, form]);
+	}, [classified_tax_category]);
 
 	return (
 		<div className="flex flex-col gap-4 dark:bg-main-black p-8 rounded-xl bg-white">
-			<div className="text-4xl font-bold">Tax Invoice Options</div>
+			<div className="text-2xl font-bold">Simplified Tax Invoice Options</div>
 			<div className="flex flex-col gap-4">
 				<div className="border grid grid-cols-4 gap-10 p-8 rounded-2xl">
 					<FormField
 						control={form.control}
-						name="ClassifiedTaxCategory"
+						name="classified_tax_category"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Tax Category *</FormLabel>
@@ -88,7 +99,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 					/>
 					<FormField
 						control={form.control}
-						name="InvoiceTypeCode"
+						name="invoice_type_code"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>VAT Documents *</FormLabel>
@@ -121,7 +132,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 					/>
 					<FormField
 						control={form.control}
-						name="PaymentMeansCode"
+						name="payment_means_code"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Payment Type *</FormLabel>
@@ -155,36 +166,53 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 
 					<FormField
 						control={form.control}
-						name="ActualDeliveryDate"
+						name="actual_delivery_date"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Delivery Date</FormLabel>
-								<FormControl>
-									<Input {...field} placeholder="Delivery Date" />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="Note"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Note</FormLabel>
-								<FormControl>
-									<Input {...field} placeholder="Note" />
-								</FormControl>
+								<div className="flex flex-col gap-3">
+									<FormLabel>Actual Delivery Date</FormLabel>
+									<Popover>
+										<FormControl>
+											<PopoverTrigger asChild>
+												<Button
+													variant="outline"
+													id="date"
+													className="w-full justify-between font-normal"
+												>
+													{field.value
+														? new Date(field.value).toLocaleDateString()
+														: "Select date"}
+													<ChevronDownIcon />
+												</Button>
+											</PopoverTrigger>
+										</FormControl>
+										<PopoverContent
+											className="w-auto overflow-hidden p-0"
+											align="start"
+										>
+											<Calendar
+												mode="single"
+												selected={
+													field.value ? new Date(field.value) : undefined
+												}
+												captionLayout="dropdown"
+												onSelect={date => {
+													field.onChange(date?.toISOString().split("T")[0]);
+												}}
+											/>
+										</PopoverContent>
+									</Popover>
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 
-					{ClassifiedTaxCategory === "Z" ? (
+					{classified_tax_category === "Z" ? (
 						<>
 							<FormField
 								control={form.control}
-								name="BuyerInfo.RegistrationName"
+								name="registration_name"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Client Name *</FormLabel>
@@ -197,23 +225,12 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="BuyerInfo.PartyIdentification.value"
+								name="party_identification_value"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>National ID *</FormLabel>
 										<FormControl>
-											<Input
-												{...field}
-												onChange={event =>
-													handleNumberInput({
-														event,
-														field,
-														type: "string",
-													})
-												}
-												value={field.value ?? ""}
-												placeholder="National ID"
-											/>
+											<Input {...field} placeholder="National ID" />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -226,7 +243,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 						<>
 							<FormField
 								control={form.control}
-								name="OriginalInvoiceID"
+								name="original_invoice_id"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Invoice ID *</FormLabel>
@@ -259,7 +276,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 							/>
 							<FormField
 								control={form.control}
-								name="InstructionNote"
+								name="instruction_note"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Instruction Note *</FormLabel>
@@ -272,6 +289,19 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 							/>
 						</>
 					) : null}
+					<FormField
+						control={form.control}
+						name="note"
+						render={({ field }) => (
+							<FormItem className="col-span-4">
+								<FormLabel>Note</FormLabel>
+								<FormControl>
+									<Textarea {...field} placeholder="Note" className="h-40" />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 				</div>
 			</div>
 		</div>
