@@ -9,7 +9,7 @@ import {
 import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MainButton } from "@/components/common/MainButton";
-import { CustomDialog } from "@/components/common/CustomDialog";
+
 import { useUpdateClient } from "../hooks/useUpdateClient";
 import {
 	Select,
@@ -21,42 +21,18 @@ import {
 	SelectGroup,
 } from "@/components/ui/select";
 import { TClientDTO } from "../types/client.types";
+import { CLIENT_IDENTIFCATIONS } from "../constants/client.constant";
+import { CustomDialog } from "@/components/common/CustomDialog";
 
 export const UpdateClient = (client: TClientDTO) => {
 	const { UpdateClientForm, isUpdatingClient, onUpdateClient } =
 		useUpdateClient(client);
-	const isValid = UpdateClientForm.formState.isValid;
 
-	const parties = [
-		{
-			label: "Commercial Registration number",
-			value: "CRN",
-		},
-		{
-			label: "MOMRAH license",
-			value: "MOM",
-		},
-		{
-			label: "MHRSD license",
-			value: "MLS",
-		},
-		{
-			label: "700",
-			value: "700",
-		},
-		{
-			label: "MISA license",
-			value: "SAG",
-		},
-		{
-			label: "Other OD",
-			value: "OTH",
-		},
-	];
+	const isValid = UpdateClientForm.formState.isValid;
 
 	return (
 		<CustomDialog
-			dialogContentClassName="sm:min-w-[80rem] dark:bg-main-black"
+			dialogContentClassName="sm:min-w-[40rem] dark:bg-main-black"
 			title="clients"
 			trigger="Update Client"
 		>
@@ -65,7 +41,7 @@ export const UpdateClient = (client: TClientDTO) => {
 					className="grid gap-4"
 					onSubmit={UpdateClientForm.handleSubmit(onUpdateClient)}
 				>
-					<div className="grid grid-cols-4 gap-10">
+					<div className="grid grid-cols-2 gap-6">
 						<FormField
 							control={UpdateClientForm.control}
 							name="registration_name"
@@ -79,7 +55,7 @@ export const UpdateClient = (client: TClientDTO) => {
 								</FormItem>
 							)}
 						/>
-						<FormField
+						{/* <FormField
 							control={UpdateClientForm.control}
 							name="party_identification_value"
 							render={({ field }) => (
@@ -91,8 +67,8 @@ export const UpdateClient = (client: TClientDTO) => {
 									<FormMessage />
 								</FormItem>
 							)}
-						/>
-						<FormField
+						/> */}
+						{/* <FormField
 							control={UpdateClientForm.control}
 							name="party_identification_scheme"
 							render={({ field }) => (
@@ -104,7 +80,7 @@ export const UpdateClient = (client: TClientDTO) => {
 									<FormMessage />
 								</FormItem>
 							)}
-						/>
+						/> */}
 						<FormField
 							control={UpdateClientForm.control}
 							name="party_identification_scheme"
@@ -123,7 +99,7 @@ export const UpdateClient = (client: TClientDTO) => {
 										<SelectContent>
 											<SelectGroup>
 												<SelectLabel>Client Identifications</SelectLabel>
-												{parties.map(client => (
+												{CLIENT_IDENTIFCATIONS.map(client => (
 													<SelectItem key={client.value} value={client.value}>
 														{client.label}
 													</SelectItem>
@@ -234,7 +210,13 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 					</div>
 					<DialogFooter>
-						<MainButton disabled={!isValid || isUpdatingClient}>
+						<MainButton
+							disabled={
+								!isValid ||
+								isUpdatingClient ||
+								!UpdateClientForm.formState.isDirty
+							}
+						>
 							{isUpdatingClient ? "Updating..." : "Update Client"}
 						</MainButton>
 					</DialogFooter>

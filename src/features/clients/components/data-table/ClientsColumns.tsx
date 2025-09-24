@@ -1,7 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { TClientDTO } from "../../types/client.types";
-import { ClientActionsCell } from "./ClientActionsCell";
+import { ClientActionsCell } from "./actions/ClientActionsCell";
 
 export const ClientsColumns: ColumnDef<TClientDTO>[] = [
 	{

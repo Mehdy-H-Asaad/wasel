@@ -9,7 +9,7 @@ import { TClientDTO } from "../types/client.types";
 
 export const useUpdateClient = (client: TClientDTO) => {
 	const { mutate, isPending } = useApiMutation<TClientDTO, TUpdateClientDTO>({
-		axiosRequestMethod: "put",
+		axiosRequestMethod: "patch",
 		queryKey: [CLIENTS],
 		requestURL: `/${CLIENTS}/${client.id}`,
 		successMsg: `Client ${UPDATE_SUCCESS_MESSAGE}`,
@@ -38,5 +38,9 @@ export const useUpdateClient = (client: TClientDTO) => {
 		mutate(values);
 	};
 
-	return { onUpdateClient, UpdateClientForm, isUpdatingClient: isPending };
+	return {
+		onUpdateClient,
+		UpdateClientForm,
+		isUpdatingClient: isPending,
+	};
 };

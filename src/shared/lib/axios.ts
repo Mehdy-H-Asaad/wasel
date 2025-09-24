@@ -64,9 +64,9 @@ axiosPrivateClient.interceptors.response.use(
 					) {
 						resetUser();
 						// Redirect to login or handle as needed
-						if (typeof window !== "undefined") {
-							window.location.href = "/login";
-						}
+						// if (typeof window !== "undefined") {
+						// 	window.location.href = "/login";
+						// }
 					}
 				}
 				// Don't retry again, just reject

@@ -14,7 +14,7 @@ export const StockColumns: ColumnDef<TStockDTO>[] = [
 		header: "Price",
 		cell: ({ row }) => {
 			return (
-				<div className="font-bold text-main-green dark:text-light-green">
+				<div className="font-bold bg-green-100 px-2 py-1 rounded-md w-fit text-green-500 dark:bg-green-900 dark:text-green-100">
 					{formatCurrency(row.original.price)}
 				</div>
 			);

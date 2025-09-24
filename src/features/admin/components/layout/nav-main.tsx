@@ -17,6 +17,8 @@ import {
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function NavMain({
 	items,
@@ -32,6 +34,8 @@ export function NavMain({
 		}[];
 	}[];
 }) {
+	const pathname = usePathname();
+
 	return (
 		<SidebarGroup>
 			<SidebarMenu>
@@ -53,7 +57,12 @@ export function NavMain({
 								</CollapsibleTrigger>
 							) : (
 								<SidebarMenuButton asChild tooltip={item.title}>
-									<Link href={item.url}>
+									<Link
+										href={item.url}
+										className={cn(
+											pathname === item.url && "bg-main-green text-white"
+										)}
+									>
 										{item.icon && <item.icon />}
 										<span className="text-base font-medium">{item.title}</span>
 									</Link>

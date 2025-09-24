@@ -12,6 +12,7 @@ export const useGetStocks = () => {
 		queryKey: [STOCKS],
 		requestURL: `/${STOCKS}`,
 		axiosConfig: {},
+		axiosType: "private",
 	});
 
 	return { stocks, isLoadingStocks, metaData };

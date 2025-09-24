@@ -6,6 +6,7 @@ export const useGetClients = () => {
 	const { data, isFetching, metaData } = useApiQuery<TClientDTO[]>({
 		queryKey: [CLIENTS],
 		requestURL: `/${CLIENTS}`,
+		axiosType: "private",
 	});
 
 	return { clients: data, isLoadingClients: isFetching, metaData };

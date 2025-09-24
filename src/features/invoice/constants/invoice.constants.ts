@@ -1,6 +1,6 @@
 export const INVOICES = "invoices";
-export const TAX_RATE = "15";
-export const NO_TAX_RATE = "0";
+export const TAX_RATE = 15;
+export const NO_TAX_RATE = 0;
 
 export const VAT_DOCUMENTS = [
 	{
@@ -61,8 +61,8 @@ export const TAX_EXEMPTION_REASONS_CODES = [
 		label: "VATEX-SA-29",
 	},
 	{
-		value: "VATEXT-SA-29-7",
-		label: "VATEXT-SA-29-7",
+		value: "VATEX-SA-29-7",
+		label: "VATEX-SA-29-7",
 	},
 	{
 		value: "VATEX-SA-30",

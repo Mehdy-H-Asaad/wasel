@@ -135,7 +135,7 @@ export const InvoiceLineDialog = ({
 						)}
 					/>
 
-					{classified_tax_category === "Z" ? (
+					{/* {classified_tax_category === "Z" ? (
 						<>
 							<FormField
 								control={invoiceLineForm.control}
@@ -160,7 +160,7 @@ export const InvoiceLineDialog = ({
 								)}
 							/>
 						</>
-					) : null}
+					) : null} */}
 					<DialogFooter>
 						<MainButton
 							className="capitalize"

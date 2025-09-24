@@ -9,12 +9,13 @@ import { UPDATE_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { TStockDTO } from "../types/stock.types";
 
 export const useUpdateStock = (stock: TStockDTO) => {
-	const { mutate, isPending } = useApiMutation<TStockDTO[], TUpdateStockDTO>({
-		axiosRequestMethod: "put",
+	const { mutate, isPending } = useApiMutation<TStockDTO, TUpdateStockDTO>({
+		axiosRequestMethod: "patch",
 		queryKey: [STOCKS],
 		requestURL: `/${STOCKS}/${stock.id}`,
 		successMsg: `Item ${UPDATE_SUCCESS_MESSAGE}`,
 	});
+	console.log(stock);
 
 	const updateStockSchema = stockSchema;
 
@@ -24,7 +25,7 @@ export const useUpdateStock = (stock: TStockDTO) => {
 		resolver: zodResolver(updateStockSchema),
 		defaultValues: {
 			name: stock.name,
-			price: stock.price,
+			price: Number(stock.price),
 			unit_code: stock.unit_code,
 		},
 	});

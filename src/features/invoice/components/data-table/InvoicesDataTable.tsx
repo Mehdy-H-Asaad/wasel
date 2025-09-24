@@ -1,41 +1,24 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import { PaginationState } from "@tanstack/react-table";
-import { useState } from "react";
-import { LIMIT } from "@/shared/data/constants";
-import { DataTableSkeleton } from "@/components/common/DataTableSkeleton";
 import { useGetInvoices } from "../../hooks/useGetInvoices";
-import { TTaxInvoiceDTO } from "../../schema/tax-invoice.schema";
 import { InvoicesColumns } from "./InvoicesColumns";
 import { CreateInvoiceDialog } from "../create-invoice/CreateInvoiceDialog";
 
 export const InvoicesDataTable = () => {
-	const [pagination, setPagination] = useState<PaginationState>({
-		pageIndex: 0,
-		pageSize: LIMIT,
-	});
+	const { metaData, invoices, isLoadingInvoices } = useGetInvoices();
 
-	const { metaData } = useGetInvoices();
-
-	const data: TTaxInvoiceDTO[] = [];
-
-	return false ? (
-		<DataTableSkeleton />
-	) : (
-		<div className=" border-3 p-10 rounded-lg border-[#171717] dark:bg-main-black">
-			<DataTable
-				columns={InvoicesColumns}
-				data={data || []}
-				pageCount={metaData.total_pages}
-				pagination={pagination}
-				searchableField="buyer-company"
-				searchablePlaceholder="Compnay - Client"
-				setPagination={setPagination}
-				skeletonRows={10}
-				manualPagination={true}
-			>
-				<CreateInvoiceDialog />
-			</DataTable>
-		</div>
+	return (
+		<DataTable
+			columns={InvoicesColumns}
+			data={invoices || []}
+			pageCount={metaData.total_pages}
+			searchablePlaceholder="Invoice Number"
+			manualPagination={true}
+			setSearchableField={() => {}}
+			isLoading={isLoadingInvoices}
+			totalCount={metaData.total_pages}
+		>
+			<CreateInvoiceDialog />
+		</DataTable>
 	);
 };

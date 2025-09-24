@@ -5,22 +5,30 @@ import {
 	useMutation,
 	UseMutationOptions,
 } from "@tanstack/react-query";
-import { axiosPrivateClient, axiosPublicClient } from "../api/axios";
 import { AxiosRequestConfig, AxiosError } from "axios";
-import { getQueryClient } from "../providers/get-query-client";
+import { getQueryClient } from "@/shared/providers/get-query-client";
+import { axiosPublicClient, axiosPrivateClient } from "../lib/axios";
+import { TServerResponse } from "../types/types";
 
 type THTTPRequestMethod = "put" | "post" | "delete" | "patch";
 
 type TApiError = {
+	success: false;
+	error: {
+		message: string;
+		statusCode: number;
+		timestamp: string;
+		path: string;
+		method: string;
+	};
+};
+
+// This is what you'll get in `onError`
+type TNormalizedError = {
 	message: string;
-	code: number;
 };
 
-type TServerResponse<T> = {
-	data: T;
-};
-
-type TUseApiMutation<TData, TVariables, TContext> = {
+type TUseApiMutation<TData, TVariables, TContext = unknown> = {
 	mutationKey?: MutationKey;
 	queryKey: QueryKey;
 	axiosRequestMethod: THTTPRequestMethod;
@@ -29,13 +37,18 @@ type TUseApiMutation<TData, TVariables, TContext> = {
 	successMsg: string;
 	axiosType?: "public" | "private";
 } & Omit<
-	UseMutationOptions<TData, TApiError, TVariables, TContext>,
+	UseMutationOptions<
+		TServerResponse<TData>,
+		TNormalizedError,
+		TVariables,
+		TContext
+	>,
 	"mutationFn" | "mutationKey"
 >;
 
 const queryClient = getQueryClient();
 
-export const useApiMutation = <TData, TVariables = void, TContext = unknown>({
+export const useApiMutation = <TData, TVariables, TContext = unknown>({
 	mutationKey,
 	axiosRequestMethod,
 	requestURL,
@@ -44,20 +57,20 @@ export const useApiMutation = <TData, TVariables = void, TContext = unknown>({
 	queryKey,
 	axiosType = "private",
 	...mutationOptions
-}: TUseApiMutation<TServerResponse<TData>, TVariables, TContext>) => {
+}: TUseApiMutation<TData, TVariables, TContext>) => {
 	const mutation = useMutation<
 		TServerResponse<TData>,
-		TApiError,
+		TNormalizedError,
 		TVariables,
 		TContext
 	>({
-		mutationKey: mutationKey,
+		mutationKey,
 		mutationFn: async (values: TVariables) => {
 			try {
-				const client =
+				const axiosClient =
 					axiosType === "public" ? axiosPublicClient : axiosPrivateClient;
 
-				const { data }: { data: TServerResponse<TData> } = await client[
+				const { data }: { data: TServerResponse<TData> } = await axiosClient[
 					axiosRequestMethod
 				](
 					requestURL,
@@ -69,31 +82,26 @@ export const useApiMutation = <TData, TVariables = void, TContext = unknown>({
 
 				return data;
 			} catch (error: unknown) {
-				const axiosError = error as AxiosError<{
-					detail: string | Array<{ msg: string }>;
-				}>;
+				const axiosError = error as AxiosError<TApiError>;
 				const responseData = axiosError?.response?.data;
-				const normalizedError = {
-					message: Array.isArray(responseData?.detail)
-						? responseData?.detail
-								.map((err: { msg: string }) => err.msg)
-								.join(", ")
-						: responseData?.detail || "Something went wrong.",
-				};
-				throw normalizedError;
+
+				throw {
+					message: responseData?.error?.message || "Something went wrong.",
+				} as TNormalizedError;
 			}
 		},
 		...mutationOptions,
 		onSuccess: (data, variables, context) => {
-			queryClient.invalidateQueries({ queryKey: queryKey, exact: false });
+			queryClient.invalidateQueries({ queryKey, exact: false });
 			toast.success(successMsg);
 			mutationOptions?.onSuccess?.(data, variables, context);
 		},
-		onError: (error: TApiError, variables, context) => {
+		onError: (error, variables, context) => {
+			// Now `error.message` works because we normalized it
 			toast.error(error.message);
 			mutationOptions?.onError?.(error, variables, context);
 		},
 	});
 
-	return { ...mutation, queryClient, data: mutation.data?.data };
+	return { ...mutation, queryClient };
 };

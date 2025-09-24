@@ -2,14 +2,14 @@ import { SalesChart } from "@/features/admin/components/SalesChart";
 import React from "react";
 import { IoMdTrendingUp } from "react-icons/io";
 
-const AdminPage = () => {
+const AnalyticsPage = () => {
 	return (
-		<div>
-			<div className="grid grid-cols-4 gap-4 py-10">
+		<div className="flex flex-col gap-10">
+			<div className="grid grid-cols-4 gap-4">
 				{Array.from({ length: 4 }).map((_, index) => (
 					<div
 						key={index}
-						className="p-6 flex flex-col gap-2 bg-white dark:bg-main-black dark:text-white rounded-lg "
+						className="p-6 flex flex-col gap-2 bg-muted  dark:bg-main-black dark:text-white rounded-lg "
 					>
 						<div className="flex items-center justify-between">
 							<div className="font-bold text-3xl text-main">Total Revune</div>
@@ -24,4 +24,4 @@ const AdminPage = () => {
 	);
 };
 
-export default AdminPage;
+export default AnalyticsPage;

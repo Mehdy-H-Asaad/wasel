@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/form";
 import {
 	INVOICE_IDS,
+	TAX_EXEMPTION_REASONS_CODES,
 	NO_TAX_RATE,
 	PAYMENTS_TYPES,
 	TAX_CATEGORIES,
@@ -23,7 +24,7 @@ import {
 	SelectLabel,
 	SelectItem,
 } from "@/components/ui/select";
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { TCreateSimplifiedTaxInvoiceDTO } from "@/features/invoice/schema/simplified-tax-invoice.schema";
@@ -36,6 +37,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
+import { handleNumberInput } from "@/shared/utils/handle-number-input";
 
 export const CreateSimplifiedTaxInvoiceOptions = () => {
 	const form = useFormContext<TCreateSimplifiedTaxInvoiceDTO>();
@@ -50,20 +52,16 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 		name: "classified_tax_category",
 	});
 
-	useEffect(() => {
-		if (classified_tax_category === "Z") {
-			form.setValue("tax_rate", NO_TAX_RATE);
-			form.setValue("party_identification_scheme", "NAT");
-		} else {
-			form.setValue("tax_rate", TAX_RATE);
-		}
-	}, [classified_tax_category]);
-
 	return (
-		<div className="flex flex-col gap-4 dark:bg-main-black p-8 rounded-xl bg-white">
-			<div className="text-2xl font-bold">Simplified Tax Invoice Options</div>
+		<div className="flex flex-col dark:bg-main-black p-8 rounded-xl bg-[#fafafa]">
+			<div className="flex justify-between items-center">
+				<div className="text-2xl font-bold">Tax Invoice Options</div>
+				<div className="w-fit self-end text-light-green font-bold text-lg border border-light-green py-1 px-4 rounded-full">
+					Simplified Tax Invoice
+				</div>
+			</div>
 			<div className="flex flex-col gap-4">
-				<div className="border grid grid-cols-4 gap-10 p-8 rounded-2xl">
+				<div className=" grid grid-cols-4 gap-10 py-8 rounded-2xl">
 					<FormField
 						control={form.control}
 						name="classified_tax_category"
@@ -71,11 +69,18 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 							<FormItem>
 								<FormLabel>Tax Category *</FormLabel>
 								<Select
-									onValueChange={field.onChange}
+									onValueChange={value => {
+										form.setValue(
+											"tax_rate",
+											value === "Z" ? NO_TAX_RATE : TAX_RATE
+										);
+										form.setValue("party_identification_scheme", "NAT");
+										field.onChange(value);
+									}}
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="Tax Category" />
 										</SelectTrigger>
 									</FormControl>
@@ -108,7 +113,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="VAT Document" />
 										</SelectTrigger>
 									</FormControl>
@@ -141,7 +146,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="Payment Type" />
 										</SelectTrigger>
 									</FormControl>
@@ -217,7 +222,11 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 									<FormItem>
 										<FormLabel>Client Name *</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="Client Name" />
+											<Input
+												{...field}
+												placeholder="Client Name"
+												className="bg-white"
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -230,7 +239,61 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 									<FormItem>
 										<FormLabel>National ID *</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="National ID" />
+											<Input
+												{...field}
+												placeholder="National ID"
+												className="bg-white"
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="tax_exemption_reason_code"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Tax Exemption Reason Code *</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger className="w-full bg-white">
+													<SelectValue placeholder="Tax Exemption Reason Code" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>Tax Exemption Reason Code</SelectLabel>
+													{TAX_EXEMPTION_REASONS_CODES.map(tax => (
+														<SelectItem
+															value={tax.value.toString()}
+															key={tax.value}
+														>
+															{tax.label}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="tax_exemption_reason"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Tax Exemption Reason *</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder="Tax Exemption Reason"
+												className="bg-white"
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -252,7 +315,7 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 											defaultValue={field.value}
 										>
 											<FormControl>
-												<SelectTrigger className="w-full">
+												<SelectTrigger className="w-full bg-white">
 													<SelectValue placeholder="Invoice ID" />
 												</SelectTrigger>
 											</FormControl>
@@ -281,7 +344,11 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 									<FormItem>
 										<FormLabel>Instruction Note *</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="Instruction Note" />
+											<Input
+												{...field}
+												placeholder="Instruction Note"
+												className="bg-white"
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -291,12 +358,35 @@ export const CreateSimplifiedTaxInvoiceOptions = () => {
 					) : null}
 					<FormField
 						control={form.control}
+						name="discount_amount"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Discount Amount</FormLabel>
+								<FormControl>
+									<Input
+										{...field}
+										value={field.value ?? ""}
+										onChange={event => handleNumberInput({ event, field })}
+										placeholder="Discount Amount"
+										className="bg-white"
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
 						name="note"
 						render={({ field }) => (
 							<FormItem className="col-span-4">
 								<FormLabel>Note</FormLabel>
 								<FormControl>
-									<Textarea {...field} placeholder="Note" className="h-40" />
+									<Textarea
+										{...field}
+										placeholder="Note"
+										className="h-40 bg-white"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

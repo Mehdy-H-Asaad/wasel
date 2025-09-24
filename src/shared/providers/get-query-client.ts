@@ -10,7 +10,9 @@ function makeQueryClient() {
 			mutations: {
 				retry: false,
 			},
+
 			queries: {
+				refetchOnWindowFocus: false,
 				staleTime: 60 * 1000,
 				retry: false,
 			},

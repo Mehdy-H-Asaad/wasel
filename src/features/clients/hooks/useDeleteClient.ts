@@ -10,5 +10,9 @@ export const useDeleteClient = (id: number) => {
 		successMsg: `Client ${DELETE_SUCCESS_MESSAGE}`,
 	});
 
-	return { deleteClient: mutate, isDeletingClient: isPending };
+	const onDeleteClient = () => {
+		mutate(id);
+	};
+
+	return { deleteClient: onDeleteClient, isDeletingClient: isPending };
 };

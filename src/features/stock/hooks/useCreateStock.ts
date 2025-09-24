@@ -7,14 +7,19 @@ import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { STOCKS } from "../constants/stock.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { TStockDTO } from "../types/stock.types";
+import { useState } from "react";
 
 export const useCreateStock = () => {
+	const [open, setOpen] = useState<boolean>(false);
 	const { mutate, isPending } = useApiMutation<TStockDTO[], TCreateStockDTO>({
 		axiosRequestMethod: "post",
 		queryKey: [STOCKS],
 		requestURL: `/${STOCKS}`,
 		successMsg: `Item ${CREATION_SUCCESS_MESSAGE}`,
-		onSuccess: () => CreateStockForm.reset(),
+		onSuccess: () => {
+			setOpen(false);
+			CreateStockForm.reset();
+		},
 	});
 
 	const createStockSchema = stockSchema;
@@ -34,5 +39,11 @@ export const useCreateStock = () => {
 		mutate(values);
 	};
 
-	return { CreateStockForm, onCreateStock, isCreatingStock: isPending };
+	return {
+		CreateStockForm,
+		onCreateStock,
+		isCreatingStock: isPending,
+		open,
+		setOpen,
+	};
 };

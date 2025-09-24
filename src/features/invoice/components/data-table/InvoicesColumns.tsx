@@ -1,6 +1,5 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { TTaxInvoiceDTO } from "../../schema/tax-invoice.schema";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -12,12 +11,19 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
+import { TInvoiceDTO } from "../../schema/invoice.schema";
+import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+import {
+	PAYMENTS_TYPES,
+	TAX_CATEGORIES,
+} from "../../constants/invoice.constants";
 
-export const InvoicesColumns: ColumnDef<TTaxInvoiceDTO>[] = [
+export const InvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
-		accessorFn: row => row.customer || "-",
+		accessorFn: row =>
+			row.customer ? row.customer.registration_name : "Customer",
 		id: "buyer-company",
-		header: "Client - Company",
+		header: "Customer",
 	},
 
 	{
@@ -45,13 +51,66 @@ export const InvoicesColumns: ColumnDef<TTaxInvoiceDTO>[] = [
 		),
 	},
 	{
+		accessorKey: "party_identification_scheme",
+		header: "Client Identification",
+		cell: ({ row }) => (
+			<div>
+				{
+					CLIENT_IDENTIFCATIONS.find(
+						identification =>
+							identification.value === row.original.party_identification_scheme
+					)?.label
+				}
+			</div>
+		),
+	},
+	{
+		accessorKey: "party_identification_value",
+		header: "Identification Value",
+	},
+
+	{
+		accessorKey: "payment_means_code",
+		header: "Payment Type",
+		cell: ({ row }) => (
+			<div>
+				{
+					PAYMENTS_TYPES.find(
+						payment =>
+							payment.value.toString() ===
+							row.original.payment_means_code.toString()
+					)?.label
+				}
+			</div>
+		),
+	},
+	{
+		accessorKey: "classified_tax_category",
+		header: "Tax Category",
+		cell: ({ row }) => (
+			<div>
+				{
+					TAX_CATEGORIES.find(
+						category =>
+							category.value.toString() ===
+							row.original.classified_tax_category.toString()
+					)?.label
+				}
+			</div>
+		),
+	},
+	{
+		accessorKey: "tax_rate",
+		header: "Tax Rate",
+		cell: ({ row }) => (
+			<div>{row.original.tax_rate.toString() === "15" ? "15%" : "0%"}</div>
+		),
+	},
+	{
 		accessorKey: "issue_date",
 		header: "Issue Date",
 	},
-	{
-		accessorKey: "payable_amount",
-		header: "Payable Amount",
-	},
+
 	{
 		id: "actions",
 		header: "Actions",
@@ -70,7 +129,7 @@ export const InvoicesColumns: ColumnDef<TTaxInvoiceDTO>[] = [
 						<DropdownMenuLabel>Options</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 
-						<Link href={`/admin/invoices/${invoice.id}`}>
+						<Link href={`/admin/invoices/invoice-details/${invoice.id}`}>
 							<MainButton>Invoice Details</MainButton>
 						</Link>
 					</DropdownMenuContent>

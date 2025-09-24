@@ -10,5 +10,9 @@ export const useDeleteStock = (id: number) => {
 		axiosRequestMethod: "delete",
 	});
 
-	return { deleteStock: mutate, isDeletingStock: isPending };
+	const onDeleteStock = () => {
+		mutate(id);
+	};
+
+	return { deleteStock: onDeleteStock, isDeletingStock: isPending };
 };

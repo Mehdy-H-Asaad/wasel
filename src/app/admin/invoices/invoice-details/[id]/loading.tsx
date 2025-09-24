@@ -1,8 +1,8 @@
 import TopLoadingBar from "@/components/common/TopLoadingBar";
+import React from "react";
 
-const Loading = () => {
+const loading = () => {
 	return <TopLoadingBar />;
 };
 
-export default Loading;
-
+export default loading;

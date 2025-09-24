@@ -12,6 +12,7 @@ import {
 	NO_TAX_RATE,
 	VAT_DOCUMENTS,
 	TAX_RATE,
+	TAX_EXEMPTION_REASONS_CODES,
 } from "@/features/invoice/constants/invoice.constants";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
 import {
@@ -51,21 +52,18 @@ export const CreateTaxInvoiceOptions = () => {
 		name: "classified_tax_category",
 	});
 
-	useEffect(() => {
-		if (classified_tax_category === "Z") {
-			form.setValue("tax_rate", NO_TAX_RATE);
-		} else {
-			form.setValue("tax_rate", TAX_RATE);
-		}
-	}, [classified_tax_category]);
-
 	const { clients } = useGetClients();
 
 	return (
-		<div className="flex flex-col gap-4 dark:bg-main-black p-8 rounded-xl bg-white">
-			<div className="text-2xl font-bold">Tax Invoice Options</div>
+		<div className="flex flex-col  dark:bg-main-black p-8 rounded-xl bg-[#fafafa]">
+			<div className="flex justify-between items-center">
+				<div className="text-2xl font-bold">Tax Invoice Options</div>
+				<div className="w-fit self-end text-light-green font-bold text-lg border border-light-green py-1 px-4 rounded-full">
+					Tax Invoice
+				</div>
+			</div>
 			<div className="flex flex-col gap-4">
-				<div className="border grid grid-cols-4 gap-10 p-8 rounded-2xl">
+				<div className=" grid grid-cols-4 gap-10 py-8 rounded-2xl">
 					<FormField
 						control={form.control}
 						name="customer"
@@ -77,7 +75,7 @@ export const CreateTaxInvoiceOptions = () => {
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="Client - Company" />
 										</SelectTrigger>
 									</FormControl>
@@ -111,7 +109,7 @@ export const CreateTaxInvoiceOptions = () => {
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="VAT Document" />
 										</SelectTrigger>
 									</FormControl>
@@ -144,7 +142,7 @@ export const CreateTaxInvoiceOptions = () => {
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="Payment Type" />
 										</SelectTrigger>
 									</FormControl>
@@ -175,12 +173,16 @@ export const CreateTaxInvoiceOptions = () => {
 								<FormLabel>Tax Category *</FormLabel>
 								<Select
 									onValueChange={value => {
+										form.setValue(
+											"tax_rate",
+											value === "Z" ? NO_TAX_RATE : TAX_RATE
+										);
 										field.onChange(value);
 									}}
 									defaultValue={field.value}
 								>
 									<FormControl>
-										<SelectTrigger className="w-full">
+										<SelectTrigger className="w-full bg-white">
 											<SelectValue placeholder="Tax Category" />
 										</SelectTrigger>
 									</FormControl>
@@ -260,7 +262,7 @@ export const CreateTaxInvoiceOptions = () => {
 											defaultValue={field.value}
 										>
 											<FormControl>
-												<SelectTrigger className="w-full">
+												<SelectTrigger className="w-full bg-white">
 													<SelectValue placeholder="Invoice ID" />
 												</SelectTrigger>
 											</FormControl>
@@ -289,7 +291,11 @@ export const CreateTaxInvoiceOptions = () => {
 									<FormItem>
 										<FormLabel>Instruction Note *</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="Instruction Note" />
+											<Input
+												{...field}
+												placeholder="Instruction Note"
+												className="bg-white"
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -297,6 +303,61 @@ export const CreateTaxInvoiceOptions = () => {
 							/>
 						</>
 					) : null}
+					{classified_tax_category === "Z" ? (
+						<>
+							<FormField
+								control={form.control}
+								name="tax_exemption_reason_code"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Tax Exemption Reason Code *</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger className="w-full bg-white">
+													<SelectValue placeholder="Tax Exemption Reason Code" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>Tax Exemption Reason Code</SelectLabel>
+													{TAX_EXEMPTION_REASONS_CODES.map(tax => (
+														<SelectItem
+															value={tax.value.toString()}
+															key={tax.value}
+														>
+															{tax.label}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="tax_exemption_reason"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Tax Exemption Reason *</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder="Tax Exemption Reason"
+												className="bg-white"
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</>
+					) : null}
+
 					<FormField
 						control={form.control}
 						name="discount_amount"
@@ -309,6 +370,7 @@ export const CreateTaxInvoiceOptions = () => {
 										value={field.value ?? ""}
 										onChange={event => handleNumberInput({ event, field })}
 										placeholder="Discount Amount"
+										className="bg-white"
 									/>
 								</FormControl>
 								<FormMessage />
@@ -322,7 +384,11 @@ export const CreateTaxInvoiceOptions = () => {
 							<FormItem className="col-span-4 ">
 								<FormLabel>Note</FormLabel>
 								<FormControl>
-									<Textarea {...field} placeholder="Note" className="h-40" />
+									<Textarea
+										{...field}
+										placeholder="Note"
+										className="h-40 bg-white"
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

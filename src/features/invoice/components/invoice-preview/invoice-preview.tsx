@@ -15,13 +15,13 @@ import { TCreateSimplifiedTaxInvoiceDTO } from "../../schema/simplified-tax-invo
 import { PAYMENTS_TYPES } from "../../constants/invoice.constants";
 import { useInvoiceLineStore } from "../../store/invoice-line.store";
 
-type TInvoiceDetailsProps = {
+type TInvoicePreviewProps = {
 	form:
 		| UseFormReturn<TCreateTaxInvoiceDTO>
 		| UseFormReturn<TCreateSimplifiedTaxInvoiceDTO>;
 };
 
-export const InvoiceDetails = ({ form }: TInvoiceDetailsProps) => {
+export const InvoicePreview = ({ form }: TInvoicePreviewProps) => {
 	const invoice = form.getValues();
 
 	const { invoiceLinesTable } = useInvoiceLineStore();

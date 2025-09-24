@@ -23,22 +23,25 @@ import {
 import { CLIENT_IDENTIFCATIONS } from "../constants/client.constant";
 
 export const CreateClient = () => {
-	const { CreateClientForm, isCreatingClient, onCreateClient } =
+	const { CreateClientForm, isCreatingClient, onCreateClient, open, setOpen } =
 		useCreateClient();
 	const isValid = CreateClientForm.formState.isValid;
 
 	return (
 		<CustomDialog
-			dialogContentClassName="sm:min-w-[80rem] dark:bg-main-black"
+			dialogContentClassName="sm:min-w-[40rem] dark:bg-main-black"
 			title="clients"
 			trigger="Add Client"
+			open={open}
+			setOpen={setOpen}
+			isMainButton
 		>
 			<Form {...CreateClientForm}>
 				<form
 					className="grid gap-4"
 					onSubmit={CreateClientForm.handleSubmit(onCreateClient)}
 				>
-					<div className="grid grid-cols-4 gap-10">
+					<div className="grid grid-cols-2 gap-6">
 						<FormField
 							control={CreateClientForm.control}
 							name="registration_name"

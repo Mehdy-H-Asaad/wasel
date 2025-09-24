@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import { MainButton } from "@/components/common/MainButton";
 import { CreateSimplifiedTaxInvoiceOptions } from "./CreateSimplifiedTaxInvoiceOptions";
 import { InvoiceLinesDataTable } from "../invoice-lines/invoice-line-data-table/InvoiceLineDataTable";
-import { InvoiceDetails } from "../../invoice-details/InvoiceDetails";
-import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { InvoicePreview } from "../../invoice-preview/invoice-preview";
 import { useCreateSimplifiedTaxInvoice } from "@/features/invoice/hooks/simplified-tax-invoice/useCreateSimplifiedTaxInvoice";
 export const CreateSimplifiedTaxInvoice = () => {
 	const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
@@ -27,23 +26,10 @@ export const CreateSimplifiedTaxInvoice = () => {
 				onSubmit={CreateSimplifiedTaxInvoiceForm.handleSubmit(
 					onCreateSimplifiedTaxInvoice
 				)}
-				className="flex flex-col gap-10 py-10"
+				className="flex flex-col gap-4"
 			>
 				{!isPreviewing ? (
 					<>
-						<div className="flex items-center justify-between gap-4">
-							<div className="flex items-center gap-4">
-								<FaFileInvoiceDollar size={40} />
-								<div className="font-bold text-4xl">
-									Create Simplified Tax Invoice
-								</div>
-							</div>
-
-							<div className="text-light-green font-bold text-lg border border-light-green py-1 px-4 rounded-full">
-								Simplified Tax Invoice
-							</div>
-						</div>
-
 						<div className="flex flex-col gap-10 ">
 							<CreateSimplifiedTaxInvoiceOptions />
 							<InvoiceLinesDataTable />
@@ -54,15 +40,12 @@ export const CreateSimplifiedTaxInvoice = () => {
 					</>
 				) : (
 					<>
-						<InvoiceDetails form={CreateSimplifiedTaxInvoiceForm} />
+						<InvoicePreview form={CreateSimplifiedTaxInvoiceForm} />
 						<div className="flex items-center gap-4 self-end">
 							<MainButton onClick={handlePreview}>Edit Invoice</MainButton>
 							<MainButton
 								type="submit"
 								className="ml-auto w-fit"
-								onClick={() =>
-									console.log(CreateSimplifiedTaxInvoiceForm.getValues())
-								}
 								disabled={
 									isCreatingSimplifiedTaxInvoice ||
 									!CreateSimplifiedTaxInvoiceForm.formState.isValid

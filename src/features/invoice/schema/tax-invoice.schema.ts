@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { invoiceSchema } from "./invoice.schema";
+import { NO_TAX_RATE, TAX_RATE } from "../constants/invoice.constants";
 
-export const taxInvoiceSchmea = invoiceSchema.pick({
+export const taxInvoiceSchema = invoiceSchema.pick({
 	id: true,
 	customer: true,
 	invoice_type: true,
@@ -20,26 +21,48 @@ export const taxInvoiceSchmea = invoiceSchema.pick({
 	invoice_lines: true,
 });
 
-export const createTaxInvoiceSchema = taxInvoiceSchmea
-	.omit({ id: true })
-	.superRefine((data, ctx) => {
-		if (data.invoice_type_code === "381" || data.invoice_type_code === "383") {
-			if (!data.original_invoice_id) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					path: ["original_invoice_id"],
-					message: "Original Invoice ID is required for credit or debit notes.",
-				});
-			}
-			if (!data.instruction_note) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					path: ["instruction_note"],
-					message: "Instruction Note is required for credit or debit notes.",
-				});
-			}
-		}
-	});
+const BaseTaxInvoiceSchema = taxInvoiceSchema.omit({
+	invoice_type_code: true,
+	original_invoice_id: true,
+	instruction_note: true,
+	classified_tax_category: true,
+	tax_rate: true,
+});
 
-export type TCreateTaxInvoiceDTO = Omit<z.infer<typeof taxInvoiceSchmea>, "id">;
-export type TTaxInvoiceDTO = z.infer<typeof taxInvoiceSchmea>;
+const InvoiceTypeSchema = z.discriminatedUnion("invoice_type_code", [
+	z.object({
+		invoice_type_code: z.enum(["381", "383"]),
+		original_invoice_id: z.string().min(1, "Original Invoice ID is required."),
+		instruction_note: z.string().min(1, "Instruction Note is required."),
+	}),
+	z.object({
+		invoice_type_code: z.literal("388"),
+	}),
+]);
+
+const TaxCategorySchema = z.discriminatedUnion("classified_tax_category", [
+	z.object({
+		classified_tax_category: z.literal("Z"),
+		tax_rate: z.literal(NO_TAX_RATE),
+		tax_exemption_reason_code: z
+			.string()
+			.min(1, "Tax Exemption Reason Code is required."),
+		tax_exemption_reason: z
+			.string()
+			.min(1, "Tax Exemption Reason is required."),
+	}),
+	z.object({
+		classified_tax_category: z.literal("S"),
+		tax_rate: z.literal(TAX_RATE),
+	}),
+]);
+
+export const TaxInvoiceSchema =
+	BaseTaxInvoiceSchema.and(InvoiceTypeSchema).and(TaxCategorySchema);
+
+export const CreateTaxInvoiceSchema = BaseTaxInvoiceSchema.omit({ id: true })
+	.and(InvoiceTypeSchema)
+	.and(TaxCategorySchema);
+
+export type TCreateTaxInvoiceDTO = z.infer<typeof CreateTaxInvoiceSchema>;
+export type TTaxInvoiceDTO = z.infer<typeof TaxInvoiceSchema>;

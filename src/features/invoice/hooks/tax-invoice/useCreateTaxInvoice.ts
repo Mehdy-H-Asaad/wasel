@@ -1,15 +1,11 @@
 "use client";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import {
-	INVOICES,
-	NO_TAX_RATE,
-	TAX_RATE,
-} from "../../constants/invoice.constants";
+import { INVOICES } from "../../constants/invoice.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	createTaxInvoiceSchema,
+	CreateTaxInvoiceSchema,
 	TCreateTaxInvoiceDTO,
 	TTaxInvoiceDTO,
 } from "../../schema/tax-invoice.schema";
@@ -28,14 +24,14 @@ export const useCreateTaxInvoice = () => {
 	const currentDate = new Date();
 
 	const CreateTaxInvoiceForm = useForm<TCreateTaxInvoiceDTO>({
-		resolver: zodResolver(createTaxInvoiceSchema),
+		resolver: zodResolver(CreateTaxInvoiceSchema),
 		mode: "onChange",
 		defaultValues: {
 			actual_delivery_date: currentDate.toISOString().split("T")[0],
 			classified_tax_category: undefined,
-			tax_rate: "",
+			tax_rate: undefined,
 			customer: "",
-			discount_amount: null,
+			discount_amount: undefined,
 			document_currency_code: "SAR",
 			invoice_type: "0100000",
 			invoice_type_code: undefined,
@@ -44,16 +40,13 @@ export const useCreateTaxInvoice = () => {
 				hour12: false,
 			}),
 			note: "",
-			instruction_note: "",
-			original_invoice_id: undefined,
 			payment_means_code: "",
 			invoice_lines: [],
 		},
 	});
 
 	const onCreateTaxInvoice = (values: TCreateTaxInvoiceDTO) => {
-		const taxRate = values.tax_rate === "0" ? NO_TAX_RATE : TAX_RATE;
-		mutate({ ...values, tax_rate: taxRate });
+		mutate({ ...values, discount_amount: values.discount_amount || 0 });
 	};
 
 	return {

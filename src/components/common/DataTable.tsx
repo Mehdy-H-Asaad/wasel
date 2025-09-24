@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/table";
 import React, { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePaginationStore } from "@/shared/store/pagination.store";
+import { useDebounce } from "@/shared/hooks/use-debounce";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -31,39 +33,46 @@ interface DataTableProps<TData, TValue> {
 	pagination?: PaginationState;
 	isLoading?: boolean;
 	pageCount?: number;
-	setPagination?: React.Dispatch<React.SetStateAction<PaginationState>>;
-	skeletonRows: number;
+	totalCount?: number;
 	searchablePlaceholder: string;
-	searchableField: string;
 	children?: React.ReactNode;
 	manualPagination?: boolean;
+	setSearchableField: (filter: string) => void;
 }
 
 export function DataTable<TData, TValue>({
 	columns,
 	data,
-	pagination,
-	setPagination,
 	pageCount,
 	isLoading,
 	searchablePlaceholder,
-	searchableField,
-	skeletonRows,
 	children,
 	manualPagination = true,
+	setSearchableField,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState({});
+	const { pagination, setPagination } = usePaginationStore();
+
+	// Create a debounced search function
+	const debouncedSearch = useDebounce({
+		callback: setSearchableField,
+		delay: 500,
+	});
 
 	const table = useReactTable({
 		data,
 		columns,
 		...(manualPagination && {
-			pageCount: pageCount,
+			pageCount,
 			manualPagination: true,
-			onPaginationChange: setPagination,
+			onPaginationChange: updater => {
+				setPagination(
+					typeof updater === "function" ? updater(pagination) : updater
+				);
+			},
 		}),
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -83,30 +92,32 @@ export function DataTable<TData, TValue>({
 	});
 
 	return (
-		<div className="w-full rounded-md">
-			<div className="flex items-center justify-between">
+		<div className="w-full">
+			<div className="flex items-center justify-between mb-6">
 				<Input
 					placeholder={searchablePlaceholder}
-					value={
-						(table.getColumn(searchableField)?.getFilterValue() as string) ?? ""
-					}
-					onChange={event =>
-						table.getColumn(searchableField)?.setFilterValue(event.target.value)
-					}
-					className="max-w-sm w-60 bg-transparent border-gray-500 my-6"
+					onChange={e => {
+						debouncedSearch(e.target.value);
+					}}
+					className="max-w-sm w-60 bg-transparent border-gray-500"
 				/>
 				{children}
 			</div>
-			<div className="rounded-md border border-gray-500">
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map(headerGroup => (
-							<TableRow
-								className=" rounded-md border border-gray-500"
-								key={headerGroup.id}
-							>
-								{headerGroup.headers.map(header => {
-									return (
+
+			{isLoading ? (
+				<div className="flex justify-center items-center h-96">
+					<Skeleton className="w-full h-full" />
+				</div>
+			) : (
+				<div className=" border border-gray-500">
+					<Table>
+						<TableHeader>
+							{table.getHeaderGroups().map(headerGroup => (
+								<TableRow
+									className=" rounded-md border border-gray-500"
+									key={headerGroup.id}
+								>
+									{headerGroup.headers.map(header => (
 										<TableHead className="rtl:text-right" key={header.id}>
 											{header.isPlaceholder
 												? null
@@ -115,57 +126,44 @@ export function DataTable<TData, TValue>({
 														header.getContext()
 												  )}
 										</TableHead>
-									);
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{isLoading ? (
-							[...Array(10)].map((_, index) => (
-								<TableRow
-									key={index}
-									className="rounded-md border border-gray-500"
-								>
-									{[...Array(skeletonRows)].map((_, cellIndex) => (
-										<TableCell key={cellIndex} className="h-24 text-center">
-											<div className="space-y-2">
-												<Skeleton className="h-4 w-[100px]" />
-											</div>
-										</TableCell>
 									))}
 								</TableRow>
-							))
-						) : table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map(row => (
-								<TableRow
-									className="rounded-md border border-gray-500"
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-								>
-									{row.getVisibleCells().map(cell => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext()
-											)}
-										</TableCell>
-									))}
+							))}
+						</TableHeader>
+						<TableBody>
+							{table.getRowModel().rows?.length ? (
+								table.getRowModel().rows.map(row => (
+									<TableRow
+										className="rounded-md border border-gray-500"
+										key={row.id}
+										data-state={row.getIsSelected() && "selected"}
+									>
+										{row.getVisibleCells().map(cell => (
+											<TableCell key={cell.id}>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext()
+												)}
+											</TableCell>
+										))}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										No results.
+									</TableCell>
 								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
+							)}
+						</TableBody>
+					</Table>
+				</div>
+			)}
+
+			{/* Pagination buttons */}
 			<div className="flex items-center justify-end space-x-2 py-4">
 				<Button
 					className="bg-transparent hover:bg-black hover:text-white duration-200 border dark:text-white text-black border-gray-500 cursor-pointer"

@@ -1,5 +1,5 @@
 import { QueryClient, QueryKey, QueryOptions } from "@tanstack/react-query";
-import { axiosPublicClient, axiosPrivateClient } from "../api/axios";
+import { axiosPublicClient, axiosPrivateClient } from "../lib/axios";
 import { AxiosRequestConfig, AxiosError } from "axios";
 
 type TUsePrefetchQueryProps<T> = {

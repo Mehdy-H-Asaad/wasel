@@ -23,12 +23,12 @@ export const CreateInvoiceDialog = () => {
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex items-center gap-4 justify-between">
-					<Link className="w-1/2" href={"/admin/invoices/tax-invoice"}>
+					<Link className="w-1/2" href={"/admin/invoices/create-tax-invoice"}>
 						<MainButton className="w-full">Tax Invoice</MainButton>
 					</Link>
 					<Link
 						className="w-1/2"
-						href={"/admin/invoices/simplified-tax-invoice"}
+						href={"/admin/invoices/create-simplified-tax-invoice"}
 					>
 						<MainButton className="w-full">Simplified Tax Invoice</MainButton>
 					</Link>

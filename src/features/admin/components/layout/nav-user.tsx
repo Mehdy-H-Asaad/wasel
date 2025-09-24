@@ -1,13 +1,6 @@
 "use client";
 
-import {
-	BadgeCheck,
-	Bell,
-	ChevronsUpDown,
-	CreditCard,
-	LogOut,
-	Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogOut, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -77,25 +70,29 @@ export function NavUser({
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
+							{/* <DropdownMenuItem>
 								<Sparkles />
 								Upgrade to Pro
-							</DropdownMenuItem>
+							</DropdownMenuItem> */}
 						</DropdownMenuGroup>
-						<DropdownMenuSeparator />
+						{/* <DropdownMenuSeparator /> */}
 						<DropdownMenuGroup>
 							<DropdownMenuItem>
-								<BadgeCheck />
-								Account
+								<User />
+								Profile
 							</DropdownMenuItem>
-							<DropdownMenuItem>
+							{/* <DropdownMenuItem>
 								<CreditCard />
 								Billing
-							</DropdownMenuItem>
-							<DropdownMenuItem>
+							</DropdownMenuItem> */}
+							{/* <DropdownMenuItem>
 								<Bell />
 								Notifications
-							</DropdownMenuItem>
+							</DropdownMenuItem> */}
+							{/* <DropdownMenuItem>
+								<Bell />
+								Notifications
+							</DropdownMenuItem> */}
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>

@@ -16,7 +16,9 @@ import { UpdateStock } from "../stock-crud/UpdateStock";
 export const StockActionsCell = ({ row }: { row: Row<TStockDTO> }) => {
 	const stock = row.original;
 
-	const { deleteStock, isDeletingStock } = useDeleteStock(stock.id);
+	const { deleteStock: onDeleteStock, isDeletingStock } = useDeleteStock(
+		stock.id
+	);
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -28,13 +30,14 @@ export const StockActionsCell = ({ row }: { row: Row<TStockDTO> }) => {
 			<DropdownMenuContent align="end">
 				<DropdownMenuLabel>Options</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				<DeleteDialog
-					deleteFunc={deleteStock}
-					isLoading={isDeletingStock}
-					trigger="Delete Stock"
-				/>
-
-				<UpdateStock {...stock} />
+				<div className="flex flex-col gap-2">
+					<UpdateStock {...stock} />
+					<DeleteDialog
+						deleteFunc={onDeleteStock}
+						isLoading={isDeletingStock}
+						trigger="Delete Stock"
+					/>
+				</div>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

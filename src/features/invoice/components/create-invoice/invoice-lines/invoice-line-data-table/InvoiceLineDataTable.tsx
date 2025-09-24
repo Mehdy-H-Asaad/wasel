@@ -19,9 +19,9 @@ export const InvoiceLinesDataTable = () => {
 	}, [invoiceLinesTable]);
 
 	return (
-		<div className="flex flex-col gap-4 dark:bg-main-black p-8 rounded-xl bg-white">
+		<div className="flex flex-col dark:bg-main-black p-8 rounded-xl bg-[#fafafa]">
 			<div className="text-2xl font-bold">Tax Invoice Lines</div>
-			<div className="flex flex-col gap-4 border px-8 rounded-2xl">
+			<div className="flex flex-col gap-4 py-8 rounded-2xl">
 				<DataTable
 					columns={InvoiceLinesColumns}
 					data={invoiceLinesTable || []}

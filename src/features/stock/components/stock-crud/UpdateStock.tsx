@@ -13,11 +13,21 @@ import { CustomDialog } from "@/components/common/CustomDialog";
 import { handleNumberInput } from "@/shared/utils/handle-number-input";
 import { useUpdateStock } from "../../hooks/useUpdateStock";
 import { TStockDTO } from "../../types/stock.types";
+import {
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+	SelectItem,
+	Select,
+} from "@/components/ui/select";
+import { STOCK_UNITS } from "../../constants/stock.constants";
 
 export const UpdateStock = (stock: TStockDTO) => {
 	const { UpdateStockForm, onUpdateStock, isUpdatingStock } =
 		useUpdateStock(stock);
 	const isValid = UpdateStockForm.formState.isValid;
+
+	console.log(UpdateStockForm.formState.errors);
 
 	return (
 		<CustomDialog className="w-full" title="stocks" trigger="update stock">
@@ -63,15 +73,35 @@ export const UpdateStock = (stock: TStockDTO) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Unit</FormLabel>
-								<FormControl>
-									<Input {...field} placeholder="Unit" />
-								</FormControl>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger className="w-full">
+											<SelectValue placeholder="Select Unit" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{STOCK_UNITS.map(unit => (
+											<SelectItem key={unit.value} value={unit.value}>
+												{unit.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 					<DialogFooter>
-						<MainButton disabled={!isValid || isUpdatingStock}>
+						<MainButton
+							disabled={
+								!isValid ||
+								isUpdatingStock ||
+								!UpdateStockForm.formState.isDirty
+							}
+						>
 							{isUpdatingStock ? "Updating..." : "Update Stock"}
 						</MainButton>
 					</DialogFooter>

@@ -5,13 +5,19 @@ import { clientSchema, TCreateClientDTO } from "../schema/client.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TClientDTO } from "../types/client.types";
+import { useState } from "react";
 
 export const useCreateClient = () => {
+	const [open, setOpen] = useState<boolean>(false);
 	const { mutate, isPending } = useApiMutation<TClientDTO, TCreateClientDTO>({
 		axiosRequestMethod: "post",
 		queryKey: [CLIENTS],
 		requestURL: `/${CLIENTS}`,
 		successMsg: `Client ${CREATION_SUCCESS_MESSAGE}`,
+		onSuccess: () => {
+			setOpen(false);
+			CreateClientForm.reset();
+		},
 	});
 
 	const CreateClientForm = useForm<TCreateClientDTO>({
@@ -33,5 +39,11 @@ export const useCreateClient = () => {
 		mutate(values);
 	};
 
-	return { onCreateClient, CreateClientForm, isCreatingClient: isPending };
+	return {
+		onCreateClient,
+		CreateClientForm,
+		isCreatingClient: isPending,
+		open,
+		setOpen,
+	};
 };

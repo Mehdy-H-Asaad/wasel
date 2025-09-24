@@ -2,8 +2,7 @@ import { useCreateTaxInvoiceLine } from "@/features/invoice/hooks/invoice-lines/
 import { InvoiceLineDialog } from "../invoice-line-form/InvoiceLineDialog";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
-import { invoiceLinesSchema } from "@/features/invoice/schema/invoice-lines.schema";
-import { z } from "zod";
+import { TCreateTaxInvoiceLineDTO } from "@/features/invoice/schema/invoice-lines.schema";
 import { calculateInvoiceLines } from "@/features/invoice/utils/calculate-invoice-lines";
 import { useInvoiceLineStore } from "@/features/invoice/store/invoice-line.store";
 import { useGetStocks } from "@/features/stock/hooks/useGetStock";
@@ -20,7 +19,7 @@ export const CreateInvoiceLine = () => {
 
 	const { stocks } = useGetStocks();
 
-	const onAddInvoiceLine = (values: z.infer<typeof invoiceLinesSchema>) => {
+	const onAddInvoiceLine = (values: TCreateTaxInvoiceLineDTO) => {
 		if (fields.find(field => field.item_id === values.item_id)) {
 			return toast.error("Item already exists");
 		}

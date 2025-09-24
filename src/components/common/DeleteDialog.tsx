@@ -23,8 +23,8 @@ export const DeleteDialog = ({
 }: TDeleteDialog) => {
 	return (
 		<AlertDialog>
-			<AlertDialogTrigger asChild className="mb-2 ">
-				<Button className="bg-red-700 duration-200 text-white hover:bg-red-800 hover:!text-white cursor-pointer w-full text-center justify-center px-4 py-1 flex font-bold rounded-lg ">
+			<AlertDialogTrigger asChild>
+				<Button className="bg-red-600 duration-200 text-white hover:bg-red-700 hover:!text-white cursor-pointer w-full text-center justify-center px-4 py-1 flex font-bold ">
 					{trigger}
 				</Button>
 			</AlertDialogTrigger>
@@ -37,13 +37,16 @@ export const DeleteDialog = ({
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel className="border light:text-black hover:bg-black hover:text-white  duration-200">
+					<AlertDialogCancel
+						disabled={isLoading}
+						className="border light:text-black hover:bg-black hover:text-white  duration-200"
+					>
 						Cancel
 					</AlertDialogCancel>
 					<Button
 						disabled={isLoading}
 						onClick={() => deleteFunc()}
-						className="capitalize duration-200 hover:bg-red-800 font-semibold hover:text-white text-white bg-red-700"
+						className="capitalize duration-200 hover:bg-red-700 font-semibold hover:text-white text-white bg-red-600"
 					>
 						{isLoading ? "Deleting..." : trigger}
 					</Button>

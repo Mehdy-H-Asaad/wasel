@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { invoiceSchema } from "./invoice.schema";
+import { NO_TAX_RATE, TAX_RATE } from "../constants/invoice.constants";
 
 export const simplifiedTaxInvoiceSchema = invoiceSchema.pick({
 	id: true,
-	customer: true,
+	// customer: true,
 	invoice_type: true,
 	invoice_type_code: true,
 	issue_date: true,
@@ -23,48 +24,56 @@ export const simplifiedTaxInvoiceSchema = invoiceSchema.pick({
 	party_identification_value: true,
 });
 
-export const createSimplifiedTaxInvoiceSchema = simplifiedTaxInvoiceSchema
-	.omit({
-		id: true,
-	})
-	.superRefine((data, ctx) => {
-		if (data.invoice_type_code === "381" || data.invoice_type_code === "383") {
-			if (!data.original_invoice_id) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					path: ["original_invoice_id"],
-					message: "Original Invoice ID is required for credit or debit notes.",
-				});
-			}
-			if (!data.instruction_note) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					path: ["instruction_note"],
-					message: "Instruction Note is required for credit or debit notes.",
-				});
-			}
-		}
-		if (data.classified_tax_category === "Z") {
-			if (!data.registration_name) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					path: ["registration_name"],
-					message: "Client Name is required for simplified tax invoice.",
-				});
-			}
-			if (!data.party_identification_value) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					path: ["party_identification_value"],
-					message: "National ID is required for simplified tax invoice.",
-				});
-			}
-		}
-	});
+const BaseSimplifiedTaxInvoiceSchema = simplifiedTaxInvoiceSchema.omit({
+	invoice_type_code: true,
+	original_invoice_id: true,
+	instruction_note: true,
+	classified_tax_category: true,
+	tax_rate: true,
+});
+
+const InvoiceTypeSchema = z.discriminatedUnion("invoice_type_code", [
+	z.object({
+		invoice_type_code: z.enum(["381", "383"]),
+		original_invoice_id: z.string().min(1, "Original Invoice ID is required."),
+		instruction_note: z.string().min(1, "Instruction Note is required."),
+	}),
+	z.object({
+		invoice_type_code: z.literal("388"),
+	}),
+]);
+
+const TaxCategorySchema = z.discriminatedUnion("classified_tax_category", [
+	z.object({
+		classified_tax_category: z.literal("Z"),
+		tax_rate: z.literal(NO_TAX_RATE),
+		registration_name: z.string().min(1, "Client Name is required."),
+		party_identification_scheme: z.literal("NAT"),
+		party_identification_value: z.string().min(1, "National ID is required."),
+		tax_exemption_reason_code: z
+			.string()
+			.min(1, "Tax Exemption Reason Code is required."),
+		tax_exemption_reason: z
+			.string()
+			.min(1, "Tax Exemption Reason is required."),
+	}),
+	z.object({
+		classified_tax_category: z.literal("S"),
+		tax_rate: z.literal(TAX_RATE),
+	}),
+]);
+
+export const SimplifiedTaxInvoiceSchema =
+	BaseSimplifiedTaxInvoiceSchema.and(InvoiceTypeSchema).and(TaxCategorySchema);
+
+export const CreateSimplifiedTaxInvoiceSchema =
+	BaseSimplifiedTaxInvoiceSchema.omit({ id: true })
+		.and(InvoiceTypeSchema)
+		.and(TaxCategorySchema);
 
 export type TSimplifiedTaxInvoiceDTO = z.infer<
-	typeof simplifiedTaxInvoiceSchema
+	typeof SimplifiedTaxInvoiceSchema
 >;
 export type TCreateSimplifiedTaxInvoiceDTO = z.infer<
-	typeof createSimplifiedTaxInvoiceSchema
+	typeof CreateSimplifiedTaxInvoiceSchema
 >;

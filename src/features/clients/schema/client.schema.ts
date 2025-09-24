@@ -1,4 +1,4 @@
-import { requiredString } from "@/shared/shcema/validation.schema";
+import { requiredString } from "@/shared/schema/validation.schema";
 import { z } from "zod";
 
 export const clientSchema = z.object({

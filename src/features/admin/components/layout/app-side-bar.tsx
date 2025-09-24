@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Box, FileText, Home, Users } from "lucide-react";
+import { Box, ChartLine, FileText, Users } from "lucide-react";
 
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
@@ -13,7 +13,6 @@ import {
 	SidebarRail,
 } from "@/components/ui/sidebar";
 
-// This is sample data.
 const data = {
 	user: {
 		name: "shadcn",
@@ -23,9 +22,9 @@ const data = {
 
 	navMain: [
 		{
-			title: "Dashboard",
+			title: "Analytics",
 			url: "/admin",
-			icon: Home,
+			icon: ChartLine,
 			isActive: true,
 		},
 		{
