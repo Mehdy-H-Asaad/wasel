@@ -1,10 +1,10 @@
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { CLIENTS } from "../constants/client.constant";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
-import { clientSchema, TCreateClientDTO } from "../schema/client.schema";
+import { CreateClientSchema, TCreateClientDTO } from "../schema/client.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TClientDTO } from "../types/client.types";
+import { TClientDTO } from "../schema/client.schema";
 import { useState } from "react";
 
 export const useCreateClient = () => {
@@ -21,7 +21,7 @@ export const useCreateClient = () => {
 	});
 
 	const CreateClientForm = useForm<TCreateClientDTO>({
-		resolver: zodResolver(clientSchema),
+		resolver: zodResolver(CreateClientSchema),
 		defaultValues: {
 			registration_name: "",
 			vat_number: "",
@@ -32,6 +32,9 @@ export const useCreateClient = () => {
 			postal_code: "",
 			party_identification_scheme: "",
 			party_identification_value: "",
+			phone: "",
+			bank_account: "",
+			notes: "",
 		},
 	});
 

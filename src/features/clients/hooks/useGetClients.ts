@@ -1,6 +1,6 @@
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { CLIENTS } from "../constants/client.constant";
-import { TClientDTO } from "../types/client.types";
+import { TClientDTO } from "../schema/client.schema";
 
 export const useGetClients = () => {
 	const { data, isFetching, metaData } = useApiQuery<TClientDTO[]>({

@@ -20,7 +20,7 @@ import {
 	SelectLabel,
 	SelectGroup,
 } from "@/components/ui/select";
-import { TClientDTO } from "../types/client.types";
+import { TClientDTO } from "../schema/client.schema";
 import { CLIENT_IDENTIFCATIONS } from "../constants/client.constant";
 import { CustomDialog } from "@/components/common/CustomDialog";
 
@@ -55,32 +55,7 @@ export const UpdateClient = (client: TClientDTO) => {
 								</FormItem>
 							)}
 						/>
-						{/* <FormField
-							control={UpdateClientForm.control}
-							name="party_identification_value"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Email" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/> */}
-						{/* <FormField
-							control={UpdateClientForm.control}
-							name="party_identification_scheme"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Phone</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Phone" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/> */}
+
 						<FormField
 							control={UpdateClientForm.control}
 							name="party_identification_scheme"
@@ -145,6 +120,32 @@ export const UpdateClient = (client: TClientDTO) => {
 						/>
 						<FormField
 							control={UpdateClientForm.control}
+							name="phone"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Phone</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="Phone" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={UpdateClientForm.control}
+							name="bank_account"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Bank Account</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="Bank Account" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={UpdateClientForm.control}
 							name="city"
 							render={({ field }) => (
 								<FormItem>
@@ -156,6 +157,7 @@ export const UpdateClient = (client: TClientDTO) => {
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={UpdateClientForm.control}
 							name="division"
@@ -203,6 +205,19 @@ export const UpdateClient = (client: TClientDTO) => {
 									<FormLabel>Postal Code</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="Postal Code" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={UpdateClientForm.control}
+							name="notes"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Note</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="Note" />
 									</FormControl>
 									<FormMessage />
 								</FormItem>

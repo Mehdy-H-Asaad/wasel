@@ -1,24 +1,20 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { TClientDTO } from "../../schema/client.schema";
-import { ClientActionsCell } from "./actions/ClientActionsCell";
+import { TSupplierDTO } from "../../schema/supplier.schema";
+import { SuppliersActionCell } from "./actions/suppliers-action-cell";
 
-export const ClientsColumns: ColumnDef<TClientDTO>[] = [
+export const SuppliersColumns: ColumnDef<TSupplierDTO>[] = [
 	{
 		accessorKey: "registration_name",
-		header: "Client - Company",
+		header: "Supplier",
 	},
 	{
 		accessorKey: "party_identification_scheme",
-		header: "Client Identification",
+		header: "Supplier Identification",
 	},
 	{
 		accessorKey: "party_identification_value",
-		header: "Identification Value ",
-	},
-	{
-		accessorKey: "vat_number",
-		header: "VAT Number ",
+		header: "Identification Value",
 	},
 	{
 		accessorKey: "bank_account",
@@ -27,6 +23,14 @@ export const ClientsColumns: ColumnDef<TClientDTO>[] = [
 	{
 		accessorKey: "phone",
 		header: "Phone",
+	},
+	// {
+	// 	accessorKey: "website",
+	// 	header: "Website",
+	// },
+	{
+		accessorKey: "vat_number",
+		header: "VAT Number",
 	},
 	{
 		accessorKey: "city",
@@ -41,10 +45,6 @@ export const ClientsColumns: ColumnDef<TClientDTO>[] = [
 		header: "Street",
 	},
 	{
-		accessorKey: "building_number",
-		header: "Building No.",
-	},
-	{
 		accessorKey: "postal_code",
 		header: "Postal Code",
 	},
@@ -53,7 +53,7 @@ export const ClientsColumns: ColumnDef<TClientDTO>[] = [
 		id: "actions",
 		header: "Actions",
 		cell: ({ row }) => {
-			return <ClientActionsCell row={row} />;
+			return <SuppliersActionCell row={row} />;
 		},
 	},
 ];

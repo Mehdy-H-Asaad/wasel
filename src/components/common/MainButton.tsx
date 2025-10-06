@@ -1,39 +1,50 @@
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
 
-type TMainButton = {
+type TMainButtonProps = {
 	children: ReactNode;
 	disabled?: boolean;
-	loading?: boolean;
+	isLoading?: boolean;
 	loadingText?: string;
-};
+	variant?:
+		| "default"
+		| "destructive"
+		| "outline"
+		| "secondary"
+		| "ghost"
+		| "link";
+	blueVariant?: boolean;
+} & React.ComponentProps<"button">;
 
 export const MainButton = ({
 	children,
 	className,
 	disabled,
-	loading,
+	isLoading,
 	loadingText,
+	variant = "default",
+	blueVariant = false,
 	...props
-}: TMainButton & React.ComponentPropsWithoutRef<"button">) => {
+}: TMainButtonProps) => {
 	return (
 		<Button
+			variant={variant}
 			className={`${cn(
 				"bg-main-green text-white py-1 capitalize px-4 font-bold rounded-lg w-fit cursor-pointer hover:bg-secondary-green",
 				className
 			)}`}
-			disabled={disabled}
 			{...props}
+			disabled={disabled}
 		>
-			{loading ? (
-				<>
+			{isLoading ? (
+				<div className="flex items-center gap-2">
 					<Loader2 className="w-4 h-4 animate-spin" />
 					{loadingText}
-				</>
+				</div>
 			) : (
-				<>{children}</>
+				children
 			)}
 		</Button>
 	);

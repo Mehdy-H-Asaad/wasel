@@ -11,7 +11,19 @@ export const clientSchema = z.object({
 	postal_code: requiredString(100),
 	party_identification_scheme: requiredString(100),
 	party_identification_value: requiredString(100),
+	phone: z.string().optional(),
+	notes: z.string().optional(),
+	bank_account: z.string().optional(),
+	id: z.number(),
 	// email: z.string().email("Invalid email"),
 });
 
-export type TCreateClientDTO = z.infer<typeof clientSchema>;
+export const CreateClientSchema = clientSchema.omit({
+	id: true,
+});
+
+export const UpdateClientSchema = CreateClientSchema;
+
+export type TClientDTO = z.infer<typeof clientSchema>;
+export type TCreateClientDTO = z.infer<typeof CreateClientSchema>;
+export type TUpdateClientDTO = z.infer<typeof UpdateClientSchema>;

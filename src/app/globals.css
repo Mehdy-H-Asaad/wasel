@@ -28,6 +28,17 @@
 	animation: loading-bar 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 .subscribe-banner-bg {
 	background-image: url("../../public/assets/imgs/hala-alghanim-f5ZB0LHwi0s-unsplash.jpg");
 	background-repeat: no-repeat;

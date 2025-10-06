@@ -10,7 +10,6 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MainButton } from "@/components/common/MainButton";
 import { CustomDialog } from "@/components/common/CustomDialog";
-import { useCreateClient } from "../hooks/useCreateClient";
 import {
 	Select,
 	SelectItem,
@@ -20,67 +19,68 @@ import {
 	SelectLabel,
 	SelectGroup,
 } from "@/components/ui/select";
-import { CLIENT_IDENTIFCATIONS } from "../constants/client.constant";
+import { useCreateSupplier } from "../../hooks/use-create-supplier";
+import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+import { Plus } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
-export const CreateClient = () => {
-	const { CreateClientForm, isCreatingClient, onCreateClient, open, setOpen } =
-		useCreateClient();
-	const isValid = CreateClientForm.formState.isValid;
+export const CreateSupplier = () => {
+	const { CreateSupplierForm, isCreatingSupplier, onCreateSupplier } =
+		useCreateSupplier();
+	const isValid = CreateSupplierForm.formState.isValid;
 
 	return (
 		<CustomDialog
-			dialogContentClassName="sm:min-w-[40rem] dark:bg-main-black"
-			title="clients"
-			trigger="Add Client"
-			open={open}
-			setOpen={setOpen}
+			dialogContentClassName="sm:min-w-[60rem] dark:bg-main-black"
+			title="suppliers"
+			trigger="Add Supplier"
 			isMainButton
 		>
-			<Form {...CreateClientForm}>
+			<Form {...CreateSupplierForm}>
 				<form
 					className="grid gap-4"
-					onSubmit={CreateClientForm.handleSubmit(onCreateClient)}
+					onSubmit={CreateSupplierForm.handleSubmit(onCreateSupplier)}
 				>
-					<div className="grid grid-cols-2 gap-6">
+					<div className="grid grid-cols-3 gap-6">
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="registration_name"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Client - Company <span className="text-red-500">*</span>
+										Supplier - Company <span className="text-red-500">*</span>
 									</FormLabel>
 									<FormControl>
-										<Input {...field} placeholder="Client - Company" />
+										<Input {...field} placeholder="Supplier - Company" />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="party_identification_scheme"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Client Identification{" "}
-										<span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>Supplier Identification</FormLabel>
 									<Select
 										defaultValue={field.value}
 										onValueChange={field.onChange}
 									>
 										<FormControl>
 											<SelectTrigger className="w-full">
-												<SelectValue placeholder="Client Identification" />
+												<SelectValue placeholder="Supplier Identification" />
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											<SelectGroup>
-												<SelectLabel>Client Identifications</SelectLabel>
-												{CLIENT_IDENTIFCATIONS.map(client => (
-													<SelectItem key={client.value} value={client.value}>
-														{client.label}
+												<SelectLabel>Supplier Identifications</SelectLabel>
+												{CLIENT_IDENTIFCATIONS.map(supplier => (
+													<SelectItem
+														key={supplier.value}
+														value={supplier.value}
+													>
+														{supplier.label}
 													</SelectItem>
 												))}
 											</SelectGroup>
@@ -91,18 +91,16 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="party_identification_value"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Identification Value <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>Identification Value</FormLabel>
 									<FormControl>
 										<Input
 											{...field}
 											disabled={
-												!CreateClientForm.watch("party_identification_scheme")
+												!CreateSupplierForm.watch("party_identification_scheme")
 											}
 											placeholder="Identification Value"
 										/>
@@ -112,13 +110,11 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="vat_number"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										VAT Number <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>VAT Number</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="VAT Number" />
 									</FormControl>
@@ -127,20 +123,7 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
-							name="phone"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Phone</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Phone" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="bank_account"
 							render={({ field }) => (
 								<FormItem>
@@ -153,13 +136,25 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
+							name="phone"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Phone</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="Phone" />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={CreateSupplierForm.control}
 							name="city"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										City <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>City</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="City" />
 									</FormControl>
@@ -168,13 +163,11 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="division"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										District <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>District</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="District" />
 									</FormControl>
@@ -183,13 +176,11 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="street"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Street <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>Street</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="Street" />
 									</FormControl>
@@ -198,13 +189,11 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="building_number"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Building Number <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>Building Number</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="Building Number" />
 									</FormControl>
@@ -213,13 +202,11 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="postal_code"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Postal Code <span className="text-red-500">*</span>
-									</FormLabel>
+									<FormLabel>Postal Code</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="Postal Code" />
 									</FormControl>
@@ -228,13 +215,13 @@ export const CreateClient = () => {
 							)}
 						/>
 						<FormField
-							control={CreateClientForm.control}
+							control={CreateSupplierForm.control}
 							name="notes"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Note</FormLabel>
 									<FormControl>
-										<Input {...field} placeholder="Note" />
+										<Textarea {...field} placeholder="Note" />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -242,8 +229,14 @@ export const CreateClient = () => {
 						/>
 					</div>
 					<DialogFooter>
-						<MainButton disabled={!isValid || isCreatingClient}>
-							{isCreatingClient ? "Creating..." : "Create Client"}
+						<MainButton
+							className="flex items-center gap-2"
+							isLoading={isCreatingSupplier}
+							loadingText="Creating Supplier..."
+							disabled={!isValid || isCreatingSupplier}
+						>
+							<Plus className="w-4 h-4" />
+							Add Supplier
 						</MainButton>
 					</DialogFooter>
 				</form>

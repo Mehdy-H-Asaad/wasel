@@ -24,7 +24,7 @@ export const DeleteDialog = ({
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
-				<Button className="bg-red-600 duration-200 text-white hover:bg-red-700 hover:!text-white cursor-pointer w-full text-center justify-center px-4 py-1 flex font-bold ">
+				<Button className="bg-red-700 duration-200 text-white hover:bg-red-800 hover:!text-white cursor-pointer w-full text-center justify-center px-4 py-1 flex font-bold ">
 					{trigger}
 				</Button>
 			</AlertDialogTrigger>
@@ -46,7 +46,7 @@ export const DeleteDialog = ({
 					<Button
 						disabled={isLoading}
 						onClick={() => deleteFunc()}
-						className="capitalize duration-200 hover:bg-red-700 font-semibold hover:text-white text-white bg-red-600"
+						className="capitalize duration-200 hover:bg-red-800 font-semibold hover:text-white text-white bg-red-700"
 					>
 						{isLoading ? "Deleting..." : trigger}
 					</Button>

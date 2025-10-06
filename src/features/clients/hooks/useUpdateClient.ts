@@ -1,11 +1,10 @@
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { CLIENTS } from "../constants/client.constant";
 import { UPDATE_SUCCESS_MESSAGE } from "@/shared/data/constants";
-import { clientSchema } from "../schema/client.schema";
-import { z } from "zod";
+import { UpdateClientSchema, TUpdateClientDTO } from "../schema/client.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TClientDTO } from "../types/client.types";
+import { TClientDTO } from "../schema/client.schema";
 
 export const useUpdateClient = (client: TClientDTO) => {
 	const { mutate, isPending } = useApiMutation<TClientDTO, TUpdateClientDTO>({
@@ -15,12 +14,8 @@ export const useUpdateClient = (client: TClientDTO) => {
 		successMsg: `Client ${UPDATE_SUCCESS_MESSAGE}`,
 	});
 
-	const updateClientSchema = clientSchema;
-
-	type TUpdateClientDTO = z.infer<typeof updateClientSchema>;
-
 	const UpdateClientForm = useForm<TUpdateClientDTO>({
-		resolver: zodResolver(updateClientSchema),
+		resolver: zodResolver(UpdateClientSchema),
 		defaultValues: {
 			registration_name: client.registration_name,
 			vat_number: client.vat_number,
@@ -31,6 +26,9 @@ export const useUpdateClient = (client: TClientDTO) => {
 			postal_code: client.postal_code,
 			party_identification_scheme: client.party_identification_scheme,
 			party_identification_value: client.party_identification_value,
+			phone: client.phone,
+			notes: client.notes,
+			bank_account: client.bank_account,
 		},
 	});
 

@@ -1,5 +1,4 @@
-import { TClientDTO } from "../../../schema/client.schema";
-import { useDeleteClient } from "../../../hooks/useDeleteClient";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -7,16 +6,19 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { DeleteDialog } from "@/components/common/DeleteDialog";
-import { UpdateClient } from "../../UpdateClient";
 import { Row } from "@tanstack/react-table";
+import { TSupplierDTO } from "../../../schema/supplier.schema";
+import { useDeleteSupplier } from "../../../hooks/use-delete-supplier";
+import { UpdateSupplier } from "../../update-supplier/update-supplier";
 
-export const ClientActionsCell = ({ row }: { row: Row<TClientDTO> }) => {
-	const client = row.original;
-	const { deleteClient, isDeletingClient } = useDeleteClient(client.id);
+export const SuppliersActionCell = ({ row }: { row: Row<TSupplierDTO> }) => {
+	const supplier = row.original;
 
+	const { onDeleteSupplier, isDeletingSupplier } = useDeleteSupplier({
+		id: supplier.id,
+	});
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -28,13 +30,12 @@ export const ClientActionsCell = ({ row }: { row: Row<TClientDTO> }) => {
 			<DropdownMenuContent align="end">
 				<DropdownMenuLabel>Options</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-
 				<div className="flex flex-col gap-2">
-					<UpdateClient {...client} />
+					<UpdateSupplier supplier={supplier} />
 					<DeleteDialog
-						deleteFunc={deleteClient}
-						isLoading={isDeletingClient}
-						trigger="Delete Client"
+						deleteFunc={onDeleteSupplier}
+						isLoading={isDeletingSupplier}
+						trigger="Delete Supplier"
 					/>
 				</div>
 			</DropdownMenuContent>

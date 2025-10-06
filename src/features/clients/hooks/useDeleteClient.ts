@@ -3,7 +3,7 @@ import { CLIENTS } from "../constants/client.constant";
 import { DELETE_SUCCESS_MESSAGE } from "@/shared/data/constants";
 
 export const useDeleteClient = (id: number) => {
-	const { mutate, isPending } = useApiMutation({
+	const { mutate, isPending } = useApiMutation<void, void>({
 		axiosRequestMethod: "delete",
 		queryKey: [CLIENTS],
 		requestURL: `/${CLIENTS}/${id}`,
@@ -11,7 +11,7 @@ export const useDeleteClient = (id: number) => {
 	});
 
 	const onDeleteClient = () => {
-		mutate(id);
+		mutate();
 	};
 
 	return { deleteClient: onDeleteClient, isDeletingClient: isPending };
