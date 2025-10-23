@@ -95,8 +95,8 @@ export function LoginForm({
 										type="submit"
 										className="w-full"
 										disabled={isLoginPending || !LoginForm.formState.isValid}
-										loading={isLoginPending}
-										loadingText="Logging in"
+										isLoading={isLoginPending}
+										loadingText="Logging in..."
 									>
 										Login
 									</MainButton>

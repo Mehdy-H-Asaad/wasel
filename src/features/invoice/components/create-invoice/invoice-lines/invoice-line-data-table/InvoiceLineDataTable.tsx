@@ -6,6 +6,14 @@ import { UseFormReturn } from "react-hook-form";
 import { CreateInvoiceLine } from "../create-invoice-line/CreateInvoiceLine";
 import { useInvoiceLineStore } from "@/features/invoice/store/invoice-line.store";
 import { useEffect } from "react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { ShoppingCart } from "lucide-react";
 
 export type TCreateTaxInvoiceLines = {
 	form: UseFormReturn<TCreateTaxInvoiceDTO>;
@@ -19,20 +27,28 @@ export const InvoiceLinesDataTable = () => {
 	}, [invoiceLinesTable]);
 
 	return (
-		<div className="flex flex-col dark:bg-main-black p-8 rounded-xl bg-[#fafafa]">
-			<div className="text-2xl font-bold">Tax Invoice Lines</div>
-			<div className="flex flex-col gap-4 py-8 rounded-2xl">
+		<Card className="border-2">
+			<CardHeader>
+				<div className="flex items-center gap-2">
+					<ShoppingCart className="h-5 w-5 text-light-green" />
+					<CardTitle>Invoice Line Items</CardTitle>
+				</div>
+				<CardDescription>
+					Add products or services to this invoice
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
 				<DataTable
 					columns={InvoiceLinesColumns}
 					data={invoiceLinesTable || []}
 					searchableField="item_name"
-					searchablePlaceholder="Item Name"
+					searchablePlaceholder="Search by item name..."
 					skeletonRows={10}
 					manualPagination={false}
 				>
 					<CreateInvoiceLine />
 				</DataTable>
-			</div>
-		</div>
+			</CardContent>
+		</Card>
 	);
 };

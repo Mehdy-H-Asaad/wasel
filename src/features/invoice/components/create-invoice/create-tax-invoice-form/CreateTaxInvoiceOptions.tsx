@@ -5,15 +5,7 @@ import {
 	FormControl,
 	FormMessage,
 } from "@/components/ui/form";
-import {
-	INVOICE_IDS,
-	PAYMENTS_TYPES,
-	TAX_CATEGORIES,
-	NO_TAX_RATE,
-	VAT_DOCUMENTS,
-	TAX_RATE,
-	TAX_EXEMPTION_REASONS_CODES,
-} from "@/features/invoice/constants/invoice.constants";
+import { PAYMENTS_TYPES } from "@/features/invoice/constants/invoice.constants";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
 import {
 	Select,
@@ -24,11 +16,9 @@ import {
 	SelectLabel,
 	SelectItem,
 } from "@/components/ui/select";
-import React, { useEffect } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { useFormContext } from "react-hook-form";
 import { useGetClients } from "@/features/clients/hooks/useGetClients";
-import { handleNumberInput } from "@/shared/utils/handle-number-input";
 import {
 	Popover,
 	PopoverContent,
@@ -36,194 +26,182 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { ChevronDownIcon } from "lucide-react";
+import { User, Receipt, CalendarIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
 
 export const CreateTaxInvoiceOptions = () => {
 	const form = useFormContext<TCreateTaxInvoiceDTO>();
 
-	const VATDocuments = useWatch({
-		control: form.control,
-		name: "invoice_type_code",
-	});
-
-	const classified_tax_category = useWatch({
-		control: form.control,
-		name: "classified_tax_category",
-	});
-
 	const { clients } = useGetClients();
 
 	return (
-		<div className="flex flex-col  dark:bg-main-black p-8 rounded-xl bg-[#fafafa]">
+		<div className="flex flex-col gap-6">
+			{/* Header Section */}
 			<div className="flex justify-between items-center">
-				<div className="text-2xl font-bold">Tax Invoice Options</div>
-				<div className="w-fit self-end text-light-green font-bold text-lg border border-light-green py-1 px-4 rounded-full">
+				<div className="flex items-center gap-3">
+					<div className="p-3 bg-light-green/10 rounded-lg">
+						<Receipt className="h-6 w-6 text-light-green" />
+					</div>
+					<div>
+						<h2 className="text-2xl font-bold">Invoice Information</h2>
+						<p className="text-sm text-muted-foreground">
+							Configure your tax invoice details
+						</p>
+					</div>
+				</div>
+				<div className="w-fit self-end text-light-green font-bold text-sm border-2 border-light-green py-2 px-6 rounded-full bg-light-green/5">
 					Tax Invoice
 				</div>
 			</div>
-			<div className="flex flex-col gap-4">
-				<div className=" grid grid-cols-4 gap-10 py-8 rounded-2xl">
-					<FormField
-						control={form.control}
-						name="customer"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Client - Company *</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger className="w-full bg-white">
-											<SelectValue placeholder="Client - Company" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Clients</SelectLabel>
-											{clients?.map(client => (
-												<SelectItem
-													value={client.id.toString()}
-													key={client.id}
-												>
-													{client.registration_name}
-												</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 
-					<FormField
-						control={form.control}
-						name="invoice_type_code"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>VAT Documents *</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger className="w-full bg-white">
-											<SelectValue placeholder="VAT Document" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>VAT documents</SelectLabel>
-											{VAT_DOCUMENTS.map(document => (
-												<SelectItem
-													value={document.value.toString()}
-													key={document.value}
-												>
-													{document.label}
-												</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="payment_means_code"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Payment Type *</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger className="w-full bg-white">
-											<SelectValue placeholder="Payment Type" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Payment Types</SelectLabel>
-											{PAYMENTS_TYPES.map(payment => (
-												<SelectItem
-													value={payment.value.toString()}
-													key={payment.value}
-												>
-													{payment.label}
-												</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+			{/* Main Information Card */}
+			<Card className="border-2">
+				<CardHeader>
+					<div className="flex items-center gap-2">
+						<User className="h-5 w-5 text-light-green" />
+						<CardTitle>Client & Basic Information</CardTitle>
+					</div>
+					<CardDescription>
+						Select client and configure invoice basic settings
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+						<FormField
+							control={form.control}
+							name="customer_id"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="flex items-center justify-between text-sm font-semibold">
+										<span>Client - Company *</span>
+										<CreateClientShortcut />
+									</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										// defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger className="w-full h-11 bg-background">
+												<SelectValue placeholder="Select client company" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectGroup>
+												<SelectLabel>Clients</SelectLabel>
+												{clients?.map(client => (
+													<SelectItem
+														value={client.id.toString()}
+														key={client.id}
+													>
+														{client.registration_name}
+													</SelectItem>
+												))}
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="payment_means_code"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="text-sm font-semibold">
+										Payment Method *
+									</FormLabel>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger className="w-full h-11 bg-background">
+												<SelectValue placeholder="Select payment type" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectGroup>
+												<SelectLabel>Payment Types</SelectLabel>
+												{PAYMENTS_TYPES.map(payment => (
+													<SelectItem
+														value={payment.value.toString()}
+														key={payment.value}
+													>
+														{payment.label}
+													</SelectItem>
+												))}
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-					<FormField
-						control={form.control}
-						name="classified_tax_category"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Tax Category *</FormLabel>
-								<Select
-									onValueChange={value => {
-										form.setValue(
-											"tax_rate",
-											value === "Z" ? NO_TAX_RATE : TAX_RATE
-										);
-										field.onChange(value);
-									}}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger className="w-full bg-white">
-											<SelectValue placeholder="Tax Category" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectGroup>
-											<SelectLabel>Tax Categories</SelectLabel>
-											{TAX_CATEGORIES.map(tax => (
-												<SelectItem
-													value={tax.value.toString()}
-													key={tax.value}
-												>
-													{tax.label}
-												</SelectItem>
-											))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="actual_delivery_date"
-						render={({ field }) => (
-							<FormItem>
-								<div className="flex flex-col gap-2">
-									<FormLabel>Actual Delivery Date</FormLabel>
+						<FormField
+							control={form.control}
+							name="prices_include_tax"
+							render={({ field }) => (
+								<FormItem className="col-span-1">
+									<FormLabel className="text-sm font-semibold">
+										Prices Include Tax
+									</FormLabel>
+									<Select
+										onValueChange={value => field.onChange(value === "true")}
+										// defaultValue={field.value ? "true" : "false"}
+									>
+										<FormControl>
+											<SelectTrigger className="w-full h-11 bg-background">
+												<SelectValue placeholder="Prices include tax" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectGroup>
+												<SelectLabel>Prices Include Tax</SelectLabel>
+												<SelectItem value="true">Yes</SelectItem>
+												<SelectItem value="false">No</SelectItem>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="actual_delivery_date"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="text-sm font-semibold">
+										Delivery Date
+									</FormLabel>
 									<Popover>
 										<FormControl>
 											<PopoverTrigger asChild>
 												<Button
 													variant="outline"
 													id="date"
-													className="w-full justify-between font-normal"
+													className="w-full h-11 justify-between font-normal"
 												>
-													{field.value
-														? new Date(field.value).toLocaleDateString()
-														: "Select date"}
-													<ChevronDownIcon />
+													<span
+														className={
+															!field.value ? "text-muted-foreground" : ""
+														}
+													>
+														{field.value
+															? new Date(field.value).toLocaleDateString()
+															: "Select delivery date"}
+													</span>
+													<CalendarIcon className="h-4 w-4 opacity-50" />
 												</Button>
 											</PopoverTrigger>
 										</FormControl>
@@ -243,159 +221,30 @@ export const CreateTaxInvoiceOptions = () => {
 											/>
 										</PopoverContent>
 									</Popover>
-								</div>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					{VATDocuments === "381" || VATDocuments === "383" ? (
-						<>
-							<FormField
-								control={form.control}
-								name="original_invoice_id"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Invoice ID *</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<FormControl>
-												<SelectTrigger className="w-full bg-white">
-													<SelectValue placeholder="Invoice ID" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												<SelectGroup>
-													<SelectLabel>Invoice ID</SelectLabel>
-													{INVOICE_IDS.map(invoice => (
-														<SelectItem
-															value={invoice.value.toString()}
-															key={invoice.value}
-														>
-															{invoice.label}
-														</SelectItem>
-													))}
-												</SelectGroup>
-											</SelectContent>
-										</Select>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="instruction_note"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Instruction Note *</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="Instruction Note"
-												className="bg-white"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</>
-					) : null}
-					{classified_tax_category === "Z" ? (
-						<>
-							<FormField
-								control={form.control}
-								name="tax_exemption_reason_code"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Tax Exemption Reason Code *</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<FormControl>
-												<SelectTrigger className="w-full bg-white">
-													<SelectValue placeholder="Tax Exemption Reason Code" />
-												</SelectTrigger>
-											</FormControl>
-											<SelectContent>
-												<SelectGroup>
-													<SelectLabel>Tax Exemption Reason Code</SelectLabel>
-													{TAX_EXEMPTION_REASONS_CODES.map(tax => (
-														<SelectItem
-															value={tax.value.toString()}
-															key={tax.value}
-														>
-															{tax.label}
-														</SelectItem>
-													))}
-												</SelectGroup>
-											</SelectContent>
-										</Select>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="tax_exemption_reason"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Tax Exemption Reason *</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												placeholder="Tax Exemption Reason"
-												className="bg-white"
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</>
-					) : null}
-
-					<FormField
-						control={form.control}
-						name="discount_amount"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Discount Amount</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										value={field.value ?? ""}
-										onChange={event => handleNumberInput({ event, field })}
-										placeholder="Discount Amount"
-										className="bg-white"
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
 					<FormField
 						control={form.control}
 						name="note"
 						render={({ field }) => (
-							<FormItem className="col-span-4 ">
-								<FormLabel>Note</FormLabel>
+							<FormItem className="mt-4">
+								<FormLabel className="text-sm font-semibold">Notes</FormLabel>
 								<FormControl>
 									<Textarea
 										{...field}
-										placeholder="Note"
-										className="h-40 bg-white"
+										placeholder="Enter additional notes, comments, or instructions..."
+										className="min-h-32 resize-none bg-background"
 									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-				</div>
-			</div>
+				</CardContent>
+			</Card>
 		</div>
 	);
 };

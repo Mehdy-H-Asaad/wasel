@@ -6,6 +6,8 @@ import { MainButton } from "@/components/common/MainButton";
 import { CreateTaxInvoiceOptions } from "./CreateTaxInvoiceOptions";
 import { InvoiceLinesDataTable } from "../invoice-lines/invoice-line-data-table/InvoiceLineDataTable";
 import { InvoicePreview } from "../../invoice-preview/invoice-preview";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, ArrowRight, Eye, Save } from "lucide-react";
 export const CreateTaxInvoice = () => {
 	const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
 
@@ -18,42 +20,65 @@ export const CreateTaxInvoice = () => {
 	};
 
 	return (
-		<Form {...CreateTaxInvoiceForm}>
-			<form
-				onSubmit={CreateTaxInvoiceForm.handleSubmit(onCreateTaxInvoice)}
-				className="flex flex-col gap-4"
-			>
-				{!isPreviewing ? (
-					<>
-						<div className="flex flex-col gap-10 ">
+		<div className=" space-y-6">
+			<Form {...CreateTaxInvoiceForm}>
+				<form
+					onSubmit={CreateTaxInvoiceForm.handleSubmit(onCreateTaxInvoice)}
+					className="flex flex-col gap-6"
+				>
+					{!isPreviewing ? (
+						<>
 							<CreateTaxInvoiceOptions />
 							<InvoiceLinesDataTable />
-							<div className="flex items-center gap-4 self-end">
-								<MainButton onClick={handlePreview}>Preview Invoice</MainButton>
-							</div>
-						</div>
-					</>
-				) : (
-					<>
-						<InvoicePreview form={CreateTaxInvoiceForm} />
-						<div className="flex items-center gap-4 self-end">
-							<MainButton onClick={handlePreview}>Edit Invoice</MainButton>
-							<MainButton
-								type="submit"
-								className="ml-auto w-fit"
-								disabled={
-									isCreatingTaxInvoice ||
-									!CreateTaxInvoiceForm.formState.isValid
-								}
-							>
-								{isCreatingTaxInvoice
-									? "Creating Invoice..."
-									: "Create Tax Invoice"}
-							</MainButton>
-						</div>
-					</>
-				)}
-			</form>
-		</Form>
+							<Card className="border-2 ">
+								<CardContent className="py-4">
+									<div className="flex items-center justify-between gap-4">
+										<p className="text-sm text-muted-foreground">
+											Complete all required fields to preview your invoice
+										</p>
+										<MainButton onClick={handlePreview} className="gap-2">
+											<Eye className="h-4 w-4" />
+											Preview Invoice
+											<ArrowRight className="h-4 w-4" />
+										</MainButton>
+									</div>
+								</CardContent>
+							</Card>
+						</>
+					) : (
+						<>
+							<InvoicePreview form={CreateTaxInvoiceForm} />
+							<Card className="border-2 sticky bottom-4 shadow-lg">
+								<CardContent className="py-4">
+									<div className="flex items-center justify-between gap-4">
+										<MainButton
+											onClick={handlePreview}
+											className="gap-2"
+											variant="outline"
+										>
+											<ArrowLeft className="h-4 w-4" />
+											Back to Edit
+										</MainButton>
+										<MainButton
+											type="submit"
+											className="gap-2"
+											disabled={
+												isCreatingTaxInvoice ||
+												!CreateTaxInvoiceForm.formState.isValid
+											}
+										>
+											<Save className="h-4 w-4" />
+											{isCreatingTaxInvoice
+												? "Creating Invoice..."
+												: "Create Tax Invoice"}
+										</MainButton>
+									</div>
+								</CardContent>
+							</Card>
+						</>
+					)}
+				</form>
+			</Form>
+		</div>
 	);
 };

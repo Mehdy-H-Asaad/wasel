@@ -9,15 +9,15 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { Row } from "@tanstack/react-table";
-import { TStockDTO } from "../../types/stock.types";
+import { TStockDTO } from "../../schema/stock.schema";
 import { useDeleteStock } from "../../hooks/useDeleteStock";
-import { UpdateStock } from "../stock-crud/UpdateStock";
+import { UpdateStock } from "../UpdateStock";
 
 export const StockActionsCell = ({ row }: { row: Row<TStockDTO> }) => {
 	const stock = row.original;
 
 	const { deleteStock: onDeleteStock, isDeletingStock } = useDeleteStock(
-		stock.id
+		Number(stock.id)
 	);
 	return (
 		<DropdownMenu>

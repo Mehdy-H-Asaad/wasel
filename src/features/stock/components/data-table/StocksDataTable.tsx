@@ -1,6 +1,6 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import { CreateStock } from "../stock-crud/CreateStock";
+import { CreateStock } from "../CreateStock";
 import { StockColumns } from "./StockColumns";
 import { useGetStocks } from "../../hooks/useGetStock";
 

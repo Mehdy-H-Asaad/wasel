@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Box, ChartLine, FileText, Users } from "lucide-react";
+import { Box, ChartLine, ClipboardMinus, FileText, Users } from "lucide-react";
 
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
@@ -44,6 +44,17 @@ const data = {
 		},
 		{
 			title: "Purchase invoices",
+			url: "/admin/purchase-invoices",
+			icon: FileText,
+		},
+		{
+			title: "Receipt Voucher",
+			url: "/admin/purchase-invoices",
+			icon: ClipboardMinus,
+		},
+
+		{
+			title: "Payments Voucher",
 			url: "/admin/purchase-invoices",
 			icon: FileText,
 		},

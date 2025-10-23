@@ -1,6 +1,6 @@
 "use client";
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
-import { TStockDTO } from "../types/stock.types";
+import { TStockDTO } from "../schema/stock.schema";
 import { STOCKS } from "../constants/stock.constants";
 
 export const useGetStocks = () => {

@@ -1,17 +1,16 @@
 "use client";
-import { z } from "zod";
-import { stockSchema } from "../schema/stock.schema";
+import { CreateStockSchema, TCreateStockDTO } from "../schema/stock.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { STOCKS } from "../constants/stock.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
-import { TStockDTO } from "../types/stock.types";
+import { TStockDTO } from "../schema/stock.schema";
 import { useState } from "react";
 
 export const useCreateStock = () => {
 	const [open, setOpen] = useState<boolean>(false);
-	const { mutate, isPending } = useApiMutation<TStockDTO[], TCreateStockDTO>({
+	const { mutate, isPending } = useApiMutation<TStockDTO, TCreateStockDTO>({
 		axiosRequestMethod: "post",
 		queryKey: [STOCKS],
 		requestURL: `/${STOCKS}`,
@@ -22,16 +21,14 @@ export const useCreateStock = () => {
 		},
 	});
 
-	const createStockSchema = stockSchema;
-
-	type TCreateStockDTO = z.infer<typeof createStockSchema>;
-
 	const CreateStockForm = useForm<TCreateStockDTO>({
-		resolver: zodResolver(createStockSchema),
+		resolver: zodResolver(CreateStockSchema),
 		defaultValues: {
 			name: "",
-			price: undefined,
+			default_sale_price: undefined,
+			default_buy_price: undefined,
 			unit_code: "",
+			description: "",
 		},
 	});
 

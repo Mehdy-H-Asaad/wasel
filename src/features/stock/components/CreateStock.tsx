@@ -9,35 +9,39 @@ import {
 import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MainButton } from "@/components/common/MainButton";
+import { useCreateStock } from "../hooks/useCreateStock";
 import { CustomDialog } from "@/components/common/CustomDialog";
 import { handleNumberInput } from "@/shared/utils/handle-number-input";
-import { useUpdateStock } from "../../hooks/useUpdateStock";
-import { TStockDTO } from "../../types/stock.types";
 import {
-	SelectTrigger,
-	SelectValue,
+	Select,
 	SelectContent,
 	SelectItem,
-	Select,
+	SelectTrigger,
+	SelectValue,
 } from "@/components/ui/select";
-import { STOCK_UNITS } from "../../constants/stock.constants";
+import { STOCK_UNITS } from "../constants/stock.constants";
+import { Textarea } from "@/components/ui/textarea";
 
-export const UpdateStock = (stock: TStockDTO) => {
-	const { UpdateStockForm, onUpdateStock, isUpdatingStock } =
-		useUpdateStock(stock);
-	const isValid = UpdateStockForm.formState.isValid;
-
-	console.log(UpdateStockForm.formState.errors);
+export const CreateStock = () => {
+	const { CreateStockForm, onCreateStock, isCreatingStock, open, setOpen } =
+		useCreateStock();
+	const isValid = CreateStockForm.formState.isValid;
 
 	return (
-		<CustomDialog className="w-full" title="stocks" trigger="update stock">
-			<Form {...UpdateStockForm}>
+		<CustomDialog
+			title="stocks"
+			trigger="create stock"
+			open={open}
+			setOpen={setOpen}
+			isMainButton
+		>
+			<Form {...CreateStockForm}>
 				<form
 					className="grid gap-4"
-					onSubmit={UpdateStockForm.handleSubmit(onUpdateStock)}
+					onSubmit={CreateStockForm.handleSubmit(onCreateStock)}
 				>
 					<FormField
-						control={UpdateStockForm.control}
+						control={CreateStockForm.control}
 						name="name"
 						render={({ field }) => (
 							<FormItem>
@@ -49,16 +53,17 @@ export const UpdateStock = (stock: TStockDTO) => {
 							</FormItem>
 						)}
 					/>
+
 					<FormField
-						control={UpdateStockForm.control}
-						name="price"
+						control={CreateStockForm.control}
+						name="default_buy_price"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Price</FormLabel>
+								<FormLabel>Buy Price</FormLabel>
 								<FormControl>
 									<Input
 										{...field}
-										placeholder="Price"
+										placeholder="Buy Price"
 										onChange={event => handleNumberInput({ field, event })}
 										value={field.value ?? ""}
 									/>
@@ -68,15 +73,30 @@ export const UpdateStock = (stock: TStockDTO) => {
 						)}
 					/>
 					<FormField
-						control={UpdateStockForm.control}
+						control={CreateStockForm.control}
+						name="default_sale_price"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Sale Price</FormLabel>
+								<FormControl>
+									<Input
+										{...field}
+										placeholder="Sale Price"
+										onChange={event => handleNumberInput({ field, event })}
+										value={field.value ?? ""}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={CreateStockForm.control}
 						name="unit_code"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Unit</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
+								<Select onValueChange={field.onChange}>
 									<FormControl>
 										<SelectTrigger className="w-full">
 											<SelectValue placeholder="Select Unit" />
@@ -94,15 +114,22 @@ export const UpdateStock = (stock: TStockDTO) => {
 							</FormItem>
 						)}
 					/>
+					<FormField
+						control={CreateStockForm.control}
+						name="description"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Description</FormLabel>
+								<FormControl>
+									<Textarea {...field} placeholder="Description" />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 					<DialogFooter>
-						<MainButton
-							disabled={
-								!isValid ||
-								isUpdatingStock ||
-								!UpdateStockForm.formState.isDirty
-							}
-						>
-							{isUpdatingStock ? "Updating..." : "Update Stock"}
+						<MainButton disabled={!isValid || isCreatingStock}>
+							{isCreatingStock ? "Creating..." : "Create Stock"}
 						</MainButton>
 					</DialogFooter>
 				</form>

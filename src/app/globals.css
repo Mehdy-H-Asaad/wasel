@@ -39,6 +39,22 @@
 	}
 }
 
+@keyframes gradient {
+	0%,
+	100% {
+		background-size: 200% 200%;
+		background-position: left center;
+	}
+	50% {
+		background-size: 200% 200%;
+		background-position: right center;
+	}
+}
+
+.animate-gradient {
+	animation: gradient 3s ease infinite;
+}
+
 .subscribe-banner-bg {
 	background-image: url("../../public/assets/imgs/hala-alghanim-f5ZB0LHwi0s-unsplash.jpg");
 	background-repeat: no-repeat;

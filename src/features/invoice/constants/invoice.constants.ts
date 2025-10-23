@@ -105,10 +105,18 @@ export const TAX_EXEMPTION_REASONS_CODES = [
 export const TAX_CATEGORIES = [
 	{
 		value: "S",
-		label: "Applicable Tax",
+		label: "VAT on Sales (15%)",
 	},
 	{
 		value: "Z",
-		label: "Zero Tax",
+		label: "Zero rated goods (0%)",
+	},
+	{
+		value: "E",
+		label: "Exempt (0%)",
+	},
+	{
+		value: "O",
+		label: "Services outside scope of VAT (0%)",
 	},
 ];

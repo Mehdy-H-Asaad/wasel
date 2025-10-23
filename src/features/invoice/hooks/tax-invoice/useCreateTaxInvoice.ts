@@ -28,10 +28,8 @@ export const useCreateTaxInvoice = () => {
 		mode: "onChange",
 		defaultValues: {
 			actual_delivery_date: currentDate.toISOString().split("T")[0],
-			classified_tax_category: undefined,
 			tax_rate: undefined,
-			customer: "",
-			discount_amount: undefined,
+			customer_id: "",
 			document_currency_code: "SAR",
 			invoice_type: "0100000",
 			invoice_type_code: undefined,
@@ -40,13 +38,14 @@ export const useCreateTaxInvoice = () => {
 				hour12: false,
 			}),
 			note: "",
+			prices_include_tax: undefined,
 			payment_means_code: "",
 			invoice_lines: [],
 		},
 	});
 
 	const onCreateTaxInvoice = (values: TCreateTaxInvoiceDTO) => {
-		mutate({ ...values, discount_amount: values.discount_amount || 0 });
+		mutate({ ...values });
 	};
 
 	return {

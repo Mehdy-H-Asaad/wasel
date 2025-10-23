@@ -10,13 +10,11 @@ export const simplifiedTaxInvoiceSchema = invoiceSchema.pick({
 	issue_date: true,
 	issue_time: true,
 	document_currency_code: true,
-	discount_amount: true,
 	actual_delivery_date: true,
 	payment_means_code: true,
 	note: true,
-	instruction_note: true,
-	original_invoice_id: true,
-	classified_tax_category: true,
+	// instruction_note: true,
+	// original_invoice_id: true,
 	tax_rate: true,
 	invoice_lines: true,
 	registration_name: true,
@@ -26,9 +24,8 @@ export const simplifiedTaxInvoiceSchema = invoiceSchema.pick({
 
 const BaseSimplifiedTaxInvoiceSchema = simplifiedTaxInvoiceSchema.omit({
 	invoice_type_code: true,
-	original_invoice_id: true,
-	instruction_note: true,
-	classified_tax_category: true,
+	// original_invoice_id: true,
+	// 	instruction_note: true,
 	tax_rate: true,
 });
 
