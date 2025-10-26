@@ -29,20 +29,66 @@ export const InvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
 
 export const CreateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
 	item_name: true,
-	item_price: true,
 	item_unit_code: true,
 	tax_amount: true,
 	rounding_amount: true,
 	line_extension_amount: true,
+}).superRefine((data, ctx) => {
+	// Validate tax exemption fields when tax category is Z, O, or E
+	if (
+		data.classified_tax_category === "Z" ||
+		data.classified_tax_category === "O" ||
+		data.classified_tax_category === "E"
+	) {
+		if (!data.tax_exemption_reason_code) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Tax exemption reason code is required for this tax category",
+				path: ["tax_exemption_reason_code"],
+			});
+		}
+
+		// For "O" category, tax exemption reason text is also required
+		if (data.classified_tax_category === "O" && !data.tax_exemption_reason) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Tax exemption reason is required for this tax category",
+				path: ["tax_exemption_reason"],
+			});
+		}
+	}
 });
 
 export const UpdateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
 	item_name: true,
-	item_price: true,
 	item_unit_code: true,
 	tax_amount: true,
 	rounding_amount: true,
 	line_extension_amount: true,
+}).superRefine((data, ctx) => {
+	// Validate tax exemption fields when tax category is Z, O, or E
+	if (
+		data.classified_tax_category === "Z" ||
+		data.classified_tax_category === "O" ||
+		data.classified_tax_category === "E"
+	) {
+		if (!data.tax_exemption_reason_code) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Tax exemption reason code is required for this tax category",
+				path: ["tax_exemption_reason_code"],
+			});
+		}
+
+		// For "O" category, tax exemption reason text is also required
+		if (data.classified_tax_category === "O" && !data.tax_exemption_reason) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Tax exemption reason is required for this tax category",
+				path: ["tax_exemption_reason"],
+			});
+		}
+	}
 });
 
 export type TBaseTaxInvoiceLineDTO = z.infer<typeof BaseInvoiceLinesSchema>;

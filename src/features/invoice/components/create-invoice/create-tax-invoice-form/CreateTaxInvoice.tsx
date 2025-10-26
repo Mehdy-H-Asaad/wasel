@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useCreateTaxInvoice } from "../../../hooks/tax-invoice/useCreateTaxInvoice";
 import { MainButton } from "@/components/common/MainButton";
 import { CreateTaxInvoiceOptions } from "./CreateTaxInvoiceOptions";
-import { InvoiceLinesDataTable } from "../invoice-lines/invoice-line-data-table/InvoiceLineDataTable";
+import { InlineInvoiceLinesTable } from "../invoice-lines/inline-invoice-lines-table/inline-invoice-lines-data-table";
 import { InvoicePreview } from "../../invoice-preview/invoice-preview";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Eye, Save } from "lucide-react";
@@ -29,7 +29,7 @@ export const CreateTaxInvoice = () => {
 					{!isPreviewing ? (
 						<>
 							<CreateTaxInvoiceOptions />
-							<InvoiceLinesDataTable />
+							<InlineInvoiceLinesTable />
 							<Card className="border-2 ">
 								<CardContent className="py-4">
 									<div className="flex items-center justify-between gap-4">
