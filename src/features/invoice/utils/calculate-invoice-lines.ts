@@ -1,38 +1,40 @@
 import { TAX_RATE } from "../constants/invoice.constants";
 import { TTaxInvoiceLineDTO } from "../schema/invoice-lines.schema";
-import { TStockDTO } from "@/features/stock/types/stock.types";
 
 export const calculateInvoiceLines = (
-	invoiceLine: TTaxInvoiceLineDTO,
-	classifiedTaxCategory: "Z" | "S",
-	item: TStockDTO
+  invoiceLine: TTaxInvoiceLineDTO,
+  classifiedTaxCategory: "Z" | "S" | "E" | "O",
+  pricesIncludeTax: boolean
 ) => {
-	let lineExtensionAmount = parseFloat(
-		(
-			item.price * invoiceLine.quantity -
-			(invoiceLine.discount_amount || 0)
-		).toFixed(2)
-	);
+  const total =
+    invoiceLine && classifiedTaxCategory
+      ? (invoiceLine.item_price || 0) * (invoiceLine.quantity || 0) -
+        (invoiceLine.discount_amount || 0)
+      : 0;
 
-	let taxAmount =
-		classifiedTaxCategory === "S"
-			? parseFloat(((lineExtensionAmount * Number(TAX_RATE)) / 100).toFixed(2))
-			: 0;
+  let lineExtensionAmount = 0;
+  let taxAmount = 0;
+  let roundingAmount = 0;
 
-	let roundingAmount = parseFloat((lineExtensionAmount + taxAmount).toFixed(2));
+  if (pricesIncludeTax) {
+    lineExtensionAmount =
+      (total * 100) / (100 + (classifiedTaxCategory === "S" ? TAX_RATE : 0));
 
-	if (
-		(invoiceLine.discount_amount || 0) >
-		item.price * (invoiceLine.quantity || 0)
-	) {
-		roundingAmount = 0;
-		lineExtensionAmount = 0;
-		taxAmount = 0;
-	}
+    taxAmount = total - lineExtensionAmount;
 
-	return {
-		lineExtensionAmount,
-		taxAmount,
-		roundingAmount,
-	};
+    roundingAmount = lineExtensionAmount + taxAmount;
+  } else {
+    lineExtensionAmount = total;
+    taxAmount =
+      classifiedTaxCategory === "S"
+        ? (lineExtensionAmount * TAX_RATE) / 100
+        : 0;
+    roundingAmount = lineExtensionAmount + taxAmount;
+  }
+
+  return {
+    lineExtensionAmount,
+    taxAmount,
+    roundingAmount,
+  };
 };

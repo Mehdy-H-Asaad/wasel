@@ -6,35 +6,35 @@ import Providers from "@/shared/providers/ReactQueryProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 const montserrat = Montserrat({
-	subsets: ["latin"],
-	weight: ["500", "600", "700"],
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-	title: "Online Faotarah",
-	description: "Mange all of your invoices on faotarah",
+  title: "Online Faotarah",
+  description: "Mange all of your invoices on faotarah",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en" suppressHydrationWarning>
-			<body className={`${montserrat.className} antialiased `}>
-				<Providers>
-					<ThemeProvider
-						attribute="class"
-						defaultTheme="light"
-						enableSystem
-						disableTransitionOnChange
-					>
-						{children}
-						<Toaster />
-					</ThemeProvider>
-				</Providers>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${montserrat.className} antialiased `}>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster richColors />
+          </ThemeProvider>
+        </Providers>
+      </body>
+    </html>
+  );
 }
