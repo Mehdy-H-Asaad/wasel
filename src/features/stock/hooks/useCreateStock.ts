@@ -9,38 +9,43 @@ import { TStockDTO } from "../schema/stock.schema";
 import { useState } from "react";
 
 export const useCreateStock = () => {
-	const [open, setOpen] = useState<boolean>(false);
-	const { mutate, isPending } = useApiMutation<TStockDTO, TCreateStockDTO>({
-		axiosRequestMethod: "post",
-		queryKey: [STOCKS],
-		requestURL: `/${STOCKS}`,
-		successMsg: `Item ${CREATION_SUCCESS_MESSAGE}`,
-		onSuccess: () => {
-			setOpen(false);
-			CreateStockForm.reset();
-		},
-	});
+  const [open, setOpen] = useState<boolean>(false);
+  const {
+    data: stock,
+    mutate,
+    isPending,
+  } = useApiMutation<TStockDTO, TCreateStockDTO>({
+    axiosRequestMethod: "post",
+    queryKey: [STOCKS],
+    requestURL: `/${STOCKS}`,
+    successMsg: `Item ${CREATION_SUCCESS_MESSAGE}`,
+    onSuccess: () => {
+      setOpen(false);
+      CreateStockForm.reset();
+    },
+  });
 
-	const CreateStockForm = useForm<TCreateStockDTO>({
-		resolver: zodResolver(CreateStockSchema),
-		defaultValues: {
-			name: "",
-			default_sale_price: undefined,
-			default_buy_price: undefined,
-			unit_code: "",
-			description: "",
-		},
-	});
+  const CreateStockForm = useForm<TCreateStockDTO>({
+    resolver: zodResolver(CreateStockSchema),
+    defaultValues: {
+      name: "",
+      default_sale_price: undefined,
+      default_buy_price: undefined,
+      unit_code: "",
+      description: "",
+    },
+  });
 
-	const onCreateStock = (values: TCreateStockDTO) => {
-		mutate(values);
-	};
+  const onCreateStock = (values: TCreateStockDTO) => {
+    mutate(values);
+  };
 
-	return {
-		CreateStockForm,
-		onCreateStock,
-		isCreatingStock: isPending,
-		open,
-		setOpen,
-	};
+  return {
+    CreateStockForm,
+    onCreateStock,
+    isCreatingStock: isPending,
+    open,
+    setOpen,
+    stock,
+  };
 };

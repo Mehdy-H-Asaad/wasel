@@ -8,45 +8,50 @@ import { TClientDTO } from "../schema/client.schema";
 import { useState } from "react";
 
 export const useCreateClient = () => {
-	const [open, setOpen] = useState<boolean>(false);
-	const { mutate, isPending } = useApiMutation<TClientDTO, TCreateClientDTO>({
-		axiosRequestMethod: "post",
-		queryKey: [CLIENTS],
-		requestURL: `/${CLIENTS}`,
-		successMsg: `Client ${CREATION_SUCCESS_MESSAGE}`,
-		onSuccess: () => {
-			setOpen(false);
-			CreateClientForm.reset();
-		},
-	});
+  const [open, setOpen] = useState<boolean>(false);
+  const {
+    data: client,
+    mutate,
+    isPending,
+  } = useApiMutation<TClientDTO, TCreateClientDTO>({
+    axiosRequestMethod: "post",
+    queryKey: [CLIENTS],
+    requestURL: `/${CLIENTS}`,
+    successMsg: `Client ${CREATION_SUCCESS_MESSAGE}`,
+    onSuccess: () => {
+      setOpen(false);
+      CreateClientForm.reset();
+    },
+  });
 
-	const CreateClientForm = useForm<TCreateClientDTO>({
-		resolver: zodResolver(CreateClientSchema),
-		defaultValues: {
-			registration_name: "",
-			vat_number: "",
-			street: "",
-			building_number: "",
-			division: "",
-			city: "",
-			postal_code: "",
-			party_identification_scheme: "",
-			party_identification_value: "",
-			phone: "",
-			bank_account: "",
-			notes: "",
-		},
-	});
+  const CreateClientForm = useForm<TCreateClientDTO>({
+    resolver: zodResolver(CreateClientSchema),
+    defaultValues: {
+      registration_name: "",
+      vat_number: "",
+      street: "",
+      building_number: "",
+      division: "",
+      city: "",
+      postal_code: "",
+      party_identification_scheme: "",
+      party_identification_value: "",
+      phone: "",
+      bank_account: "",
+      notes: "",
+    },
+  });
 
-	const onCreateClient = (values: TCreateClientDTO) => {
-		mutate(values);
-	};
+  const onCreateClient = (values: TCreateClientDTO) => {
+    mutate(values);
+  };
 
-	return {
-		onCreateClient,
-		CreateClientForm,
-		isCreatingClient: isPending,
-		open,
-		setOpen,
-	};
+  return {
+    onCreateClient,
+    CreateClientForm,
+    isCreatingClient: isPending,
+    open,
+    setOpen,
+    client,
+  };
 };
