@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -29,18 +29,16 @@ import { handleNumberInput } from "@/shared/utils/handle-number-input";
 import { TStockDTO } from "@/features/stock/schema/stock.schema";
 import { FormatRiyal } from "@/components/common/format-riyal";
 import { calculateInvoiceLines } from "@/features/invoice/utils/calculate-invoice-lines";
+import { CreateStockShortcut } from "@/features/stock/components/create-stock-shortcut";
+import { useGetStocks } from "@/features/stock/hooks/useGetStock";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type InvoiceLineRowProps = {
   index: number;
-  stocks: TStockDTO[];
   onRemove: () => void;
 };
 
-export const InvoiceLineRow = ({
-  index,
-  stocks,
-  onRemove,
-}: InvoiceLineRowProps) => {
+export const InvoiceLineRow = ({ index, onRemove }: InvoiceLineRowProps) => {
   const form = useFormContext<TCreateTaxInvoiceDTO>();
 
   const classifiedTaxCategory = useWatch({
@@ -48,9 +46,11 @@ export const InvoiceLineRow = ({
     name: `invoice_lines.${index}.classified_tax_category`,
   });
 
+  const { stocks, isLoadingStocks } = useGetStocks();
+
   const stockMap = useMemo(() => {
     const map = new Map<number, TStockDTO>();
-    for (const stock of stocks) {
+    for (const stock of stocks || []) {
       map.set(Number(stock.id), stock);
     }
     return map;
@@ -86,32 +86,45 @@ export const InvoiceLineRow = ({
             control={form.control}
             name={`invoice_lines.${index}.item_id`}
             render={({ field }) => (
-              <FormItem>
-                <Select
-                  value={field.value ? field.value.toString() : ""}
-                  onValueChange={(value) => {
-                    field.onChange(Number(value));
-                    handleStockChange(value);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select item" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Available Items</SelectLabel>
-                      {stocks?.map((stock) => (
-                        <SelectItem key={stock.id} value={stock.id.toString()}>
-                          <div className="flex flex-col">
-                            <span>{stock.name}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+              <FormItem className="flex items-center justify-between gap-2">
+                {isLoadingStocks ? (
+                  <Skeleton className="w-full h-11" />
+                ) : (
+                  <>
+                    <Select
+                      value={field.value ? field.value.toString() : ""}
+                      onValueChange={(value) => {
+                        field.onChange(Number(value));
+                        handleStockChange(value);
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select item" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Available Items</SelectLabel>
+                          {stocks?.map((stock) => (
+                            <SelectItem
+                              key={stock.id}
+                              value={stock.id.toString()}
+                            >
+                              <div className="flex flex-col">
+                                <span>{stock.name}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </>
+                )}
+                <CreateStockShortcut
+                  form={form}
+                  name={`invoice_lines.${index}.item_id`}
+                />
                 <FormMessage />
               </FormItem>
             )}

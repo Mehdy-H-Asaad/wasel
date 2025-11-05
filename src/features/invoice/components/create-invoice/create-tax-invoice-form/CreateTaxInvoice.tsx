@@ -19,7 +19,6 @@ export const CreateTaxInvoice = () => {
     window.scrollTo({ top: 0 });
   };
 
-  console.log(CreateTaxInvoiceForm.formState.errors);
   return (
     <div className=" space-y-6">
       <Form {...CreateTaxInvoiceForm}>
@@ -63,6 +62,10 @@ export const CreateTaxInvoice = () => {
                     <MainButton
                       type="submit"
                       className="gap-2"
+                      onClick={() => {
+                        console.log(CreateTaxInvoiceForm.formState.errors);
+                        console.log(CreateTaxInvoiceForm.getValues());
+                      }}
                       // disabled={
                       // 	isCreatingTaxInvoice ||
                       // 	!CreateTaxInvoiceForm.formState.isValid

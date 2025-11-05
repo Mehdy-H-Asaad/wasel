@@ -36,11 +36,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const CreateTaxInvoiceOptions = () => {
   const form = useFormContext<TCreateTaxInvoiceDTO>();
 
-  const { clients } = useGetClients();
+  const { clients, isLoadingClients } = useGetClients();
 
   return (
     <div className="flex flex-col gap-6">
@@ -84,29 +85,36 @@ export const CreateTaxInvoiceOptions = () => {
                     <span>Client - Company *</span>
                     <CreateClientShortcut form={form} name="customer_id" />
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    // defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full h-11 bg-background">
-                        <SelectValue placeholder="Select client company" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Clients</SelectLabel>
-                        {clients?.map((client) => (
-                          <SelectItem
-                            value={client.id.toString()}
-                            key={client.id}
-                          >
-                            {client.registration_name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  {isLoadingClients ? (
+                    <Skeleton className="w-full h-11" />
+                  ) : (
+                    <>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value ? field.value.toString() : undefined}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full h-11 bg-background">
+                            <SelectValue placeholder="Select client company" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Clients</SelectLabel>
+                            {clients?.map((client) => (
+                              <SelectItem
+                                value={client.id.toString()}
+                                key={client.id}
+                              >
+                                {client.registration_name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
+
                   <FormMessage />
                 </FormItem>
               )}

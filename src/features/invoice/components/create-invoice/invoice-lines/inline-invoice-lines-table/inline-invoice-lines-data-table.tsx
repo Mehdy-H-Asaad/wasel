@@ -14,18 +14,12 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
-import { useGetStocks } from "@/features/stock/hooks/useGetStock";
 import { ShoppingCart, Plus, Package } from "lucide-react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { InvoiceLineRow } from "./invoice-line-row";
-import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
-import { CreateStockShortcut } from "@/features/stock/components/create-stock-shortcut";
-import { useEffect } from "react";
 
 export const InlineInvoiceLinesTable = () => {
   const form = useFormContext<TCreateTaxInvoiceDTO>();
-
-  const { stocks } = useGetStocks();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -36,16 +30,13 @@ export const InlineInvoiceLinesTable = () => {
     append({
       item_id: 0,
       quantity: 1,
-      classified_tax_category: "S",
+      classified_tax_category: undefined as unknown as "Z" | "S" | "E" | "O",
       discount_amount: 0,
       description: undefined,
       price_discount: 0,
-    } as any);
+      item_price: 0,
+    });
   };
-
-  //   useEffect(() => {
-  //     console.log(form.getValues());
-  //   }, [form.getValues()]);
 
   return (
     <Card className="border-2">
@@ -88,15 +79,7 @@ export const InlineInvoiceLinesTable = () => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
-                  <TableHead className="min-w-[250px] flex items-center gap-2 justify-between">
-                    <div>
-                      Item <span className="text-destructive">*</span>
-                    </div>
-                    <CreateStockShortcut
-                      form={form}
-                      name={`invoice_lines.0.item_id`}
-                    />
-                  </TableHead>
+                  <TableHead className="min-w-[300px]">Item</TableHead>
                   <TableHead className="min-w-[120px]">
                     Price <span className="text-destructive">*</span>
                   </TableHead>
@@ -121,7 +104,6 @@ export const InlineInvoiceLinesTable = () => {
                   <InvoiceLineRow
                     key={field.id}
                     index={index}
-                    stocks={stocks || []}
                     onRemove={() => remove(index)}
                   />
                 ))}

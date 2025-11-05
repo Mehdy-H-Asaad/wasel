@@ -37,18 +37,28 @@ export const CreateClientShortcut = <T extends FieldValues>({
   form,
   name,
 }: TCreateClientShortcutProps<T>) => {
-  const { client, onCreateClient, CreateClientForm, isCreatingClient } =
-    useCreateClient();
+  const {
+    client,
+    onCreateClient,
+    CreateClientForm,
+    isCreatingClient,
+    open,
+    setOpen,
+  } = useCreateClient();
   const isValid = CreateClientForm.formState.isValid;
 
   useEffect(() => {
     if (client) {
-      form.setValue(name as Path<T>, client.data.id as PathValue<T, Path<T>>);
+      form.setValue(name as Path<T>, client.data.id as PathValue<T, Path<T>>, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
         <Plus className="h-4 w-4 text-light-green" />
         <span className="text-xs text-light-green">Client</span>
@@ -265,8 +275,14 @@ export const CreateClientShortcut = <T extends FieldValues>({
               />
             </div>
             <DialogFooter>
-              <MainButton disabled={!isValid || isCreatingClient}>
-                {isCreatingClient ? "Creating..." : "Create Client"}
+              <MainButton
+                disabled={!isValid || isCreatingClient}
+                type="button"
+                onClick={CreateClientForm.handleSubmit(onCreateClient)}
+                isLoading={isCreatingClient}
+                loadingText="Creating Client..."
+              >
+                Create Client
               </MainButton>
             </DialogFooter>
           </form>

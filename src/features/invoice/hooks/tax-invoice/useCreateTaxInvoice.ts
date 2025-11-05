@@ -31,7 +31,7 @@ export const useCreateTaxInvoice = () => {
       actual_delivery_date: currentDate.toISOString().split("T")[0],
       //   tax_rate: undefined,
       discount_amount: 0,
-      customer_id: "",
+      customer_id: undefined,
 
       document_currency_code: "SAR",
       invoice_type: "0100000",

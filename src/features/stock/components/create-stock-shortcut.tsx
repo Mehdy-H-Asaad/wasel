@@ -42,20 +42,36 @@ export const CreateStockShortcut = <T extends FieldValues>({
   form,
   name,
 }: TCreateStockShortcutProps<T>) => {
-  const { stock, CreateStockForm, onCreateStock, isCreatingStock } =
-    useCreateStock();
+  const {
+    stock,
+    CreateStockForm,
+    onCreateStock,
+    isCreatingStock,
+    open,
+    setOpen,
+  } = useCreateStock();
   const isValid = CreateStockForm.formState.isValid;
 
   useEffect(() => {
     if (stock) {
-      console.log(stock);
-      console.log(form);
-      form.setValue("customer_id" as Path<T>, Number(stock.data.id));
+      form.setValue(name as Path<T>, stock.data.id as PathValue<T, Path<T>>, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      // form.setValue(
+      //   name as Path<T>,
+      //   stock.data.default_sale_price as PathValue<T, Path<T>>,
+      //   {
+      //     shouldDirty: true,
+      //     shouldValidate: true,
+      //   }
+      // );
     }
-  }, [stock, form, name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stock]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
         <Plus className="h-4 w-4 text-light-green" />
         <span className="text-xs text-light-green">Item</span>
@@ -158,8 +174,14 @@ export const CreateStockShortcut = <T extends FieldValues>({
               )}
             />
             <DialogFooter>
-              <MainButton disabled={!isValid || isCreatingStock}>
-                {isCreatingStock ? "Creating..." : "Create Stock"}
+              <MainButton
+                disabled={!isValid || isCreatingStock}
+                type="button"
+                isLoading={isCreatingStock}
+                loadingText="Creating Stock..."
+                onClick={CreateStockForm.handleSubmit(onCreateStock)}
+              >
+                Create Stock
               </MainButton>
             </DialogFooter>
           </form>

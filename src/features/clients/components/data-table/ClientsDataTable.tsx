@@ -6,20 +6,20 @@ import { ClientsColumns } from "./ClientsColumns";
 import { CreateClient } from "../CreateClient";
 
 export const ClientsDataTable = () => {
-	const { metaData, clients, isLoadingClients } = useGetClients();
+  const { metaData, clients, isLoadingClients } = useGetClients();
 
-	return (
-		<DataTable
-			columns={ClientsColumns}
-			data={clients || []}
-			isLoading={isLoadingClients}
-			pageCount={metaData.total_pages}
-			setSearchableField={() => {}}
-			manualPagination={false}
-			totalCount={metaData.total_rows}
-			searchablePlaceholder="Compnay - Client"
-		>
-			<CreateClient />
-		</DataTable>
-	);
+  return (
+    <DataTable
+      columns={ClientsColumns}
+      data={clients || []}
+      isLoading={isLoadingClients}
+      pageCount={metaData.total_pages}
+      setSearchableField={() => {}}
+      manualPagination={true}
+      totalCount={metaData.total_rows}
+      searchablePlaceholder="Compnay - Client"
+    >
+      <CreateClient />
+    </DataTable>
+  );
 };
