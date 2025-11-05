@@ -1,6 +1,9 @@
 "use client";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import { INVOICES } from "../../constants/invoice.constants";
+import {
+  INVOICES,
+  TAX_EXEMPTION_REASONS_CODES,
+} from "../../constants/invoice.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,7 +51,20 @@ export const useCreateTaxInvoice = () => {
   });
 
   const onCreateTaxInvoice = (values: TCreateTaxInvoiceDTO) => {
-    mutate({ ...values });
+    mutate({
+      ...values,
+      invoice_lines: values.invoice_lines.map((line) => ({
+        ...line,
+        tax_exemption_reason:
+          line.classified_tax_category === "O"
+            ? line.tax_exemption_reason
+            : line.tax_exemption_reason_code
+            ? TAX_EXEMPTION_REASONS_CODES.find(
+                (code) => code.value === line.tax_exemption_reason_code
+              )?.label
+            : undefined,
+      })),
+    });
   };
 
   return {

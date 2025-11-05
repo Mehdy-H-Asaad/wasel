@@ -16,6 +16,15 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { useGetClients } from "@/features/clients/hooks/useGetClients";
@@ -40,6 +49,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const CreateTaxInvoiceOptions = () => {
   const form = useFormContext<TCreateTaxInvoiceDTO>();
+  const [clientOpen, setClientOpen] = React.useState(false);
 
   const { clients, isLoadingClients } = useGetClients();
 
@@ -80,7 +90,7 @@ export const CreateTaxInvoiceOptions = () => {
               control={form.control}
               name="customer_id"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel className="flex items-center justify-between text-sm font-semibold">
                     <span>Client - Company *</span>
                     <CreateClientShortcut form={form} name="customer_id" />
@@ -88,31 +98,54 @@ export const CreateTaxInvoiceOptions = () => {
                   {isLoadingClients ? (
                     <Skeleton className="w-full h-11" />
                   ) : (
-                    <>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value ? field.value.toString() : undefined}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full h-11 bg-background">
-                            <SelectValue placeholder="Select client company" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Clients</SelectLabel>
-                            {clients?.map((client) => (
-                              <SelectItem
-                                value={client.id.toString()}
-                                key={client.id}
-                              >
-                                {client.registration_name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </>
+                    <Popover open={clientOpen} onOpenChange={setClientOpen}>
+                      <FormControl>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={clientOpen}
+                            className=" justify-between bg-background font-normal"
+                          >
+                            {field.value
+                              ? clients?.find(
+                                  (client) => client.id === field.value
+                                )?.registration_name
+                              : "Select client company"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                      </FormControl>
+                      <PopoverContent className="w-[300px] p-0" align="start">
+                        <Command>
+                          <CommandInput placeholder="Search client..." />
+                          <CommandList>
+                            <CommandEmpty>No client found.</CommandEmpty>
+                            <CommandGroup>
+                              {clients?.map((client) => (
+                                <CommandItem
+                                  key={client.id}
+                                  value={client.registration_name}
+                                  onSelect={() => {
+                                    field.onChange(client.id);
+                                    setClientOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={`mr-2 h-4 w-4 ${
+                                      client.id === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    }`}
+                                  />
+                                  {client.registration_name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   )}
 
                   <FormMessage />
@@ -224,7 +257,15 @@ export const CreateTaxInvoiceOptions = () => {
                         }
                         captionLayout="dropdown"
                         onSelect={(date) => {
-                          field.onChange(date?.toISOString().split("T")[0]);
+                          if (date) {
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(
+                              2,
+                              "0"
+                            );
+                            const day = String(date.getDate()).padStart(2, "0");
+                            field.onChange(`${year}-${month}-${day}`);
+                          }
                         }}
                       />
                     </PopoverContent>

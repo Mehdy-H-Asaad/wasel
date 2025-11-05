@@ -15,8 +15,9 @@ import {
 } from "@/components/ui/table";
 import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/tax-invoice.schema";
 import { ShoppingCart, Plus, Package } from "lucide-react";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import { InvoiceLineRow } from "./invoice-line-row";
+import { useMemo } from "react";
 
 export const InlineInvoiceLinesTable = () => {
   const form = useFormContext<TCreateTaxInvoiceDTO>();
@@ -25,6 +26,29 @@ export const InlineInvoiceLinesTable = () => {
     control: form.control,
     name: "invoice_lines",
   });
+
+  // Watch all invoice lines to check if any require tax exemption fields
+  const invoiceLines = useWatch({
+    control: form.control,
+    name: "invoice_lines",
+  });
+
+  // Check if any line has a tax category that requires exemption fields
+  const { showExemptionCode, showExemptionReason } = useMemo(() => {
+    const hasExemptionCategory = invoiceLines.some(
+      (line) =>
+        line.classified_tax_category === "Z" ||
+        line.classified_tax_category === "E" ||
+        line.classified_tax_category === "O"
+    );
+    const hasOCategory = invoiceLines.some(
+      (line) => line.classified_tax_category === "O"
+    );
+    return {
+      showExemptionCode: hasExemptionCategory,
+      showExemptionReason: hasOCategory,
+    };
+  }, [invoiceLines]);
 
   const addNewLine = () => {
     append({
@@ -35,6 +59,8 @@ export const InlineInvoiceLinesTable = () => {
       description: undefined,
       price_discount: 0,
       item_price: 0,
+      tax_exemption_reason_code: "",
+      tax_exemption_reason: "",
     });
   };
 
@@ -89,7 +115,19 @@ export const InlineInvoiceLinesTable = () => {
                   <TableHead className="min-w-[200px]">
                     Tax Category <span className="text-destructive">*</span>
                   </TableHead>
+                  {showExemptionCode && (
+                    <TableHead className="min-w-[100px] bg-amber-50/50 dark:bg-amber-800/20">
+                      Exemption Code <span className="text-destructive">*</span>
+                    </TableHead>
+                  )}
+                  {showExemptionReason && (
+                    <TableHead className="min-w-[200px] bg-amber-50/50 dark:bg-amber-800/20">
+                      Exemption Reason{" "}
+                      <span className="text-destructive">*</span>
+                    </TableHead>
+                  )}
                   <TableHead className="min-w-[100px]">Discount</TableHead>
+
                   <TableHead className="min-w-[120px]">Sub Total</TableHead>
                   <TableHead className="min-w-[120px]">Tax</TableHead>
                   <TableHead className="min-w-[120px]">Total</TableHead>
@@ -105,6 +143,8 @@ export const InlineInvoiceLinesTable = () => {
                     key={field.id}
                     index={index}
                     onRemove={() => remove(index)}
+                    showExemptionCode={showExemptionCode}
+                    showExemptionReason={showExemptionReason}
                   />
                 ))}
               </TableBody>

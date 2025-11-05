@@ -58,14 +58,6 @@ export const CreateStockShortcut = <T extends FieldValues>({
         shouldDirty: true,
         shouldValidate: true,
       });
-      // form.setValue(
-      //   name as Path<T>,
-      //   stock.data.default_sale_price as PathValue<T, Path<T>>,
-      //   {
-      //     shouldDirty: true,
-      //     shouldValidate: true,
-      //   }
-      // );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stock]);
