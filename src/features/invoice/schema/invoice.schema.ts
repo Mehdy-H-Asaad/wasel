@@ -9,7 +9,7 @@ import { TClientDTO } from "@/features/clients/schema/client.schema";
 
 export const invoiceSchema = z.object({
   id: z.number(),
-  customer_id: requiredString(50),
+  customer_id: z.number().min(1, "Required"),
   invoice_type: z.enum(["0100000", "0200000"]),
   invoice_type_code: z.enum(["388", "383", "381", "386"]),
   issue_date: requiredString(50),
