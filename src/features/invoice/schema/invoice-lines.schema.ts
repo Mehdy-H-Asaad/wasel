@@ -3,11 +3,30 @@ import { z } from "zod";
 export const BaseInvoiceLinesSchema = z.object({
   item_id: z.number().min(1, "Required"),
   item_name: z.string().min(1, "Required"),
-  item_price: z.number().min(1, "Required"),
-  discount_amount: z.number().optional(),
+  item_price: z
+    .number({
+      required_error: "Required",
+      invalid_type_error: "Required",
+    })
+    .min(1, {
+      message: "Required",
+    }),
+  discount_amount: z
+    .number({
+      required_error: "Required",
+      invalid_type_error: "Required",
+    })
+    .optional(),
   tax_exemption_reason_code: z.string().optional(),
   tax_exemption_reason: z.string().optional(),
-  quantity: z.number().min(1, "Required"),
+  quantity: z
+    .number({
+      required_error: "Required",
+      invalid_type_error: "Required",
+    })
+    .min(1, {
+      message: "Required",
+    }),
   price_discount: z.number().optional(),
   item_unit_code: z.string().min(1, "Required"),
   line_extension_amount: z.number().min(1, "Required"),
@@ -18,44 +37,78 @@ export const BaseInvoiceLinesSchema = z.object({
   rounding_amount: z.number().min(1, "Required"),
 });
 
-export const InvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
-  item_name: true,
-  // item_price: true,
-  item_unit_code: true,
-  tax_amount: true,
-  rounding_amount: true,
-  line_extension_amount: true,
-});
+export const InvoiceLinesSchema = (isSaleInvoice: boolean) =>
+  BaseInvoiceLinesSchema.omit({
+    item_name: true,
+    // item_price: true,
+    item_unit_code: true,
+    tax_amount: true,
+    rounding_amount: true,
+    line_extension_amount: true,
+  }).superRefine((data, ctx) => {
+    if (
+      (data.classified_tax_category === "Z" ||
+        data.classified_tax_category === "O" ||
+        data.classified_tax_category === "E") &&
+      isSaleInvoice
+    ) {
+      if (!data.tax_exemption_reason_code) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required",
+          path: ["tax_exemption_reason_code"],
+        });
+      }
 
-export const CreateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
-  item_name: true,
-  item_unit_code: true,
-  tax_amount: true,
-  rounding_amount: true,
-  line_extension_amount: true,
-}).superRefine((data, ctx) => {
-  if (
-    data.classified_tax_category === "Z" ||
-    data.classified_tax_category === "O" ||
-    data.classified_tax_category === "E"
-  ) {
-    if (!data.tax_exemption_reason_code) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Tax exemption reason code is required for this tax category",
-        path: ["tax_exemption_reason_code"],
-      });
+      if (
+        data.classified_tax_category === "O" &&
+        !data.tax_exemption_reason &&
+        isSaleInvoice
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required",
+          path: ["tax_exemption_reason"],
+        });
+      }
     }
+  });
 
-    if (data.classified_tax_category === "O" && !data.tax_exemption_reason) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Tax exemption reason is required for this tax category",
-        path: ["tax_exemption_reason"],
-      });
+export const CreateInvoiceLinesSchema = (isSaleInvoice: boolean) =>
+  BaseInvoiceLinesSchema.omit({
+    item_name: true,
+    item_unit_code: true,
+    tax_amount: true,
+    rounding_amount: true,
+    line_extension_amount: true,
+  }).superRefine((data, ctx) => {
+    if (
+      (data.classified_tax_category === "Z" ||
+        data.classified_tax_category === "O" ||
+        data.classified_tax_category === "E") &&
+      isSaleInvoice
+    ) {
+      if (!data.tax_exemption_reason_code) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required",
+          path: ["tax_exemption_reason_code"],
+        });
+      }
+
+      if (
+        data.classified_tax_category === "O" &&
+        !data.tax_exemption_reason &&
+        isSaleInvoice
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required",
+          path: ["tax_exemption_reason"],
+        });
+      }
     }
-  }
-});
+  });
 
 export const UpdateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
   item_name: true,
@@ -72,7 +125,7 @@ export const UpdateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
     if (!data.tax_exemption_reason_code) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Tax exemption reason code is required for this tax category",
+        message: "Required",
         path: ["tax_exemption_reason_code"],
       });
     }
@@ -81,7 +134,7 @@ export const UpdateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
     if (data.classified_tax_category === "O" && !data.tax_exemption_reason) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Tax exemption reason is required for this tax category",
+        message: "Required",
         path: ["tax_exemption_reason"],
       });
     }
@@ -89,7 +142,9 @@ export const UpdateInvoiceLinesSchema = BaseInvoiceLinesSchema.omit({
 });
 
 export type TBaseTaxInvoiceLineDTO = z.infer<typeof BaseInvoiceLinesSchema>;
-export type TTaxInvoiceLineDTO = z.infer<typeof InvoiceLinesSchema>;
-export type TCreateTaxInvoiceLineDTO = z.infer<typeof CreateInvoiceLinesSchema>;
+export type TTaxInvoiceLineDTO = z.infer<ReturnType<typeof InvoiceLinesSchema>>;
+export type TCreateTaxInvoiceLineDTO = z.infer<
+  ReturnType<typeof CreateInvoiceLinesSchema>
+>;
 export type TUpdateTaxInvoiceLineDTO = z.infer<typeof UpdateInvoiceLinesSchema>;
-export type TInvoiceLineDTO = z.infer<typeof InvoiceLinesSchema>;
+export type TInvoiceLineDTO = z.infer<ReturnType<typeof InvoiceLinesSchema>>;

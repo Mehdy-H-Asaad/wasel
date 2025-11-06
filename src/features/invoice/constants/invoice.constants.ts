@@ -1,4 +1,6 @@
-export const INVOICES = "sale-invoices";
+export const SALE_INVOICES = "sale-invoices";
+export const PURCHASE_INVOICES = "buy-invoices";
+export const QUOTATIONS = "quotations";
 export const TAX_RATE = 15;
 export const NO_TAX_RATE = 0;
 
