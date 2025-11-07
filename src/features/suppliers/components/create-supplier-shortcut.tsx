@@ -9,7 +9,7 @@ import {
 import { Plus } from "lucide-react";
 import React, { useEffect } from "react";
 import { Form } from "@/components/ui/form";
-import { useCreateClientShortcut } from "../hooks/useCreateClientShortcut";
+import { useCreateSupplierShortcut } from "../hooks/use-create-supplier-shortcut";
 import { FormField } from "@/components/ui/form";
 import { FormItem } from "@/components/ui/form";
 import { FormLabel } from "@/components/ui/form";
@@ -25,94 +25,101 @@ import { SelectItem } from "@/components/ui/select";
 import { FormMessage } from "@/components/ui/form";
 import { DialogFooter } from "@/components/ui/dialog";
 import { MainButton } from "@/components/common/MainButton";
-import { CLIENT_IDENTIFCATIONS } from "../constants/client.constant";
+import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+import { Textarea } from "@/components/ui/textarea";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 
-type TCreateClientShortcutProps<T extends FieldValues> = {
+type TCreateSupplierShortcutProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
   name: Path<T>;
 };
 
-export const CreateClientShortcut = <T extends FieldValues>({
+export const CreateSupplierShortcut = <T extends FieldValues>({
   form,
   name,
-}: TCreateClientShortcutProps<T>) => {
+}: TCreateSupplierShortcutProps<T>) => {
   const {
-    client,
-    onCreateClient,
-    CreateClientForm,
-    isCreatingClient,
+    supplier,
+    onCreateSupplier,
+    CreateSupplierForm,
+    isCreatingSupplier,
     open,
     setOpen,
-  } = useCreateClientShortcut();
-  const isValid = CreateClientForm.formState.isValid;
+  } = useCreateSupplierShortcut();
+  const isValid = CreateSupplierForm.formState.isValid;
 
   useEffect(() => {
-    if (client) {
-      form.setValue(name as Path<T>, client.data.id as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+    if (supplier) {
+      form.setValue(
+        name as Path<T>,
+        supplier.data.id as PathValue<T, Path<T>>,
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+        }
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client]);
+  }, [supplier]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
         <Plus className="h-4 w-4 text-light-green" />
-        <span className="text-xs text-light-green">Client</span>
+        <span className="text-xs text-light-green">Supplier</span>
       </DialogTrigger>
       <DialogContent className="sm:min-w-[60rem] dark:bg-main-black">
         <DialogHeader>
-          <DialogTitle>Add New Client</DialogTitle>
-          <DialogDescription>Add a new client to your system</DialogDescription>
+          <DialogTitle>Add New Supplier</DialogTitle>
+          <DialogDescription>
+            Add a new supplier to your system
+          </DialogDescription>
         </DialogHeader>
-        <Form {...CreateClientForm}>
+        <Form {...CreateSupplierForm}>
           <form
             className="grid gap-4"
-            onSubmit={CreateClientForm.handleSubmit(onCreateClient)}
+            onSubmit={CreateSupplierForm.handleSubmit(onCreateSupplier)}
           >
             <div className="grid grid-cols-3 gap-6">
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="registration_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Client - Company <span className="text-red-500">*</span>
+                      Supplier - Company <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Client - Company" />
+                      <Input {...field} placeholder="Supplier - Company" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="party_identification_scheme"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Client Identification{" "}
-                      <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Supplier Identification</FormLabel>
                     <Select
                       defaultValue={field.value}
                       onValueChange={field.onChange}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Client Identification" />
+                          <SelectValue placeholder="Supplier Identification" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>Client Identifications</SelectLabel>
-                          {CLIENT_IDENTIFCATIONS.map((client) => (
-                            <SelectItem key={client.value} value={client.value}>
-                              {client.label}
+                          <SelectLabel>Supplier Identifications</SelectLabel>
+                          {CLIENT_IDENTIFCATIONS.map((supplier) => (
+                            <SelectItem
+                              key={supplier.value}
+                              value={supplier.value}
+                            >
+                              {supplier.label}
                             </SelectItem>
                           ))}
                         </SelectGroup>
@@ -123,19 +130,18 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="party_identification_value"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Identification Value{" "}
-                      <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Identification Value</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         disabled={
-                          !CreateClientForm.watch("party_identification_scheme")
+                          !CreateSupplierForm.watch(
+                            "party_identification_scheme"
+                          )
                         }
                         placeholder="Identification Value"
                       />
@@ -145,13 +151,11 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="vat_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      VAT Number <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>VAT Number</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="VAT Number" />
                     </FormControl>
@@ -160,7 +164,7 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
@@ -173,7 +177,20 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
+                name="website"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Website</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Website" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={CreateSupplierForm.control}
                 name="bank_account"
                 render={({ field }) => (
                   <FormItem>
@@ -186,13 +203,11 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      City <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>City</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="City" />
                     </FormControl>
@@ -201,13 +216,11 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="division"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      District <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>District</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="District" />
                     </FormControl>
@@ -216,13 +229,11 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="street"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Street <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Street</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Street" />
                     </FormControl>
@@ -231,13 +242,11 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="building_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Building Number <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Building Number</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Building Number" />
                     </FormControl>
@@ -246,13 +255,11 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="postal_code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Postal Code <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Postal Code</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Postal Code" />
                     </FormControl>
@@ -261,13 +268,13 @@ export const CreateClientShortcut = <T extends FieldValues>({
                 )}
               />
               <FormField
-                control={CreateClientForm.control}
+                control={CreateSupplierForm.control}
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Note</FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         {...field}
                         placeholder="Note"
                         value={field.value ?? ""}
@@ -280,13 +287,13 @@ export const CreateClientShortcut = <T extends FieldValues>({
             </div>
             <DialogFooter>
               <MainButton
-                disabled={!isValid || isCreatingClient}
+                disabled={!isValid || isCreatingSupplier}
                 type="button"
-                onClick={CreateClientForm.handleSubmit(onCreateClient)}
-                isLoading={isCreatingClient}
-                loadingText="Creating Client..."
+                onClick={CreateSupplierForm.handleSubmit(onCreateSupplier)}
+                isLoading={isCreatingSupplier}
+                loadingText="Creating Supplier..."
               >
-                Create Client
+                Create Supplier
               </MainButton>
             </DialogFooter>
           </form>

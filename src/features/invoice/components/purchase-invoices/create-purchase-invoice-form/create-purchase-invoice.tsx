@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useCreatePurchaseInvoice } from "../../../hooks/buy-invoice/use-create-purchase-invoices";
 import { MainButton } from "@/components/common/MainButton";
 import { CreatePurchaseInvoiceOptions } from "./create-purchase-invoice-options";
-import { InlineInvoiceLinesTable } from "../../invoice-lines/inline-invoice-lines-table/inline-invoice-lines-data-table";
+import { InlineInvoiceLinesTable } from "../../invoice-lines/inline-invoice-lines-data-table";
 import { InvoicePreview } from "../../invoice-preview/invoice-preview";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Eye, Save } from "lucide-react";
@@ -53,7 +53,7 @@ export const CreatePurchaseInvoice = () => {
           ) : (
             <>
               <InvoicePreview form={CreatePurchaseInvoiceForm} />
-              <Card className="border-2 sticky bottom-4 shadow-lg">
+              <Card className="border-2 bottom-4 shadow-lg">
                 <CardContent className="py-4">
                   <div className="flex items-center justify-between gap-4">
                     <MainButton

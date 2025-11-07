@@ -1,11 +1,12 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-
 import { useGetClients } from "../../hooks/useGetClients";
 import { ClientsColumns } from "./ClientsColumns";
-import { CreateClient } from "../CreateClient";
+import { MainButton } from "@/components/common/MainButton";
+import { useRouter } from "next/navigation";
 
 export const ClientsDataTable = () => {
+  const router = useRouter();
   const { metaData, clients, isLoadingClients } = useGetClients();
 
   return (
@@ -19,7 +20,11 @@ export const ClientsDataTable = () => {
       totalCount={metaData.total_rows}
       searchablePlaceholder="Compnay - Client"
     >
-      <CreateClient />
+      <MainButton
+        onClick={() => router.push("/admin/contacts/clients/create-client")}
+      >
+        Add Client
+      </MainButton>
     </DataTable>
   );
 };

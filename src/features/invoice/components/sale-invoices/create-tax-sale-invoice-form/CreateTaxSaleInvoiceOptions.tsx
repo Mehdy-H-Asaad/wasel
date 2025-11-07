@@ -69,7 +69,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
           </div>
         </div>
         <div className="w-fit self-end text-light-green font-bold text-sm border-2 border-light-green py-2 px-6 rounded-full bg-light-green/5">
-          Sale Tax Invoice
+          Sale Invoice
         </div>
       </div>
 
@@ -286,6 +286,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
                     {...field}
                     placeholder="Enter additional notes, comments, or instructions..."
                     className="min-h-32 resize-none bg-background"
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />

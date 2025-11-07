@@ -25,7 +25,6 @@ export const MainButton = ({
   isLoading,
   loadingText,
   variant = "default",
-  blueVariant = false,
   ...props
 }: TMainButtonProps) => {
   return (

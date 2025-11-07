@@ -1,17 +1,19 @@
 "use client";
 import { DataTable } from "@/components/common/DataTable";
-import { SaleInvoicesColumns } from "./SaleInvoicesColumns";
-import { CreateSaleInvoiceDialog } from "../CreateSaleInvoiceDialog";
+import { QuotationColumns } from "./quotation-columns";
 import { useGetSaleInvoices } from "@/features/invoice/hooks/sale-invoice/useGetSalenvoices";
+import Link from "next/link";
+import { MainButton } from "@/components/common/MainButton";
 
-export const SaleInvoicesDataTable = () => {
+export const QuotationsDataTable = () => {
   const { metaData, invoices, isLoadingInvoices } = useGetSaleInvoices({
-    documentType: "invoice",
+    documentType: "quotation",
+    invoiceType: "tax",
   });
 
   return (
     <DataTable
-      columns={SaleInvoicesColumns}
+      columns={QuotationColumns}
       data={invoices || []}
       pageCount={metaData.total_pages}
       searchablePlaceholder="Invoice Number"
@@ -20,7 +22,9 @@ export const SaleInvoicesDataTable = () => {
       isLoading={isLoadingInvoices}
       totalCount={metaData.total_pages}
     >
-      <CreateSaleInvoiceDialog documentType="invoice" />
+      <Link href={"/admin/sales/quotations/create-quotation"}>
+        <MainButton>Create Quotation</MainButton>
+      </Link>
     </DataTable>
   );
 };

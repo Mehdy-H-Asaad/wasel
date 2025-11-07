@@ -45,6 +45,8 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetSuppliers } from "@/features/suppliers/hooks/use-get-suppliers";
+import { Input } from "@/components/ui/input";
+import { CreateSupplierShortcut } from "@/features/suppliers/components/create-supplier-shortcut";
 
 export const CreatePurchaseInvoiceOptions = () => {
   const form = useFormContext<TCreatePurchaseInvoiceDTO>();
@@ -92,7 +94,7 @@ export const CreatePurchaseInvoiceOptions = () => {
                 <FormItem className="flex flex-col">
                   <FormLabel className="flex items-center justify-between text-sm font-semibold">
                     <span>Supplier - Company *</span>
-                    {/* <CreateClientShortcut form={form} name="supplier_id" /> */}
+                    <CreateSupplierShortcut form={form} name="supplier_id" />
                   </FormLabel>
                   {isLoadingSuppliers ? (
                     <Skeleton className="w-full h-11" />
@@ -147,6 +149,25 @@ export const CreatePurchaseInvoiceOptions = () => {
                     </Popover>
                   )}
 
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="invoice_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold">
+                    Invoice Number
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Enter invoice number"
+                      className="bg-background"
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -285,6 +306,7 @@ export const CreatePurchaseInvoiceOptions = () => {
                     {...field}
                     placeholder="Enter additional notes, comments, or instructions..."
                     className="min-h-32 resize-none bg-background"
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />

@@ -27,7 +27,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 const data = {
   user: {
@@ -60,9 +60,9 @@ const data = {
         },
         {
           title: "Cash Invoices",
-          url: "/admin/sales/cash-invoices",
+          url: "/admin/sales/invoices/cash-invoices",
           canAddShortcut: true,
-          shortCutLink: "/admin/sales/invoices/create-simplified-tax-invoice",
+          shortCutLink: "/admin/sales/invoices/create-cash-invoice",
         },
         {
           title: "Quotations",
@@ -100,14 +100,16 @@ const data = {
       icon: Users,
       children: [
         {
-          title: "Customers",
-          url: "/admin/contacts/customers",
+          title: "Clients",
+          url: "/admin/contacts/clients",
           canAddShortcut: true,
+          shortCutLink: "/admin/contacts/clients/create-client",
         },
         {
           title: "Suppliers",
           url: "/admin/contacts/suppliers",
           canAddShortcut: true,
+          shortCutLink: "/admin/contacts/suppliers/create-supplier",
         },
         {
           title: "Vendors",
@@ -121,9 +123,10 @@ const data = {
       icon: Box,
       children: [
         {
-          title: "Items",
-          url: "/admin/inventory/items",
+          title: "Stock",
+          url: "/admin/inventory/stock",
           canAddShortcut: true,
+          shortCutLink: "/admin/inventory/stock/create-stock",
         },
         {
           title: "Warehouses",

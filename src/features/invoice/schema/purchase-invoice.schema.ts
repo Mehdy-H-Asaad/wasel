@@ -7,6 +7,7 @@ export const purchaseInvoiceSchema = invoiceSchema(false).pick({
   invoice_type: true,
   invoice_type_code: true,
   issue_date: true,
+  invoice_number: true,
   issue_time: true,
   document_currency_code: true,
   document_type: true,
@@ -22,7 +23,7 @@ export const purchaseInvoiceSchema = invoiceSchema(false).pick({
   prices_include_tax: true,
 });
 
-export const CreatePurchaseInvoiceSchema = invoiceSchema(false).omit({
+export const CreatePurchaseInvoiceSchema = purchaseInvoiceSchema.omit({
   id: true,
 });
 export type TCreatePurchaseInvoiceDTO = z.infer<

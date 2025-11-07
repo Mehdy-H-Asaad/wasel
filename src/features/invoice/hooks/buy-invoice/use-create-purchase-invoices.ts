@@ -37,11 +37,24 @@ export const useCreatePurchaseInvoice = () => {
       issue_time: currentDate.toLocaleTimeString("en-US", {
         hour12: false,
       }),
-      note: "",
+      note: null,
       prices_include_tax: undefined,
       payment_means_code: "",
-
-      invoice_lines: [],
+      invoice_number: "",
+      invoice_lines: [
+        {
+          description: null,
+          item_id: undefined,
+          // item_name: "",
+          item_price: undefined,
+          quantity: 1,
+          price_discount: 0,
+          tax_exemption_reason_code: null,
+          tax_exemption_reason: null,
+          classified_tax_category: undefined,
+          discount_amount: 0,
+        },
+      ],
     },
   });
 
