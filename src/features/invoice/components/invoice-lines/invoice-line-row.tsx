@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
+import { TCreateSaleTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
 import { TableCell, TableRow } from "@/components/ui/table";
 import {
   FormControl,
@@ -52,7 +52,6 @@ type InvoiceLineRowProps = {
   onRemove: () => void;
   showExemptionCode: boolean;
   showExemptionReason: boolean;
-  isSaleInvoice: boolean;
 };
 
 export const InvoiceLineRow = ({
@@ -60,9 +59,8 @@ export const InvoiceLineRow = ({
   onRemove,
   showExemptionCode,
   showExemptionReason,
-  isSaleInvoice,
 }: InvoiceLineRowProps) => {
-  const form = useFormContext<TCreateTaxInvoiceDTO>();
+  const form = useFormContext<TCreateSaleTaxInvoiceDTO>();
   const [itemOpen, setItemOpen] = React.useState(false);
 
   const classifiedTaxCategory = useWatch({
@@ -260,7 +258,10 @@ export const InvoiceLineRow = ({
               name={`invoice_lines.${index}.tax_exemption_reason_code`}
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
+                  >
                     <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select code" />
@@ -301,6 +302,7 @@ export const InvoiceLineRow = ({
                       {...field}
                       placeholder="Describe reason..."
                       className="w-full"
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -360,6 +362,7 @@ export const InvoiceLineRow = ({
                   {...field}
                   placeholder="Add description..."
                   className="w-full"
+                  value={field.value ?? ""}
                 />
               </FormControl>
               <FormMessage />

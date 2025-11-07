@@ -13,7 +13,7 @@ import {
   TableHead,
   TableBody,
 } from "@/components/ui/table";
-import { TCreateTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
+import { TCreateSaleTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
 import { ShoppingCart, Plus, Package } from "lucide-react";
 import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import { InvoiceLineRow } from "./invoice-line-row";
@@ -24,7 +24,7 @@ export const InlineInvoiceLinesTable = ({
 }: {
   isSaleInvoice: boolean;
 }) => {
-  const form = useFormContext<TCreateTaxInvoiceDTO>();
+  const form = useFormContext<TCreateSaleTaxInvoiceDTO>();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -53,7 +53,7 @@ export const InlineInvoiceLinesTable = ({
       showExemptionCode: hasExemptionCategory,
       showExemptionReason: hasOCategory,
     };
-  }, [invoiceLines]);
+  }, [invoiceLines, isSaleInvoice]);
 
   const addNewLine = () => {
     append({
@@ -64,8 +64,8 @@ export const InlineInvoiceLinesTable = ({
       description: undefined,
       price_discount: 0,
       item_price: 0,
-      tax_exemption_reason_code: "",
-      tax_exemption_reason: "",
+      tax_exemption_reason_code: null,
+      tax_exemption_reason: null,
     });
   };
 
@@ -145,7 +145,6 @@ export const InlineInvoiceLinesTable = ({
               <TableBody>
                 {fields.map((field, index) => (
                   <InvoiceLineRow
-                    isSaleInvoice={isSaleInvoice}
                     key={field.id}
                     index={index}
                     onRemove={() => remove(index)}

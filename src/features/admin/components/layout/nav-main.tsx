@@ -85,7 +85,7 @@ export function NavMain({
                 </SidebarMenuButton>
               )}
               <CollapsibleContent>
-                <SidebarMenuSub>
+                <SidebarMenuSub className="w-[96%]">
                   {item.children?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>

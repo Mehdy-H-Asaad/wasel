@@ -1,5 +1,3 @@
-import Image from "next/image";
-import riyalIcon from "../../../public/assets/imgs/saudi-riyal-svgrepo-com (1).svg";
 import { SaudiRiyalIcon } from "lucide-react";
 type CurrencyProps = {
   value: number;

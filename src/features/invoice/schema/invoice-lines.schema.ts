@@ -17,8 +17,8 @@ export const BaseInvoiceLinesSchema = z.object({
       invalid_type_error: "Required",
     })
     .optional(),
-  tax_exemption_reason_code: z.string().optional(),
-  tax_exemption_reason: z.string().optional(),
+  tax_exemption_reason_code: z.string().nullable().optional(),
+  tax_exemption_reason: z.string().nullable().optional(),
   quantity: z
     .number({
       required_error: "Required",
@@ -33,7 +33,7 @@ export const BaseInvoiceLinesSchema = z.object({
   // tax_rate: z.number().min(1, "Required"),
   tax_amount: z.number().min(1, "Required"),
   classified_tax_category: z.enum(["Z", "S", "E", "O"]),
-  description: z.string().optional(),
+  description: z.string().nullable().optional(),
   rounding_amount: z.number().min(1, "Required"),
 });
 
@@ -71,6 +71,14 @@ export const InvoiceLinesSchema = (isSaleInvoice: boolean) =>
           path: ["tax_exemption_reason"],
         });
       }
+    }
+
+    if (data.discount_amount && data.discount_amount > data.item_price) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Discount amount cannot be greater than item price",
+        path: ["discount_amount"],
+      });
     }
   });
 

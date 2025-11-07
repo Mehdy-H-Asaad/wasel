@@ -6,10 +6,10 @@ import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { STOCKS } from "../constants/stock.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { TStockDTO } from "../schema/stock.schema";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export const useCreateStock = () => {
-  const router = useRouter();
+export const useCreateStockShortcut = () => {
+  const [open, setOpen] = useState<boolean>(false);
 
   const CreateStockForm = useForm<TCreateStockDTO>({
     resolver: zodResolver(CreateStockSchema),
@@ -22,14 +22,18 @@ export const useCreateStock = () => {
     },
   });
 
-  const { mutate, isPending } = useApiMutation<TStockDTO, TCreateStockDTO>({
+  const {
+    data: stock,
+    mutate,
+    isPending,
+  } = useApiMutation<TStockDTO, TCreateStockDTO>({
     axiosRequestMethod: "post",
     queryKey: [STOCKS],
     requestURL: `/${STOCKS}`,
     successMsg: `Item ${CREATION_SUCCESS_MESSAGE}`,
     onSuccess: () => {
+      setOpen(false);
       CreateStockForm.reset();
-      router.push(`/admin/inventory/stock`);
     },
   });
 
@@ -41,5 +45,8 @@ export const useCreateStock = () => {
     CreateStockForm,
     onCreateStock,
     isCreatingStock: isPending,
+    open,
+    setOpen,
+    stock,
   };
 };

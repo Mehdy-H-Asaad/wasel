@@ -16,10 +16,10 @@ import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.const
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 
-export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
+export const QuotationColumns: ColumnDef<TInvoiceDTO>[] = [
   {
     accessorKey: "invoice_number",
-    header: "#Invoice",
+    header: "#Quotation",
   },
   {
     accessorFn: (row) =>

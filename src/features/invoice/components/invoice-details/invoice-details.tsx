@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/table";
 import { PAYMENTS_TYPES } from "../../constants/invoice.constants";
 import { useGetSingleSaleInvoice } from "../../hooks/sale-invoice/use-get-single-sale-invoice";
+import { useParams } from "next/navigation";
 
-export const InvoiceDetails = ({ id }: { id: string }) => {
-  const { invoice } = useGetSingleSaleInvoice({ id: id });
+export const InvoiceDetails = () => {
+  const { id } = useParams<{ id: string }>();
+  const { invoice } = useGetSingleSaleInvoice({ id });
 
   if (!invoice) return null;
 

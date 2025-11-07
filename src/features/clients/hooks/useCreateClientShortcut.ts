@@ -5,10 +5,10 @@ import { CreateClientSchema, TCreateClientDTO } from "../schema/client.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TClientDTO } from "../schema/client.schema";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export const useCreateClient = () => {
-  const router = useRouter();
+export const useCreateClientShortcut = () => {
+  const [open, setOpen] = useState<boolean>(false);
   const {
     data: client,
     mutate,
@@ -19,8 +19,8 @@ export const useCreateClient = () => {
     requestURL: `/${CLIENTS}`,
     successMsg: `Client ${CREATION_SUCCESS_MESSAGE}`,
     onSuccess: () => {
+      setOpen(false);
       CreateClientForm.reset();
-      router.push(`/admin/contacts/clients`);
     },
   });
 
@@ -50,6 +50,8 @@ export const useCreateClient = () => {
     onCreateClient,
     CreateClientForm,
     isCreatingClient: isPending,
+    open,
+    setOpen,
     client,
   };
 };

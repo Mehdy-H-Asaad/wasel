@@ -1,17 +1,20 @@
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import { CreateSupplierSchema, TSupplierDTO } from "../schema/supplier.schema";
-import { TCreateSupplierDTO } from "../schema/supplier.schema";
 import {
   SUPPLIERS,
   SUPPLIERS_QUERY_KEY,
 } from "../constants/supplier.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  CreateSupplierSchema,
+  TCreateSupplierDTO,
+} from "../schema/supplier.schema";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TSupplierDTO } from "../schema/supplier.schema";
+import { useState } from "react";
 
-export const useCreateSupplier = () => {
-  const router = useRouter();
+export const useCreateSupplierShortcut = () => {
+  const [open, setOpen] = useState<boolean>(false);
 
   const CreateSupplierForm = useForm<TCreateSupplierDTO>({
     resolver: zodResolver(CreateSupplierSchema),
@@ -32,17 +35,18 @@ export const useCreateSupplier = () => {
     },
   });
 
-  const { mutate, isPending } = useApiMutation<
-    TSupplierDTO,
-    TCreateSupplierDTO
-  >({
+  const {
+    data: supplier,
+    mutate,
+    isPending,
+  } = useApiMutation<TSupplierDTO, TCreateSupplierDTO>({
     axiosRequestMethod: "post",
     queryKey: [SUPPLIERS_QUERY_KEY],
     requestURL: `/${SUPPLIERS}`,
     successMsg: `Supplier ${CREATION_SUCCESS_MESSAGE}`,
     onSuccess: () => {
+      setOpen(false);
       CreateSupplierForm.reset();
-      router.push(`/admin/contacts/suppliers`);
     },
   });
 
@@ -54,5 +58,8 @@ export const useCreateSupplier = () => {
     onCreateSupplier,
     CreateSupplierForm,
     isCreatingSupplier: isPending,
+    open,
+    setOpen,
+    supplier,
   };
 };

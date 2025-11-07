@@ -5,7 +5,7 @@ import React, { Suspense } from "react";
 const InvoicesPage = () => {
   return (
     <Suspense fallback={<DataTableSkeleton />}>
-      <SaleInvoicesDataTable invoiceType="tax" />
+      <SaleInvoicesDataTable invoiceType="simplified-tax" />
     </Suspense>
   );
 };

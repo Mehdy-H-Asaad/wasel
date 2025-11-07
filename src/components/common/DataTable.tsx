@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
   children?: React.ReactNode;
   manualPagination?: boolean;
   setSearchableField: (filter: string) => void;
+  filters?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -50,6 +51,7 @@ export function DataTable<TData, TValue>({
   children,
   manualPagination = true,
   setSearchableField,
+  filters,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -108,6 +110,9 @@ export function DataTable<TData, TValue>({
         </div>
         {children}
       </div>
+
+      {/* Filters Section */}
+      {filters && <div className="w-full">{filters}</div>}
 
       {/* Table Section */}
       {isLoading ? (

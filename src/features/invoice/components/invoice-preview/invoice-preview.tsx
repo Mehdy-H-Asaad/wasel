@@ -1,6 +1,5 @@
 "use client";
-import { FieldValues, UseFormReturn } from "react-hook-form";
-import { TCreateSaleTaxInvoiceDTO } from "../../schema/sale-tax-invoice.schema";
+import { FieldValues, Path, UseFormReturn, useWatch } from "react-hook-form";
 import {
   Table,
   TableHeader,
@@ -10,9 +9,8 @@ import {
   TableCell,
   TableFooter,
 } from "@/components/ui/table";
-import { TCreateSimplifiedSaleTaxInvoiceDTO } from "../../schema/simplified-sale-tax-invoice.schema";
 import { PAYMENTS_TYPES } from "../../constants/invoice.constants";
-import { useInvoiceLineStore } from "../../store/invoice-line.store";
+import { TTaxInvoiceLineDTO } from "../../schema/invoice-lines.schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -21,24 +19,60 @@ import {
   DollarSign,
   CreditCard,
   Building2,
+  SaudiRiyal,
 } from "lucide-react";
+import { calculateInvoiceLines } from "../../utils/calculate-invoice-lines";
+import { useGetStocks } from "@/features/stock/hooks/useGetStock";
+import { useMemo } from "react";
+import { FormatRiyal } from "@/components/common/format-riyal";
 
 type TInvoicePreviewProps<T> = {
-  form:
-    | UseFormReturn<T extends FieldValues ? T : never>
-    | UseFormReturn<TCreateSaleTaxInvoiceDTO>
-    | UseFormReturn<TCreateSimplifiedSaleTaxInvoiceDTO>;
+  form: UseFormReturn<T extends FieldValues ? T : never>;
 };
 
-export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
+export const InvoicePreview = <T extends FieldValues>({
+  form,
+}: TInvoicePreviewProps<T>) => {
   const invoice = form.getValues();
+  const { stocks } = useGetStocks();
 
-  const { invoiceLinesTable } = useInvoiceLineStore();
+  const invoiceLines = (useWatch({
+    control: form.control,
+    name: "invoice_lines" as Path<T extends FieldValues ? T : never>,
+  }) || []) as TTaxInvoiceLineDTO[];
 
-  const total = invoiceLinesTable
-    .reduce((acc, curr) => acc + (curr.roundingAmount || 0), 0)
+  const pricesIncludeTax = useWatch({
+    control: form.control,
+    name: "prices_include_tax" as Path<T extends FieldValues ? T : never>,
+  });
+
+  const stockMap = useMemo(() => {
+    const map = new Map<number, string>();
+    for (const stock of stocks || []) {
+      map.set(Number(stock.id), stock.name);
+    }
+    return map;
+  }, [stocks]);
+
+  const invoiceLinesWithCalculations = invoiceLines.map((line) => {
+    const { lineExtensionAmount, taxAmount, roundingAmount } =
+      calculateInvoiceLines(
+        line,
+        line.classified_tax_category || "S",
+        pricesIncludeTax || false
+      );
+    return {
+      ...line,
+      item_name: stockMap.get(line.item_id || 0),
+      line_extension_amount: lineExtensionAmount,
+      tax_amount: taxAmount,
+      rounding_amount: roundingAmount,
+    };
+  });
+
+  const total = invoiceLinesWithCalculations
+    .reduce((acc, curr) => acc + (curr.rounding_amount || 0), 0)
     .toFixed(2);
-
   return (
     <Card className="border-2">
       <CardContent className="p-8 space-y-8">
@@ -126,17 +160,12 @@ export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
                 </div>
               </div>
               <div>
-                <div className="text-muted-foreground text-xs">
-                  Tax Category
+                <div className="text-muted-foreground text-xs">Currency</div>
+                <div className="font-semibold">
+                  <SaudiRiyal className="h-4 w-4" />
                 </div>
-                {/* <div className="font-semibold">
-                  {invoice.classified_tax_category === "Z"
-                    ? "Zero Tax"
-                    : invoice.classified_tax_category === "S"
-                    ? "Applicable Tax"
-                    : "NA"}
-                </div> */}
               </div>
+
               <div>
                 <div className="text-muted-foreground text-xs">
                   Delivery Date
@@ -165,10 +194,6 @@ export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
                 <div className="text-muted-foreground text-xs">Issue Time</div>
                 <div className="font-semibold">{invoice.issue_time}</div>
               </div>
-              <div>
-                <div className="text-muted-foreground text-xs">Currency</div>
-                <div className="font-semibold">SAR (Saudi Riyal)</div>
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -185,40 +210,52 @@ export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
-                  <TableHead className="font-semibold">Item</TableHead>
-                  <TableHead className="font-semibold">Price</TableHead>
-                  <TableHead className="font-semibold">Qty</TableHead>
-                  <TableHead className="font-semibold">Discount</TableHead>
-                  <TableHead className="font-semibold">Subtotal</TableHead>
-                  <TableHead className="font-semibold">Tax</TableHead>
-                  <TableHead className="text-right font-semibold">
-                    Total
+                  <TableHead className="min-w-[100px]">Item</TableHead>
+                  <TableHead className="min-w-[100px]">
+                    Price <span className="text-destructive">*</span>
                   </TableHead>
+                  <TableHead className="min-w-[100px]">
+                    Quantity <span className="text-destructive">*</span>
+                  </TableHead>
+                  <TableHead className="min-w-[100px]">
+                    Tax Category <span className="text-destructive">*</span>
+                  </TableHead>
+                  <TableHead className="min-w-[100px]">Discount</TableHead>
+                  <TableHead className="min-w-[100px]">Sub Total</TableHead>
+                  <TableHead className="min-w-[120px]">Tax</TableHead>
+                  <TableHead className="min-w-[100px]">Total</TableHead>
+                  <TableHead className="min-w-[100px]">Description</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoiceLinesTable.length > 0 ? (
-                  invoiceLinesTable.map((invoiceLine) => (
+                {invoiceLinesWithCalculations.length > 0 ? (
+                  invoiceLinesWithCalculations.map((invoiceLine) => (
                     <TableRow key={invoiceLine.item_id}>
                       <TableCell className="font-medium">
                         {invoiceLine.item_name}
                       </TableCell>
                       <TableCell>
-                        {invoiceLine.item_price.toFixed(2)} SAR
+                        <FormatRiyal value={invoiceLine.item_price} />{" "}
                       </TableCell>
-                      <TableCell>{invoiceLine.quantity.toFixed(2)}</TableCell>
+                      <TableCell>{invoiceLine.quantity}</TableCell>
                       <TableCell>
-                        {invoiceLine.discount_amount?.toFixed(2) || "0.00"} SAR
-                      </TableCell>
-                      <TableCell>
-                        {invoiceLine.lineExtensionAmount.toFixed(2)} SAR
+                        {invoiceLine.classified_tax_category}
                       </TableCell>
                       <TableCell>
-                        {invoiceLine.taxAmount.toFixed(2)} SAR
+                        <FormatRiyal value={invoiceLine.discount_amount || 0} />
+                      </TableCell>
+                      <TableCell>
+                        <FormatRiyal
+                          value={invoiceLine.line_extension_amount}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <FormatRiyal value={invoiceLine.tax_amount} />{" "}
                       </TableCell>
                       <TableCell className="text-right font-semibold">
-                        {invoiceLine.roundingAmount.toFixed(2)} SAR
+                        <FormatRiyal value={invoiceLine.rounding_amount} />
                       </TableCell>
+                      <TableCell>{invoiceLine.description}</TableCell>
                     </TableRow>
                   ))
                 ) : (
@@ -234,7 +271,7 @@ export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
               </TableBody>
               <TableFooter>
                 <TableRow className="bg-light-green/10">
-                  <TableCell colSpan={6} className="font-bold text-lg">
+                  <TableCell colSpan={8} className="font-bold text-lg">
                     Grand Total
                   </TableCell>
                   <TableCell className="text-right font-bold text-lg text-light-green">
@@ -262,9 +299,9 @@ export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
                   Subtotal Before Tax
                 </span>
                 <span className="font-semibold">
-                  {invoiceLinesTable
+                  {invoiceLinesWithCalculations
                     .reduce(
-                      (acc, curr) => acc + (curr.lineExtensionAmount || 0),
+                      (acc, curr) => acc + (curr.line_extension_amount || 0),
                       0
                     )
                     .toFixed(2)}{" "}
@@ -276,8 +313,8 @@ export const InvoicePreview = <T,>({ form }: TInvoicePreviewProps<T>) => {
                   {/* Tax Amount ({invoice.tax_rate}%) */}
                 </span>
                 <span className="font-semibold">
-                  {invoiceLinesTable
-                    .reduce((acc, curr) => acc + (curr.taxAmount || 0), 0)
+                  {invoiceLinesWithCalculations
+                    .reduce((acc, curr) => acc + (curr.tax_amount || 0), 0)
                     .toFixed(2)}{" "}
                   SAR
                 </span>

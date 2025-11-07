@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import React, { useEffect } from "react";
-import { useCreateStock } from "../hooks/useCreateStock";
+import { useCreateStockShortcut } from "../hooks/useCreateStockShortcut";
 import { handleNumberInput } from "@/shared/utils/handle-number-input";
 import {
   Select,
@@ -49,7 +49,7 @@ export const CreateStockShortcut = <T extends FieldValues>({
     isCreatingStock,
     open,
     setOpen,
-  } = useCreateStock();
+  } = useCreateStockShortcut();
   const isValid = CreateStockForm.formState.isValid;
 
   useEffect(() => {

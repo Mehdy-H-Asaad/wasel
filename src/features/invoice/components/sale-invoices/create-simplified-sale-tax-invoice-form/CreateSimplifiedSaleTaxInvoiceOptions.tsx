@@ -64,12 +64,12 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
           <div>
             <h2 className="text-2xl font-bold">Invoice Information</h2>
             <p className="text-sm text-muted-foreground">
-              Configure your simplified tax invoice details
+              Configure your cash invoice details
             </p>
           </div>
         </div>
         <div className="w-fit self-end text-light-green font-bold text-sm border-2 border-light-green py-2 px-6 rounded-full bg-light-green/5">
-          Simplified Tax Invoice
+          Cash Invoice
         </div>
       </div>
 
@@ -132,7 +132,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                                   }}
                                 >
                                   <Check
-                                    className={`mr-2 h-4 w-4 ${
+                                    className={`  ${
                                       client.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0"
@@ -286,6 +286,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                     {...field}
                     placeholder="Enter additional notes, comments, or instructions..."
                     className="min-h-32 resize-none bg-background"
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />
