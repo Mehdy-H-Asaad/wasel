@@ -13,7 +13,6 @@ export const OTPSignUp = () => {
 	const { email } = useAuthEmailOtpStore();
 
 	useEffect(() => {
-		// If no email is stored or step is not 2, redirect to signup
 		if (!email || step < 2) {
 			router.replace("/signup");
 		}

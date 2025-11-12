@@ -23,11 +23,11 @@ import {
 } from "@/components/ui/input-otp";
 
 import { UseFormReturn } from "react-hook-form";
-import { TOTPVerifcationDTO } from "../../schema/otp.schema";
+import { TOtpDTO } from "../../schema/auth.schema";
 
 type OTPFormProps = {
-	form: UseFormReturn<TOTPVerifcationDTO>;
-	onSubmit: (values: TOTPVerifcationDTO) => void;
+	form: UseFormReturn<TOtpDTO>;
+	onSubmit: (values: TOtpDTO) => void;
 	isPending: boolean;
 };
 
