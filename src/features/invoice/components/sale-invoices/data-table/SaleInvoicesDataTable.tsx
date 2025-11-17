@@ -81,7 +81,7 @@ export const SaleInvoicesDataTable = ({
     <DataTable
       columns={SaleInvoicesColumns}
       data={invoices || []}
-      pageCount={metaData.total_pages}
+      pageCount={metaData.current_page}
       searchablePlaceholder="Invoice Number"
       manualPagination={true}
       setSearchableField={() => {}}

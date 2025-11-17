@@ -10,43 +10,42 @@ import { useRouter } from "next/navigation";
 import { useAuthUserStore } from "../store/auth-user.store";
 
 export const useLogin = () => {
-	const router = useRouter();
-	const { setAccessToken, setUser } = useAuthUserStore();
-	const { mutate, isPending } = useApiMutation<TAuthUserDTO, TLoginDTO>({
-		axiosRequestMethod: "post",
-		queryKey: [LOGIN_QUERY_KEY],
-		requestURL: `/auth/login`,
-		successMsg: "Login successful",
-		axiosType: "public",
-		onSuccess: data => {
-			router.push("/admin");
-			setAccessToken(data.data.access_token);
-			setUser(data.data.user);
-		},
-	});
+  const router = useRouter();
+  const { setUser } = useAuthUserStore();
+  const { mutate, isPending } = useApiMutation<TAuthUserDTO, TLoginDTO>({
+    axiosRequestMethod: "post",
+    queryKey: [LOGIN_QUERY_KEY],
+    requestURL: `/auth/login`,
+    successMsg: "Login successful",
+    axiosType: "public",
+    onSuccess: (data) => {
+      router.push("/admin");
+      setUser(data.data.user);
+    },
+  });
 
-	const loginSchema = authSchema.pick({
-		email: true,
-		password: true,
-	});
+  const loginSchema = authSchema.pick({
+    email: true,
+    password: true,
+  });
 
-	type TLoginDTO = z.infer<typeof loginSchema>;
+  type TLoginDTO = z.infer<typeof loginSchema>;
 
-	const LoginForm = useForm<TLoginDTO>({
-		resolver: zodResolver(loginSchema),
-		defaultValues: {
-			email: "",
-			password: "",
-		},
-	});
+  const LoginForm = useForm<TLoginDTO>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-	const onLogin = (values: TLoginDTO) => {
-		mutate(values);
-	};
+  const onLogin = (values: TLoginDTO) => {
+    mutate(values);
+  };
 
-	return {
-		LoginForm,
-		onLogin,
-		isLoginPending: isPending,
-	};
+  return {
+    LoginForm,
+    onLogin,
+    isLoginPending: isPending,
+  };
 };

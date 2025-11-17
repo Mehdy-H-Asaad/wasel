@@ -18,22 +18,11 @@ export const axiosPrivateClient = axios.create({
   withCredentials: true,
 });
 
-axiosPrivateClient.interceptors.request.use(
-  (config) => {
-    const { accessToken } = useAuthUserStore.getState();
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
 axiosPrivateClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const { setAccessToken, resetUser, setUser } = useAuthUserStore.getState();
+    const { resetUser, setUser } = useAuthUserStore.getState();
 
     // Prevent infinite retry loops
     if (
@@ -48,11 +37,9 @@ axiosPrivateClient.interceptors.response.use(
         const { data }: { data: { data: TAuthUserDTO } } =
           await axiosPublicClient.post("/auth/refresh", {});
 
-        setAccessToken(data.data.access_token);
         setUser(data.data.user);
 
         // Retry the original request with new token
-        originalRequest.headers.Authorization = `Bearer ${data.data.access_token}`;
         originalRequest._isRetryRequest = true; // Mark as retry to prevent loops
         return axiosPrivateClient(originalRequest);
       } catch (refreshError) {

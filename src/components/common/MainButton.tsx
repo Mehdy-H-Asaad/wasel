@@ -34,8 +34,8 @@ export const MainButton = ({
         "bg-main-green text-white py-1 capitalize px-4 font-bold rounded-lg w-fit cursor-pointer hover:bg-secondary-green",
         className
       )}`}
-      {...props}
       disabled={disabled}
+      {...props}
     >
       {isLoading ? (
         <div className="flex items-center gap-2">

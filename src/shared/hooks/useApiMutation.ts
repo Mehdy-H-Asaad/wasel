@@ -12,16 +12,20 @@ import { TServerResponse } from "../types/types";
 
 type THTTPRequestMethod = "put" | "post" | "delete" | "patch";
 
-type TApiError = {
-	success: false;
-	error: {
-		message: string;
-		statusCode: number;
-		timestamp: string;
-		path: string;
-		method: string;
-	};
-};
+type TApiError =
+	| {
+			success: false;
+			error: {
+				message: string;
+				statusCode: number;
+				timestamp: string;
+				path: string;
+				method: string;
+			};
+	  }
+	| {
+			detail: string;
+	  };
 
 // This is what you'll get in `onError`
 type TNormalizedError = {
@@ -86,7 +90,12 @@ export const useApiMutation = <TData, TVariables, TContext = unknown>({
 				const responseData = axiosError?.response?.data;
 
 				throw {
-					message: responseData?.error?.message || "Something went wrong.",
+					message:
+						responseData && "error" in responseData
+							? responseData?.error?.message
+							: responseData && "detail" in responseData
+							? responseData?.detail
+							: "Something went wrong.",
 				} as TNormalizedError;
 			}
 		},
@@ -99,6 +108,7 @@ export const useApiMutation = <TData, TVariables, TContext = unknown>({
 		onError: (error, variables, context) => {
 			// Now `error.message` works because we normalized it
 			toast.error(error.message);
+
 			mutationOptions?.onError?.(error, variables, context);
 		},
 	});
