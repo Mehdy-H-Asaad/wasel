@@ -42,10 +42,10 @@ export function SignUpForm({
 						href="/"
 						className="flex items-center gap-2 font-semibold text-main-green"
 					>
-						<div className="bg-main-green text-white flex size-6 items-center justify-center rounded-md ">
-							<GalleryVerticalEnd className="size-4" />
+						<div className="bg-main-green text-white flex size-10 items-center justify-center rounded-md ">
+							<GalleryVerticalEnd className="size-6" />
 						</div>
-						Wasel
+						{/* Wasel */}
 					</Link>
 				</div>
 			</div>
@@ -69,7 +69,7 @@ export function SignUpForm({
 									<FormItem>
 										<FormLabel>Full Name</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="John Doe" />
+											<Input {...field} placeholder="Full Name" />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -82,7 +82,7 @@ export function SignUpForm({
 									<FormItem>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder="m@example.com" />
+											<Input {...field} placeholder="Email" />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -155,7 +155,7 @@ export function SignUpForm({
 									type="submit"
 									isLoading={isSignupPending}
 									loadingText="Creating account..."
-									disabled={isSignupPending}
+									disabled={isSignupPending || !SignupForm.formState.isValid}
 									className="w-full"
 								>
 									Create Account
@@ -164,7 +164,7 @@ export function SignUpForm({
 									Already have an account?{" "}
 									<Link
 										href="/login"
-										className="text-main-green hover:underline"
+										className="text-light-green hover:underline"
 									>
 										Sign in
 									</Link>
@@ -176,11 +176,11 @@ export function SignUpForm({
 			</Card>
 			<p className="px-6 text-center text-sm text-muted-foreground">
 				By clicking continue, you agree to our{" "}
-				<Link href="/terms" className="text-main-green hover:underline">
+				<Link href="/terms" className="text-light-green hover:underline">
 					Terms of Service
 				</Link>{" "}
 				and{" "}
-				<Link href="/privacy" className="text-main-green hover:underline">
+				<Link href="/privacy" className="text-light-green hover:underline">
 					Privacy Policy
 				</Link>
 				.
