@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut, User } from "lucide-react";
+import { ChevronsUpDown, Loader2, LogOut, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -18,6 +18,7 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
 export function NavUser({
 	user,
@@ -29,7 +30,7 @@ export function NavUser({
 	};
 }) {
 	const { isMobile } = useSidebar();
-
+	const { onLogout, isLogoutPending } = useLogout();
 	return (
 		<SidebarMenu>
 			<SidebarMenuItem>
@@ -95,9 +96,13 @@ export function NavUser({
 							</DropdownMenuItem> */}
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem onClick={onLogout}>
 							<LogOut />
-							Log out
+							{isLogoutPending ? (
+								<Loader2 className="size-4 animate-spin" />
+							) : (
+								"Log out"
+							)}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
