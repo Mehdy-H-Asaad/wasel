@@ -72,7 +72,7 @@ export const SaleInvoicesDataTable = ({
   };
 
   const { metaData, invoices, isLoadingInvoices } = useGetSaleInvoices({
-    documentType: "invoice",
+    documentType: "INVOICE",
     invoiceType,
     filters,
   });

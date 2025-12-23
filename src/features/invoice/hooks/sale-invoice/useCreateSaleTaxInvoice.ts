@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 export const useCreateSaleTaxInvoice = ({
   documentType,
 }: {
-  documentType: "invoice" | "quotation";
+  documentType: "INVOICE" | "QUOTATION";
 }) => {
   const router = useRouter();
   const { mutate, isPending } = useApiMutation<
@@ -31,7 +31,7 @@ export const useCreateSaleTaxInvoice = ({
     axiosType: "private",
     onSuccess: () => {
       CreateSaleTaxInvoiceForm.reset();
-      router.push(`/admin/sales/${documentType}s`);
+      router.push(`/admin/sales/${documentType.toLowerCase()}s`);
     },
   });
 

@@ -56,29 +56,29 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
     accessorKey: "issue_date",
     header: "Issue Date",
   },
-  {
-    accessorKey: "party_identification_scheme",
-    header: "Client Identification",
-    cell: ({ row }) => (
-      <div>
-        {
-          CLIENT_IDENTIFCATIONS.find(
-            (identification) =>
-              identification.value ===
-              row.original.customer.party_identification_scheme
-          )?.label
-        }
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: "party_identification_scheme",
+  //   header: "Client Identification",
+  //   cell: ({ row }) => (
+  //     <div>
+  //       {
+  //         CLIENT_IDENTIFCATIONS.find(
+  //           (identification) =>
+  //             identification.value ===
+  //             row.original.customer.party_identification_scheme
+  //         )?.label
+  //       }
+  //     </div>
+  //   ),
+  // },
 
-  {
-    accessorKey: "party_identification_value",
-    header: "Identification Value",
-    cell: ({ row }) => (
-      <div>{row.original.customer.party_identification_value}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "party_identification_value",
+  //   header: "Identification Value",
+  //   cell: ({ row }) => (
+  //     <div>{row.original.customer.party_identification_value}</div>
+  //   ),
+  // },
 
   {
     accessorKey: "payment_means_code",

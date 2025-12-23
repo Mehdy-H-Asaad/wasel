@@ -13,7 +13,7 @@ import {
 export const useCreateSimplifiedSaleTaxInvoice = ({
   documentType,
 }: {
-  documentType: "invoice" | "quotation";
+  documentType: "INVOICE" | "QUOTATION";
 }) => {
   const { mutate, isPending } = useApiMutation<
     TSimplifiedSaleTaxInvoiceDTO,

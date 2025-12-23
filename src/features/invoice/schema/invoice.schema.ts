@@ -16,7 +16,7 @@ export const invoiceSchema = (isSaleInvoice: boolean) =>
     invoice_type_code: z.enum(["388", "383", "381", "386"]),
     issue_date: requiredString(50),
     supplier_id: z.number().min(1, "Required"),
-    document_type: requiredString(50),
+    document_type: z.enum(["INVOICE", "QUOTATION"]),
     discount_amount: z.number().optional(),
     issue_time: requiredString(50),
     document_currency_code: requiredString(50),

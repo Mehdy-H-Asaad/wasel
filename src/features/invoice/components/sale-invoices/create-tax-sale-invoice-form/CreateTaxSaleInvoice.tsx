@@ -11,7 +11,7 @@ import { CreateTaxSaleInvoiceOptions } from "./CreateTaxSaleInvoiceOptions";
 export const CreateTaxSaleInvoiceForm = ({
   documentType,
 }: {
-  documentType: "invoice" | "quotation";
+  documentType: "INVOICE" | "QUOTATION";
 }) => {
   const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
 

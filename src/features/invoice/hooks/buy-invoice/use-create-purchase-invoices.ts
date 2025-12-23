@@ -26,10 +26,11 @@ export const useCreatePurchaseInvoice = () => {
     resolver: zodResolver(CreatePurchaseInvoiceSchema),
     mode: "onChange",
     defaultValues: {
-      document_type: "invoice",
+      document_type: "INVOICE",
       actual_delivery_date: currentDate.toISOString().split("T")[0],
       discount_amount: 0,
       supplier_id: undefined,
+
       document_currency_code: "SAR",
       invoice_type: "0100000",
       invoice_type_code: "388",

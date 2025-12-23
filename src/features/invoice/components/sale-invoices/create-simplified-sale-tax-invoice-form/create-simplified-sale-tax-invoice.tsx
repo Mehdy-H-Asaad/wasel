@@ -15,7 +15,7 @@ export const CreateSimplifiedSaleTaxInvoice = () => {
     CreateSimplifiedSaleTaxInvoiceForm,
     isCreatingSimplifiedSaleTaxInvoice,
     onCreateSimplifiedSaleTaxInvoice,
-  } = useCreateSimplifiedSaleTaxInvoice({ documentType: "invoice" });
+  } = useCreateSimplifiedSaleTaxInvoice({ documentType: "INVOICE" });
 
   const handlePreview = () => {
     setIsPreviewing(!isPreviewing);

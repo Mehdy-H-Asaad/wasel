@@ -7,7 +7,7 @@ import { MainButton } from "@/components/common/MainButton";
 
 export const QuotationsDataTable = () => {
   const { metaData, invoices, isLoadingInvoices } = useGetSaleInvoices({
-    documentType: "quotation",
+    documentType: "QUOTATION",
     invoiceType: "tax",
   });
 

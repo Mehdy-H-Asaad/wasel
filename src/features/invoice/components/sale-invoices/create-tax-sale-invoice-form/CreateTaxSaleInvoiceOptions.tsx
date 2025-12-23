@@ -46,12 +46,28 @@ import {
 } from "@/components/ui/card";
 import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AsyncSelect } from "@/components/common/async-select";
 
 export const CreateTaxSaleInvoiceOptions = () => {
   const form = useFormContext<TCreateSaleTaxInvoiceDTO>();
   const [clientOpen, setClientOpen] = React.useState(false);
 
   const { clients, isLoadingClients } = useGetClients();
+
+  const options = [
+    {
+      label: "Option 1",
+      value: "1",
+    },
+    {
+      label: "Option 2",
+      value: 2,
+    },
+    {
+      label: "Option 3",
+      value: true,
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
@@ -86,6 +102,10 @@ export const CreateTaxSaleInvoiceOptions = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <AsyncSelect
+              options={options}
+              placeholder="Select client company"
+            />
             <FormField
               control={form.control}
               name="customer_id"

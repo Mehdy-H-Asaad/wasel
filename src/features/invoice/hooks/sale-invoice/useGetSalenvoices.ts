@@ -4,7 +4,7 @@ import { TInvoiceDTO } from "../../schema/invoice.schema";
 import { SaleInvoiceFiltersType } from "../../components/sale-invoices/data-table/SaleInvoiceFilters";
 
 type TUseGetSaleInvoicesProps = {
-  documentType: "invoice" | "quotation";
+  documentType: "INVOICE" | "QUOTATION";
   invoiceType: "tax" | "simplified-tax";
   filters?: SaleInvoiceFiltersType;
 };
