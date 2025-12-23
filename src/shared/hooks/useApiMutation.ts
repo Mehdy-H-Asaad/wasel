@@ -24,7 +24,9 @@ type TApiError =
 			};
 	  }
 	| {
-			detail: string;
+			detail: {
+				msg: string;
+			}[];
 	  };
 
 // This is what you'll get in `onError`
@@ -93,7 +95,13 @@ export const useApiMutation = <TData, TVariables, TContext = unknown>({
 					message:
 						responseData && "error" in responseData
 							? responseData?.error?.message
-							: responseData && "detail" in responseData
+							: responseData &&
+							  "detail" in responseData &&
+							  Array.isArray(responseData?.detail)
+							? responseData?.detail?.[0]?.msg
+							: responseData &&
+							  "detail" in responseData &&
+							  typeof responseData?.detail === "string"
 							? responseData?.detail
 							: "Something went wrong.",
 				} as TNormalizedError;
