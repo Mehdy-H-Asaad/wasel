@@ -3,7 +3,15 @@ import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { TStockDTO } from "../schema/stock.schema";
 import { STOCKS } from "../constants/stock.constants";
 
-export const useGetStocks = () => {
+type UseGetStocksProps = {
+	limit?: number;
+	page?: number;
+	filters?: {
+		name?: string;
+	};
+};
+
+export const useGetStocks = (options?: UseGetStocksProps) => {
 	const {
 		data: stocks,
 		isFetching: isLoadingStocks,
@@ -11,7 +19,13 @@ export const useGetStocks = () => {
 	} = useApiQuery<TStockDTO[]>({
 		queryKey: [STOCKS],
 		requestURL: `/${STOCKS}`,
-		axiosConfig: {},
+		axiosConfig: {
+			params: {
+				limit: options?.limit || 10,
+				page: options?.page || 1,
+				name: options?.filters?.name,
+			},
+		},
 		axiosType: "private",
 	});
 

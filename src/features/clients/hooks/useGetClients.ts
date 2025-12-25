@@ -2,19 +2,28 @@ import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { CLIENTS } from "../constants/client.constant";
 import { TClientDTO } from "../schema/client.schema";
 
-export const useGetClients = () => {
-  const { data, isFetching, metaData } = useApiQuery<TClientDTO[]>({
-    queryKey: [CLIENTS],
-    requestURL: `/${CLIENTS}`,
-    axiosType: "private",
-    axiosConfig: {
-      params: {
-        limit: 10,
-        page: 1,
-      },
-    },
-    isZustandPagination: false,
-  });
+type TUseGetClientsOptions = {
+	limit?: number;
+	page?: number;
+	filters?: {
+		registration_name?: string;
+	};
+};
 
-  return { clients: data, isLoadingClients: isFetching, metaData };
+export const useGetClients = (options?: TUseGetClientsOptions) => {
+	const { data, isFetching, metaData } = useApiQuery<TClientDTO[]>({
+		queryKey: [CLIENTS, options],
+		requestURL: `/${CLIENTS}`,
+		axiosType: "private",
+		axiosConfig: {
+			params: {
+				limit: options?.limit || 10,
+				page: options?.page || 1,
+				registration_name: options?.filters?.registration_name,
+			},
+		},
+		isZustandPagination: false,
+	});
+
+	return { clients: data, isLoadingClients: isFetching, metaData };
 };
