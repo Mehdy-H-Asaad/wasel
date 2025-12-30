@@ -34,7 +34,7 @@ export const OrganizationInfoStep = () => {
     } else {
       form.setValue("tax_scheme", "UAE_TAX");
     }
-  }, [country_code]);
+  }, [country_code, form]);
 
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-300">
@@ -86,7 +86,7 @@ export const OrganizationInfoStep = () => {
                 <FormMessage />
                 <FormDescription className="text-light-green">
                   This will determine the VAT information of your organization
-                  and can't be changed later.
+                  and can&apos;t be changed later.
                 </FormDescription>
               </FormItem>
             )}

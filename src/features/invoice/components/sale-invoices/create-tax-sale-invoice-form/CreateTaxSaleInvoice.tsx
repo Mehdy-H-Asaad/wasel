@@ -8,6 +8,8 @@ import { InvoicePreview } from "../../invoice-preview/invoice-preview";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Eye, Save } from "lucide-react";
 import { CreateTaxSaleInvoiceOptions } from "./CreateTaxSaleInvoiceOptions";
+import { TCreateSaleTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
+import { toast } from "sonner";
 export const CreateTaxSaleInvoiceForm = ({
   documentType,
 }: {
@@ -26,13 +28,23 @@ export const CreateTaxSaleInvoiceForm = ({
     window.scrollTo({ top: 0 });
   };
 
+  const handleSubmit = (values: TCreateSaleTaxInvoiceDTO) => {
+    if (CreateSaleTaxInvoiceForm.formState.isValid) {
+      onCreateSaleTaxInvoice(values);
+    } else {
+      toast.error("Please complete all required fields");
+      setIsPreviewing(false);
+    }
+  };
+
   return (
     <div className=" space-y-6">
       <Form {...CreateSaleTaxInvoiceForm}>
         <form
-          onSubmit={CreateSaleTaxInvoiceForm.handleSubmit(
-            onCreateSaleTaxInvoice
-          )}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(CreateSaleTaxInvoiceForm.getValues());
+          }}
           className="flex flex-col gap-6"
         >
           {!isPreviewing ? (

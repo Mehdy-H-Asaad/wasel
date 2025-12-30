@@ -3,17 +3,17 @@ import { z } from "zod";
 
 export const clientSchema = z.object({
   registration_name: requiredString(100),
-  vat_number: requiredString(100),
+  vat_number: requiredString(100).min(15, "Must be 15 digits long"),
   street: requiredString(100),
-  building_number: requiredString(100),
+  building_number: requiredString(100).min(4, "Must be 4 digits long"),
   division: requiredString(100),
   city: requiredString(100),
-  postal_code: requiredString(100),
+  postal_code: requiredString(100).min(5, "Must be 5 digits long"),
   party_identification_scheme: requiredString(100),
   party_identification_value: requiredString(100),
-  phone: z.string().optional(),
+  phone: z.string().optional().nullable(),
   notes: z.string().nullable().optional(),
-  bank_account: z.string().optional(),
+  bank_account: z.string().optional().nullable(),
   id: z.number(),
   // email: z.string().email("Invalid email"),
 });

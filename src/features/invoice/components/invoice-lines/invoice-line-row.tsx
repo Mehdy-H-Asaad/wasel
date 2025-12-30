@@ -76,7 +76,6 @@ export const InvoiceLineRow = ({
     name: "prices_include_tax",
   });
 
-  console.log(form.watch("invoice_lines.0.item_id"));
   const { lineExtensionAmount, taxAmount, roundingAmount } =
     calculateInvoiceLines(invoiceLine, classifiedTaxCategory, pricesIncludeTax);
 
@@ -207,7 +206,9 @@ export const InvoiceLineRow = ({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Exemption Codes</SelectLabel>
-                        {TAX_EXEMPTION_REASONS_CODES.map((tax) => (
+                        {TAX_EXEMPTION_REASONS_CODES.find(
+                          (tax) => tax.case === classifiedTaxCategory
+                        )?.options.map((tax) => (
                           <SelectItem key={tax.value} value={tax.value}>
                             {tax.label}
                           </SelectItem>

@@ -110,7 +110,10 @@ export const InlineInvoiceLinesTable = ({
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
-                  <TableHead className="min-w-[300px]">Item</TableHead>
+                  <TableHead className="min-w-[300px]">
+                    {" "}
+                    Item <span className="text-red-500">*</span>
+                  </TableHead>
                   <TableHead className="min-w-[120px]">
                     Price <span className="text-destructive">*</span>
                   </TableHead>

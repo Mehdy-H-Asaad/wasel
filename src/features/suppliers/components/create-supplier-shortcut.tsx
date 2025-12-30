@@ -1,12 +1,13 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogHeader,
-  DialogTrigger,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetHeader,
+  SheetTrigger,
+  SheetDescription,
+  SheetFooter,
+} from "@/components/ui/sheet";
+import { Plus, Truck, Building2, IdCard, MapPin } from "lucide-react";
 import React, { useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useCreateSupplierShortcut } from "../hooks/use-create-supplier-shortcut";
@@ -23,11 +24,19 @@ import { SelectGroup } from "@/components/ui/select";
 import { SelectLabel } from "@/components/ui/select";
 import { SelectItem } from "@/components/ui/select";
 import { FormMessage } from "@/components/ui/form";
-import { DialogFooter } from "@/components/ui/dialog";
 import { MainButton } from "@/components/common/MainButton";
 import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 type TCreateSupplierShortcutProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
@@ -63,242 +72,306 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
   }, [supplier]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
         <Plus className="h-4 w-4 text-light-green" />
         <span className="text-xs text-light-green">Supplier</span>
-      </DialogTrigger>
-      <DialogContent className="sm:min-w-[60rem] dark:bg-main-black">
-        <DialogHeader>
-          <DialogTitle>Add New Supplier</DialogTitle>
-          <DialogDescription>
-            Add a new supplier to your system
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...CreateSupplierForm}>
-          <form
-            className="grid gap-4"
-            onSubmit={CreateSupplierForm.handleSubmit(onCreateSupplier)}
-          >
-            <div className="grid grid-cols-3 gap-6">
-              <FormField
-                control={CreateSupplierForm.control}
-                name="registration_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Supplier - Company <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Supplier - Company" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="party_identification_scheme"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Supplier Identification</FormLabel>
-                    <Select
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Supplier Identification" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Supplier Identifications</SelectLabel>
-                          {CLIENT_IDENTIFCATIONS.map((supplier) => (
-                            <SelectItem
-                              key={supplier.value}
-                              value={supplier.value}
-                            >
-                              {supplier.label}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="party_identification_value"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Identification Value</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={
-                          !CreateSupplierForm.watch(
-                            "party_identification_scheme"
-                          )
-                        }
-                        placeholder="Identification Value"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="vat_number"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>VAT Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="VAT Number" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Phone" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="website"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Website</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Website" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="bank_account"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bank Account</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Bank Account" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>City</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="City" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="division"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>District</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="District" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="street"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Street</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Street" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="building_number"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Building Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Building Number" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="postal_code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Postal Code</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Postal Code" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={CreateSupplierForm.control}
-                name="notes"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Note</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Note"
-                        value={field.value ?? ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      </SheetTrigger>
+      <SheetContent className="sm:max-w-[800px] w-full dark:bg-main-black">
+        <SheetHeader className="space-y-3 pb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-light-green/10 rounded-lg">
+              <Truck className="h-5 w-5 text-light-green" />
             </div>
-            <DialogFooter>
-              <MainButton
-                disabled={!isValid || isCreatingSupplier}
-                type="button"
-                onClick={CreateSupplierForm.handleSubmit(onCreateSupplier)}
-                isLoading={isCreatingSupplier}
-                loadingText="Creating Supplier..."
-              >
-                Create Supplier
-              </MainButton>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+            <div>
+              <SheetTitle className="text-2xl">Add New Supplier</SheetTitle>
+              <SheetDescription>
+                Create a new supplier profile for your business
+              </SheetDescription>
+            </div>
+          </div>
+        </SheetHeader>
+        <Separator className="my-4" />
+        <ScrollArea className="h-[calc(100vh-180px)] pr-4">
+          <Form {...CreateSupplierForm}>
+            <form
+              className="space-y-6"
+              onSubmit={CreateSupplierForm.handleSubmit(onCreateSupplier)}
+            >
+              {/* Company Information */}
+              <Card className="border-2">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-light-green" />
+                    <CardTitle>Company Information</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Basic company details and contact information
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="registration_name"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>
+                          Company Name <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter company name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="vat_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>VAT Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter VAT number" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter phone number" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="website"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Website</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="https://example.com" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="bank_account"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bank Account</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter bank account" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Identification Information */}
+              <Card className="border-2">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <IdCard className="h-5 w-5 text-light-green" />
+                    <CardTitle>Identification Details</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Legal identification and registration details
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="party_identification_scheme"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Identification Type</FormLabel>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select identification type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>
+                                Supplier Identifications
+                              </SelectLabel>
+                              {CLIENT_IDENTIFCATIONS.map((supplier) => (
+                                <SelectItem
+                                  key={supplier.value}
+                                  value={supplier.value}
+                                >
+                                  {supplier.label}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="party_identification_value"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Identification Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={
+                              !CreateSupplierForm.watch(
+                                "party_identification_scheme"
+                              )
+                            }
+                            placeholder="Enter identification number"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Address Information */}
+              <Card className="border-2">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-light-green" />
+                    <CardTitle>Address Information</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Complete address details for invoicing
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="street"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Street</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter street name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="building_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Building Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Building no." />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="postal_code"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Postal Code</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Postal code" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>City</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter city" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="division"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>District</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter district" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateSupplierForm.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Additional Notes</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            placeholder="Any additional notes..."
+                            value={field.value ?? ""}
+                            rows={3}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </form>
+          </Form>
+        </ScrollArea>
+        <SheetFooter className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
+          <div className="flex items-center justify-end gap-3 w-full">
+            <MainButton
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </MainButton>
+            <MainButton
+              disabled={!isValid || isCreatingSupplier}
+              type="button"
+              onClick={CreateSupplierForm.handleSubmit(onCreateSupplier)}
+              isLoading={isCreatingSupplier}
+              loadingText="Creating Supplier..."
+            >
+              Create Supplier
+            </MainButton>
+          </div>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };

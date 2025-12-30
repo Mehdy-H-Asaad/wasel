@@ -81,7 +81,9 @@ export const CreateTaxSaleInvoiceOptions = () => {
               render={() => (
                 <FormItem className="flex flex-col">
                   <FormLabel className="flex items-center justify-between text-sm font-semibold">
-                    <span>Client - Company *</span>
+                    <span>
+                      Client - Company <span className="text-red-500">*</span>
+                    </span>
                     <CreateClientShortcut form={form} name="customer_id" />
                   </FormLabel>
 
@@ -109,14 +111,14 @@ export const CreateTaxSaleInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Payment Method *
+                    Payment Method <span className="text-red-500">*</span>
                   </FormLabel>
                   <SelectFormField
                     field={field}
                     label="Payment Method"
                     options={PAYMENTS_TYPES.map((payment) => ({
                       label: payment.label,
-                      value: payment.value,
+                      value: payment.value.toString(),
                     }))}
                   />
                   <FormMessage />
@@ -130,7 +132,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem className="col-span-1">
                   <FormLabel className="text-sm font-semibold">
-                    Prices Include Tax
+                    Prices Include Tax <span className="text-red-500">*</span>
                   </FormLabel>
 
                   <SelectFormField
@@ -151,7 +153,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Delivery Date
+                    Delivery Date <span className="text-red-500">*</span>
                   </FormLabel>
                   <Popover>
                     <FormControl>
@@ -208,7 +210,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
             name="note"
             render={({ field }) => (
               <FormItem className="mt-4">
-                <FormLabel className="text-sm font-semibold">Notes</FormLabel>
+                <FormLabel className="text-sm font-semibold">Note</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}

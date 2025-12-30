@@ -59,48 +59,84 @@ export const INVOICE_IDS = [
 
 export const TAX_EXEMPTION_REASONS_CODES = [
   {
-    value: "VATEX-SA-29",
-    label: "VATEX-SA-29",
+    case: "O",
+    options: [
+      {
+        value: "VATEX-SA-OOS",
+        label: "Services outside scope of VAT",
+      },
+    ],
   },
   {
-    value: "VATEX-SA-29-7",
-    label: "VATEX-SA-29-7",
+    case: "E",
+    options: [
+      {
+        value: "VATEX-SA-29",
+        label: "Financial services",
+      },
+      {
+        value: "VATEX-SA-29-7",
+        label: "Life insurance Services",
+      },
+      {
+        value: "VATEX-SA-30",
+        label: "Real Estate Transactions",
+      },
+    ],
   },
   {
-    value: "VATEX-SA-30",
-    label: "VATEX-SA-30",
-  },
-  {
-    value: "VATEX-SA-32",
-    label: "VATEX-SA-32",
-  },
-  {
-    value: "VATEX-SA-33",
-    label: "VATEX-SA-33",
-  },
-  {
-    value: "VATEX-SA-34-1",
-    label: "VATEX-SA-34-1",
-  },
-  {
-    value: "VATEX-SA-34-2",
-    label: "VATEX-SA-34-2",
-  },
-  {
-    value: "VATEX-SA-34-3",
-    label: "VATEX-SA-34-3",
-  },
-  {
-    value: "VATEX-SA-34-4",
-    label: "VATEX-SA-34-4",
-  },
-  {
-    value: "VATEX-SA-HEA",
-    label: "VATEX-SA-HEA",
-  },
-  {
-    value: "VATEX-SA-MLTRY",
-    label: "VATEX-SA-MLTRY",
+    case: "Z",
+    options: [
+      {
+        value: "VATEX-SA-32",
+        label: "Export of goods",
+      },
+      {
+        value: "VATEX-SA-33",
+        label: "Export of services",
+      },
+      {
+        value: "VATEX-SA-34-1",
+        label: "The international transport of goods",
+      },
+      {
+        value: "VATEX-SA-34-2",
+        label: "The international transport of passengers",
+      },
+      {
+        value: "VATEX-SA-34-3",
+        label:
+          "Services directly connected and incidental to a supply of international passenger transport",
+      },
+      {
+        value: "VATEX-SA-34-4",
+        label: "Supply of a qualifiying means of transport",
+      },
+      {
+        value: "VATEX-SA-34-5",
+        label: "Any services relating to goods or passenger transportation ",
+      },
+      {
+        value: "VATEX-SA-35",
+        label: "Medicine and medical equipment",
+      },
+      {
+        value: "VATEX-SA-36",
+        label: "Qualifiying meals",
+      },
+      {
+        value: "VATEX-SA-EDU",
+        label: "Private education to citizen",
+      },
+      {
+        value: "VATEX-SA-HEA",
+        label: "Private healthcare to citizen",
+      },
+      {
+        value: "VATEX-SA-MLTRY",
+        label: "Supply of qualifying military goods",
+      },
+    ],
   },
 ];
 

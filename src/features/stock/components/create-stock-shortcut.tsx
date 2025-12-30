@@ -1,11 +1,12 @@
 import {
-  Dialog,
-  DialogTitle,
-  DialogDescription,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetHeader,
+  SheetTrigger,
+  SheetDescription,
+  SheetFooter,
+} from "@/components/ui/sheet";
 import {
   Form,
   FormField,
@@ -15,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
+import { Plus, Package, DollarSign, FileText } from "lucide-react";
 import React, { useEffect } from "react";
 import { useCreateStockShortcut } from "../hooks/useCreateStockShortcut";
 import { handleNumberInput } from "@/shared/utils/handle-number-input";
@@ -28,10 +29,18 @@ import {
 } from "@/components/ui/select";
 import { STOCK_UNITS } from "../constants/stock.constants";
 import { Textarea } from "@/components/ui/textarea";
-import { DialogFooter } from "@/components/ui/dialog";
 import { MainButton } from "@/components/common/MainButton";
 import { FieldValues, PathValue, UseFormReturn } from "react-hook-form";
 import { Path } from "react-hook-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 type TCreateStockShortcutProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
@@ -63,122 +72,198 @@ export const CreateStockShortcut = <T extends FieldValues>({
   }, [stock]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger className="capitalize w-fit flex items-center gap-1 text-light-green cursor-pointer rounded-lg border-2 border-light-green py-1 px-2 hover:bg-light-green/10 transition-all duration-300">
         <Plus className="h-4 w-4 text-light-green" />
         <span className="text-xs text-light-green">Item</span>
-      </DialogTrigger>
-      <DialogContent className="sm:min-w-[425px] dark:bg-main-black">
-        <DialogHeader>
-          <DialogTitle>Add New Item</DialogTitle>
-          <DialogDescription>Add a new item to your system</DialogDescription>
-        </DialogHeader>
-        <Form {...CreateStockForm}>
-          <form
-            className="grid gap-4"
-            onSubmit={CreateStockForm.handleSubmit(onCreateStock)}
-          >
-            <FormField
-              control={CreateStockForm.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Stock Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Stock Name" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      </SheetTrigger>
+      <SheetContent className="sm:max-w-[600px] w-full dark:bg-main-black">
+        <SheetHeader className="space-y-3 pb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-light-green/10 rounded-lg">
+              <Package className="h-5 w-5 text-light-green" />
+            </div>
+            <div>
+              <SheetTitle className="text-2xl">Add New Item</SheetTitle>
+              <SheetDescription>
+                Create a new stock item for your inventory
+              </SheetDescription>
+            </div>
+          </div>
+        </SheetHeader>
+        <Separator className="my-4" />
+        <ScrollArea className="h-[calc(100vh-180px)] pr-4">
+          <Form {...CreateStockForm}>
+            <form
+              className="space-y-6"
+              onSubmit={CreateStockForm.handleSubmit(onCreateStock)}
+            >
+              {/* Basic Information */}
+              <Card className="border-2">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Package className="h-5 w-5 text-light-green" />
+                    <CardTitle>Basic Information</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Item name and unit of measurement
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={CreateStockForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Item Name <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Enter item name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateStockForm.control}
+                    name="unit_code"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Unit <span className="text-red-500">*</span>
+                        </FormLabel>
+                        <Select onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select unit" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {STOCK_UNITS.map((unit) => (
+                              <SelectItem key={unit.value} value={unit.value}>
+                                {unit.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
 
-            <FormField
-              control={CreateStockForm.control}
-              name="default_buy_price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Buy Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Buy Price"
-                      onChange={(event) => handleNumberInput({ field, event })}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={CreateStockForm.control}
-              name="default_sale_price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sale Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Sale Price"
-                      onChange={(event) => handleNumberInput({ field, event })}
-                      value={field.value ?? ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={CreateStockForm.control}
-              name="unit_code"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Unit</FormLabel>
-                  <Select onValueChange={field.onChange}>
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Unit" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {STOCK_UNITS.map((unit) => (
-                        <SelectItem key={unit.value} value={unit.value}>
-                          {unit.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={CreateStockForm.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} placeholder="Description" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <MainButton
-                disabled={!isValid || isCreatingStock}
-                type="button"
-                isLoading={isCreatingStock}
-                loadingText="Creating Stock..."
-                onClick={CreateStockForm.handleSubmit(onCreateStock)}
-              >
-                Create Stock
-              </MainButton>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              {/* Pricing Information */}
+              <Card className="border-2">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-light-green" />
+                    <CardTitle>Pricing Information</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Default buy and sale prices for this item
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <FormField
+                    control={CreateStockForm.control}
+                    name="default_buy_price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Default Buy Price</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="0.00"
+                            onChange={(event) =>
+                              handleNumberInput({ field, event })
+                            }
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={CreateStockForm.control}
+                    name="default_sale_price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Default Sale Price</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="0.00"
+                            onChange={(event) =>
+                              handleNumberInput({ field, event })
+                            }
+                            value={field.value ?? ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Additional Details */}
+              <Card className="border-2">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-light-green" />
+                    <CardTitle>Additional Details</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Optional description and notes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <FormField
+                    control={CreateStockForm.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            placeholder="Enter item description..."
+                            rows={4}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </form>
+          </Form>
+        </ScrollArea>
+        <SheetFooter className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
+          <div className="flex items-center justify-end gap-3 w-full">
+            <MainButton
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </MainButton>
+            <MainButton
+              disabled={!isValid || isCreatingStock}
+              type="button"
+              isLoading={isCreatingStock}
+              loadingText="Creating Item..."
+              onClick={CreateStockForm.handleSubmit(onCreateStock)}
+            >
+              Create Item
+            </MainButton>
+          </div>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };

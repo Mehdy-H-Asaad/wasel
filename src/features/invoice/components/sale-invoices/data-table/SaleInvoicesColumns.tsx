@@ -12,7 +12,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
-import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+// import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 

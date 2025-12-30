@@ -22,9 +22,9 @@ import {
   SaudiRiyal,
 } from "lucide-react";
 import { calculateInvoiceLines } from "../../utils/calculate-invoice-lines";
-import { useGetStocks } from "@/features/stock/hooks/useGetStock";
-import { useMemo } from "react";
-import { FormatRiyal } from "@/components/common/format-riyal";
+import { useGetSingleClient } from "@/features/clients/hooks/use-get-single-client";
+import { Skeleton } from "@/components/ui/skeleton";
+import { InvoicePreviewRow } from "./invoice-preview-row";
 
 type TInvoicePreviewProps<T> = {
   form: UseFormReturn<T extends FieldValues ? T : never>;
@@ -34,7 +34,10 @@ export const InvoicePreview = <T extends FieldValues>({
   form,
 }: TInvoicePreviewProps<T>) => {
   const invoice = form.getValues();
-  const { stocks } = useGetStocks();
+
+  const { client, isLoadingClient } = useGetSingleClient({
+    id: invoice.customer_id,
+  });
 
   const invoiceLines = (useWatch({
     control: form.control,
@@ -46,14 +49,6 @@ export const InvoicePreview = <T extends FieldValues>({
     name: "prices_include_tax" as Path<T extends FieldValues ? T : never>,
   });
 
-  const stockMap = useMemo(() => {
-    const map = new Map<number, string>();
-    for (const stock of stocks || []) {
-      map.set(Number(stock.id), stock.name);
-    }
-    return map;
-  }, [stocks]);
-
   const invoiceLinesWithCalculations = invoiceLines.map((line) => {
     const { lineExtensionAmount, taxAmount, roundingAmount } =
       calculateInvoiceLines(
@@ -61,9 +56,9 @@ export const InvoicePreview = <T extends FieldValues>({
         line.classified_tax_category || "S",
         pricesIncludeTax || false
       );
+
     return {
       ...line,
-      item_name: stockMap.get(line.item_id || 0),
       line_extension_amount: lineExtensionAmount,
       tax_amount: taxAmount,
       rounding_amount: roundingAmount,
@@ -73,6 +68,8 @@ export const InvoicePreview = <T extends FieldValues>({
   const total = invoiceLinesWithCalculations
     .reduce((acc, curr) => acc + (curr.rounding_amount || 0), 0)
     .toFixed(2);
+
+  if (isLoadingClient) return <Skeleton className="h-[700px] w-full" />;
   return (
     <Card className="border-2">
       <CardContent className="p-8 space-y-8">
@@ -109,7 +106,7 @@ export const InvoicePreview = <T extends FieldValues>({
             <CardContent className="space-y-3 text-sm">
               <div>
                 <div className="text-muted-foreground text-xs">Issued for</div>
-                <div className="font-semibold">Sami Jneidy</div>
+                <div className="font-semibold">{client?.registration_name}</div>
               </div>
               <div>
                 <div className="text-muted-foreground text-xs">
@@ -229,39 +226,16 @@ export const InvoicePreview = <T extends FieldValues>({
               </TableHeader>
               <TableBody>
                 {invoiceLinesWithCalculations.length > 0 ? (
-                  invoiceLinesWithCalculations.map((invoiceLine) => (
-                    <TableRow key={invoiceLine.item_id}>
-                      <TableCell className="font-medium">
-                        {invoiceLine.item_name}
-                      </TableCell>
-                      <TableCell>
-                        <FormatRiyal value={invoiceLine.item_price} />{" "}
-                      </TableCell>
-                      <TableCell>{invoiceLine.quantity}</TableCell>
-                      <TableCell>
-                        {invoiceLine.classified_tax_category}
-                      </TableCell>
-                      <TableCell>
-                        <FormatRiyal value={invoiceLine.discount_amount || 0} />
-                      </TableCell>
-                      <TableCell>
-                        <FormatRiyal
-                          value={invoiceLine.line_extension_amount}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <FormatRiyal value={invoiceLine.tax_amount} />{" "}
-                      </TableCell>
-                      <TableCell className="text-right font-semibold">
-                        <FormatRiyal value={invoiceLine.rounding_amount} />
-                      </TableCell>
-                      <TableCell>{invoiceLine.description}</TableCell>
-                    </TableRow>
+                  invoiceLinesWithCalculations.map((invoiceLine, index) => (
+                    <InvoicePreviewRow
+                      key={`invoice-line-${invoiceLine.item_id}-${index}`}
+                      invoiceLine={invoiceLine}
+                    />
                   ))
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={7}
+                      colSpan={9}
                       className="text-center text-muted-foreground py-8"
                     >
                       No line items added yet

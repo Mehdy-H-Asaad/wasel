@@ -35,7 +35,7 @@ export const CreateClient = () => {
   const router = useRouter();
   const { CreateClientForm, isCreatingClient, onCreateClient } =
     useCreateClient();
-  const isValid = CreateClientForm.formState.isValid;
+  // const isValid = CreateClientForm.formState.isValid;
 
   return (
     <div className="">
@@ -141,32 +141,7 @@ export const CreateClient = () => {
                       <FormControl>
                         <Input {...field} placeholder="VAT Number" />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={CreateClientForm.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Phone" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={CreateClientForm.control}
-                  name="bank_account"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bank Account</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Bank Account" />
-                      </FormControl>
+
                       <FormMessage />
                     </FormItem>
                   )}
@@ -248,6 +223,41 @@ export const CreateClient = () => {
                 />
                 <FormField
                   control={CreateClientForm.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Phone"
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={CreateClientForm.control}
+                  name="bank_account"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bank Account</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Bank Account"
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={CreateClientForm.control}
                   name="notes"
                   render={({ field }) => (
                     <FormItem>
@@ -274,7 +284,7 @@ export const CreateClient = () => {
                   Cancel
                 </Button>
                 <MainButton
-                  disabled={!isValid || isCreatingClient}
+                  disabled={isCreatingClient}
                   isLoading={isCreatingClient}
                   loadingText="Creating Client..."
                 >
