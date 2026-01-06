@@ -1,24 +1,28 @@
 import { z } from "zod";
 
 export const stockSchema = z.object({
-	id: z.string(),
-	name: z.string().min(1, "Rqeuired").max(100, "Only 100 characters allowed"),
-	default_sale_price: z
-		.number({
-			required_error: "Required, must be a number",
-			invalid_type_error: "Required, must be a number",
-		})
-		.positive()
-		.min(1, "Required"),
-	default_buy_price: z
-		.number({
-			required_error: "Required, must be a number",
-			invalid_type_error: "Required, must be a number",
-		})
-		.positive()
-		.min(1, "Required"),
-	unit_code: z.string().min(1, "Required"),
-	description: z.string().optional(),
+  id: z.string(),
+  name: z.string().min(1, "Rqeuired").max(100, "Only 100 characters allowed"),
+  default_sale_price: z
+    .number({
+      required_error: "Required, must be a number",
+      invalid_type_error: "Required, must be a number",
+    })
+    .positive()
+    .min(1, "Required"),
+  default_buy_price: z
+    .number({
+      required_error: "Required, must be a number",
+      invalid_type_error: "Required, must be a number",
+    })
+    .positive()
+    .min(1, "Required"),
+  unit_code: z.string().min(1, "Required"),
+  description: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => (val === "" ? null : val)),
 });
 
 export const CreateStockSchema = stockSchema.omit({ id: true });

@@ -7,7 +7,7 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { Plus, Truck, Building2, IdCard, MapPin } from "lucide-react";
+import { Plus, Truck } from "lucide-react";
 import React, { useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useCreateSupplierShortcut } from "../hooks/use-create-supplier-shortcut";
@@ -77,7 +77,7 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
         <Plus className="h-4 w-4 text-light-green" />
         <span className="text-xs text-light-green">Supplier</span>
       </SheetTrigger>
-      <SheetContent className="sm:max-w-[800px] w-full dark:bg-main-black">
+      <SheetContent className="sm:max-w-[600px] w-full dark:bg-main-black">
         <SheetHeader className="space-y-3 pb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-light-green/10 rounded-lg">
@@ -90,9 +90,9 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
               </SheetDescription>
             </div>
           </div>
+          <Separator />
         </SheetHeader>
-        <Separator className="my-4" />
-        <ScrollArea className="h-[calc(100vh-180px)] pr-4">
+        <ScrollArea className="h-[calc(100vh-220px)] px-4">
           <Form {...CreateSupplierForm}>
             <form
               className="space-y-6"
@@ -102,7 +102,6 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-light-green" />
                     <CardTitle>Company Information</CardTitle>
                   </div>
                   <CardDescription>
@@ -132,7 +131,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>VAT Number</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter VAT number" />
+                          <Input
+                            {...field}
+                            placeholder="Enter VAT number"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -145,7 +148,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>Phone</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter phone number" />
+                          <Input
+                            {...field}
+                            placeholder="Enter phone number"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -158,7 +165,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>Website</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="https://example.com" />
+                          <Input
+                            {...field}
+                            placeholder="https://example.com"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -171,7 +182,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>Bank Account</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter bank account" />
+                          <Input
+                            {...field}
+                            placeholder="Enter bank account"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -184,7 +199,6 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <IdCard className="h-5 w-5 text-light-green" />
                     <CardTitle>Identification Details</CardTitle>
                   </div>
                   <CardDescription>
@@ -199,7 +213,7 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>Identification Type</FormLabel>
                         <Select
-                          defaultValue={field.value}
+                          defaultValue={field.value ?? undefined}
                           onValueChange={field.onChange}
                         >
                           <FormControl>
@@ -242,6 +256,7 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                               )
                             }
                             placeholder="Enter identification number"
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                         <FormMessage />
@@ -255,7 +270,6 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-light-green" />
                     <CardTitle>Address Information</CardTitle>
                   </div>
                   <CardDescription>
@@ -270,7 +284,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem className="md:col-span-2">
                         <FormLabel>Street</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter street name" />
+                          <Input
+                            {...field}
+                            placeholder="Enter street name"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -283,7 +301,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>Building Number</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Building no." />
+                          <Input
+                            {...field}
+                            placeholder="Building no."
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -296,7 +318,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>Postal Code</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Postal code" />
+                          <Input
+                            {...field}
+                            placeholder="Postal code"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -309,7 +335,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>City</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter city" />
+                          <Input
+                            {...field}
+                            placeholder="Enter city"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -322,7 +352,11 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
                       <FormItem>
                         <FormLabel>District</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter district" />
+                          <Input
+                            {...field}
+                            placeholder="Enter district"
+                            value={field.value ?? ""}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -351,7 +385,7 @@ export const CreateSupplierShortcut = <T extends FieldValues>({
             </form>
           </Form>
         </ScrollArea>
-        <SheetFooter className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
+        <SheetFooter className="p-6 border-t">
           <div className="flex items-center justify-end gap-3 w-full">
             <MainButton
               type="button"

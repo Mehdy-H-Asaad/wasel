@@ -29,6 +29,7 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
     useUpdateSupplier({ supplier });
   const isValid = UpdateSupplierForm.formState.isValid;
 
+  console.log(UpdateSupplierForm.formState.errors);
   return (
     <CustomDialog
       dialogContentClassName="sm:min-w-[40rem] dark:bg-main-black"
@@ -63,7 +64,7 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>Supplier Identification</FormLabel>
                   <Select
-                    defaultValue={field.value}
+                    defaultValue={field.value ?? undefined}
                     onValueChange={field.onChange}
                   >
                     <FormControl>
@@ -102,6 +103,7 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                         !UpdateSupplierForm.watch("party_identification_scheme")
                       }
                       placeholder="Identification Value"
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />
@@ -115,7 +117,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>VAT Number</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="VAT Number" />
+                    <Input
+                      {...field}
+                      placeholder="VAT Number"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -128,7 +134,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>Bank Account</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Bank Account" />
+                    <Input
+                      {...field}
+                      placeholder="Bank Account"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,7 +151,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Phone" />
+                    <Input
+                      {...field}
+                      placeholder="Phone"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -155,7 +169,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>City</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="City" />
+                    <Input
+                      {...field}
+                      placeholder="City"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -168,7 +186,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>District</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="District" />
+                    <Input
+                      {...field}
+                      placeholder="District"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -181,7 +203,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>Street</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Street" />
+                    <Input
+                      {...field}
+                      placeholder="Street"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,7 +220,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>Building Number</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Building Number" />
+                    <Input
+                      {...field}
+                      placeholder="Building Number"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -207,7 +237,11 @@ export const UpdateSupplier = ({ supplier }: { supplier: TSupplierDTO }) => {
                 <FormItem>
                   <FormLabel>Postal Code</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Postal Code" />
+                    <Input
+                      {...field}
+                      placeholder="Postal Code"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

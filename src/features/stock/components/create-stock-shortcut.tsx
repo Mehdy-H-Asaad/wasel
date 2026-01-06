@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Plus, Package, DollarSign, FileText } from "lucide-react";
+import { Plus, Package } from "lucide-react";
 import React, { useEffect } from "react";
 import { useCreateStockShortcut } from "../hooks/useCreateStockShortcut";
 import { handleNumberInput } from "@/shared/utils/handle-number-input";
@@ -90,9 +90,9 @@ export const CreateStockShortcut = <T extends FieldValues>({
               </SheetDescription>
             </div>
           </div>
+          <Separator />
         </SheetHeader>
-        <Separator className="my-4" />
-        <ScrollArea className="h-[calc(100vh-180px)] pr-4">
+        <ScrollArea className="h-[calc(100vh-220px)] px-4">
           <Form {...CreateStockForm}>
             <form
               className="space-y-6"
@@ -102,19 +102,19 @@ export const CreateStockShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <Package className="h-5 w-5 text-light-green" />
+                    {/* <Package className="h-5 w-5 text-light-green" /> */}
                     <CardTitle>Basic Information</CardTitle>
                   </div>
                   <CardDescription>
                     Item name and unit of measurement
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="flex gap-6">
                   <FormField
                     control={CreateStockForm.control}
                     name="name"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="flex-1">
                         <FormLabel>
                           Item Name <span className="text-red-500">*</span>
                         </FormLabel>
@@ -129,7 +129,7 @@ export const CreateStockShortcut = <T extends FieldValues>({
                     control={CreateStockForm.control}
                     name="unit_code"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="flex-1">
                         <FormLabel>
                           Unit <span className="text-red-500">*</span>
                         </FormLabel>
@@ -158,24 +158,27 @@ export const CreateStockShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-light-green" />
+                    {/* <DollarSign className="h-5 w-5 text-light-green" /> */}
                     <CardTitle>Pricing Information</CardTitle>
                   </div>
                   <CardDescription>
                     Default buy and sale prices for this item
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="flex gap-6">
                   <FormField
                     control={CreateStockForm.control}
                     name="default_buy_price"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Default Buy Price</FormLabel>
+                      <FormItem className="flex-1">
+                        <FormLabel>
+                          Default Buy Price{" "}
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             {...field}
-                            placeholder="0.00"
+                            placeholder="0"
                             onChange={(event) =>
                               handleNumberInput({ field, event })
                             }
@@ -190,12 +193,15 @@ export const CreateStockShortcut = <T extends FieldValues>({
                     control={CreateStockForm.control}
                     name="default_sale_price"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Default Sale Price</FormLabel>
+                      <FormItem className="flex-1">
+                        <FormLabel>
+                          Default Sale Price{" "}
+                          <span className="text-red-500">*</span>
+                        </FormLabel>
                         <FormControl>
                           <Input
                             {...field}
-                            placeholder="0.00"
+                            placeholder="0"
                             onChange={(event) =>
                               handleNumberInput({ field, event })
                             }
@@ -213,7 +219,7 @@ export const CreateStockShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-light-green" />
+                    {/* <FileText className="h-5 w-5 text-light-green" /> */}
                     <CardTitle>Additional Details</CardTitle>
                   </div>
                   <CardDescription>
@@ -232,6 +238,7 @@ export const CreateStockShortcut = <T extends FieldValues>({
                             {...field}
                             placeholder="Enter item description..."
                             rows={4}
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                         <FormMessage />
@@ -243,7 +250,7 @@ export const CreateStockShortcut = <T extends FieldValues>({
             </form>
           </Form>
         </ScrollArea>
-        <SheetFooter className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
+        <SheetFooter className=" bottom-0 p-6 border-t">
           <div className="flex items-center justify-end gap-3 w-full">
             <MainButton
               type="button"

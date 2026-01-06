@@ -11,13 +11,19 @@ export const OrganizationSchema = z.object({
     .max(15, "Required (15 digits)"),
   business_category: z.string().min(1, "Required"),
   tax_scheme: z.enum(["ZATCA_PHASE1", "ZATCA_PHASE2", "UAE_TAX"]),
-  phone: z.string().min(1, "Required"),
+  phone: z.string().min(1, "Required").min(10, "Invalid phone number"),
   street: z.string().min(1, "Required"),
   building_number: z.string().min(1, "Required"),
   division: z.string().min(1, "Required"),
   city: z.string().min(1, "Required"),
-  postal_code: z.string().min(1, "Required"),
-  address: z.string().min(1, "Required"),
+  postal_code: z
+    .string()
+    .min(1, "Required")
+    .min(5, "Postal code must be 5 digits"),
+  address: z
+    .string()
+    .min(1, "Required")
+    .min(10, "Address must be at least 10 characters"),
 });
 
 export const CreateOrganizationSchema = OrganizationSchema.omit({

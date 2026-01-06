@@ -33,8 +33,7 @@ import { Package } from "lucide-react";
 
 export const CreateStock = () => {
   const router = useRouter();
-  const { CreateStockForm, onCreateStock, isCreatingStock } =
-    useCreateStock();
+  const { CreateStockForm, onCreateStock, isCreatingStock } = useCreateStock();
   const isValid = CreateStockForm.formState.isValid;
 
   return (
@@ -60,7 +59,9 @@ export const CreateStock = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Stock Name</FormLabel>
+                      <FormLabel>
+                        Stock Name <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="Stock Name" />
                       </FormControl>
@@ -74,12 +75,16 @@ export const CreateStock = () => {
                   name="default_buy_price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Buy Price</FormLabel>
+                      <FormLabel>
+                        Buy Price <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           placeholder="Buy Price"
-                          onChange={(event) => handleNumberInput({ field, event })}
+                          onChange={(event) =>
+                            handleNumberInput({ field, event })
+                          }
                           value={field.value ?? ""}
                         />
                       </FormControl>
@@ -92,12 +97,16 @@ export const CreateStock = () => {
                   name="default_sale_price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sale Price</FormLabel>
+                      <FormLabel>
+                        Sale Price <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           placeholder="Sale Price"
-                          onChange={(event) => handleNumberInput({ field, event })}
+                          onChange={(event) =>
+                            handleNumberInput({ field, event })
+                          }
                           value={field.value ?? ""}
                         />
                       </FormControl>
@@ -110,7 +119,9 @@ export const CreateStock = () => {
                   name="unit_code"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unit</FormLabel>
+                      <FormLabel>
+                        Unit <span className="text-red-500">*</span>
+                      </FormLabel>
                       <Select onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger className="w-full">
@@ -136,7 +147,11 @@ export const CreateStock = () => {
                     <FormItem className="md:col-span-2">
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Textarea {...field} placeholder="Description" />
+                        <Textarea
+                          {...field}
+                          placeholder="Description"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

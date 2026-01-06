@@ -14,7 +14,7 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import { TCreateSaleTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
-import { ShoppingCart, Plus, Package } from "lucide-react";
+import { Plus, Package } from "lucide-react";
 import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import { InvoiceLineRow } from "./invoice-line-row";
 import { useMemo } from "react";
@@ -75,7 +75,7 @@ export const InlineInvoiceLinesTable = ({
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5 text-light-green" />
+              {/* <ShoppingCart className="h-5 w-5 text-light-green" /> */}
               <CardTitle>Invoice Line Items</CardTitle>
             </div>
             <CardDescription className="mt-2">

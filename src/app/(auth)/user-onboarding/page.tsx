@@ -1,8 +1,13 @@
 import { AcceptInvitationForm } from "@/features/auth/components/accept-invitation";
-import React from "react";
+import React, { Suspense } from "react";
+import TopLoadingBar from "@/components/common/TopLoadingBar";
 
 const page = () => {
-	return <AcceptInvitationForm />;
+  return (
+    <Suspense fallback={<TopLoadingBar />}>
+      <AcceptInvitationForm />
+    </Suspense>
+  );
 };
 
 export default page;

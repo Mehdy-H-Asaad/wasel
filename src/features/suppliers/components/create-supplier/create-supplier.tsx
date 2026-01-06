@@ -80,7 +80,7 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Supplier Identification</FormLabel>
                       <Select
-                        defaultValue={field.value}
+                        defaultValue={field.value ?? ""}
                         onValueChange={field.onChange}
                       >
                         <FormControl>
@@ -121,6 +121,7 @@ export const CreateSupplier = () => {
                             )
                           }
                           placeholder="Identification Value"
+                          value={field.value ?? ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -134,7 +135,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>VAT Number</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="VAT Number" />
+                        <Input
+                          {...field}
+                          placeholder="VAT Number"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -147,7 +152,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Bank Account</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Bank Account" />
+                        <Input
+                          {...field}
+                          placeholder="Bank Account"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -160,7 +169,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Phone</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Phone" />
+                        <Input
+                          {...field}
+                          placeholder="Phone"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -173,7 +186,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Website</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Website" />
+                        <Input
+                          {...field}
+                          placeholder="Website"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -186,7 +203,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>City</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="City" />
+                        <Input
+                          {...field}
+                          placeholder="City"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -199,7 +220,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>District</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="District" />
+                        <Input
+                          {...field}
+                          placeholder="District"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -212,7 +237,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Street</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Street" />
+                        <Input
+                          {...field}
+                          placeholder="Street"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -225,7 +254,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Building Number</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Building Number" />
+                        <Input
+                          {...field}
+                          placeholder="Building Number"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -238,7 +271,11 @@ export const CreateSupplier = () => {
                     <FormItem>
                       <FormLabel>Postal Code</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Postal Code" />
+                        <Input
+                          {...field}
+                          placeholder="Postal Code"
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

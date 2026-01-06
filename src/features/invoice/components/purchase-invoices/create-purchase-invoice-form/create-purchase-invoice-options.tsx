@@ -16,15 +16,7 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
+
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import {
@@ -43,16 +35,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGetSuppliers } from "@/features/suppliers/hooks/use-get-suppliers";
 import { Input } from "@/components/ui/input";
 import { CreateSupplierShortcut } from "@/features/suppliers/components/create-supplier-shortcut";
+import { AsyncSelectFormField } from "@/components/common/select/async-select-form-field";
 
 export const CreatePurchaseInvoiceOptions = () => {
   const form = useFormContext<TCreatePurchaseInvoiceDTO>();
-  const [supplierOpen, setSupplierOpen] = React.useState(false);
-
-  const { suppliers, isLoadingSuppliers } = useGetSuppliers();
+  const [supplierSearch, setSupplierSearch] = React.useState<string>("");
+  const { suppliers, isLoadingSuppliers } = useGetSuppliers({
+    limit: 10,
+    page: 1,
+    filters: {
+      registration_name: supplierSearch || undefined,
+    },
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -90,64 +87,28 @@ export const CreatePurchaseInvoiceOptions = () => {
             <FormField
               control={form.control}
               name="supplier_id"
-              render={({ field }) => (
+              render={() => (
                 <FormItem className="flex flex-col">
                   <FormLabel className="flex items-center justify-between text-sm font-semibold">
-                    <span>Supplier - Company *</span>
+                    <span>
+                      Supplier - Company <span className="text-red-500">*</span>
+                    </span>
                     <CreateSupplierShortcut form={form} name="supplier_id" />
                   </FormLabel>
-                  {isLoadingSuppliers ? (
-                    <Skeleton className="w-full h-11" />
-                  ) : (
-                    <Popover open={supplierOpen} onOpenChange={setSupplierOpen}>
-                      <FormControl>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={supplierOpen}
-                            className=" justify-between bg-background font-normal"
-                          >
-                            {field.value
-                              ? suppliers?.find(
-                                  (supplier) => supplier.id === field.value
-                                )?.registration_name
-                              : "Select supplier company"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                      </FormControl>
-                      <PopoverContent className="w-[300px] p-0" align="start">
-                        <Command>
-                          <CommandInput placeholder="Search supplier..." />
-                          <CommandList>
-                            <CommandEmpty>No supplier found.</CommandEmpty>
-                            <CommandGroup>
-                              {suppliers?.map((supplier) => (
-                                <CommandItem
-                                  key={supplier.id}
-                                  value={supplier.registration_name}
-                                  onSelect={() => {
-                                    field.onChange(supplier.id);
-                                    setSupplierOpen(false);
-                                  }}
-                                >
-                                  <Check
-                                    className={`mr-2 h-4 w-4 ${
-                                      supplier.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    }`}
-                                  />
-                                  {supplier.registration_name}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  )}
+
+                  <AsyncSelectFormField
+                    form={form}
+                    placeholder="Select supplier company"
+                    name="supplier_id"
+                    options={
+                      suppliers?.map((supplier) => ({
+                        value: supplier.id,
+                        label: supplier.registration_name,
+                      })) ?? []
+                    }
+                    onSearch={setSupplierSearch}
+                    isLoading={isLoadingSuppliers}
+                  />
 
                   <FormMessage />
                 </FormItem>
@@ -159,7 +120,7 @@ export const CreatePurchaseInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Invoice Number
+                    Invoice Number <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -178,7 +139,7 @@ export const CreatePurchaseInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Payment Method *
+                    Payment Method <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -214,7 +175,7 @@ export const CreatePurchaseInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem className="col-span-1">
                   <FormLabel className="text-sm font-semibold">
-                    Prices Include Tax
+                    Prices Include Tax <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(value === "true")}
@@ -243,7 +204,7 @@ export const CreatePurchaseInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Delivery Date
+                    Delivery Date <span className="text-red-500">*</span>
                   </FormLabel>
                   <Popover>
                     <FormControl>

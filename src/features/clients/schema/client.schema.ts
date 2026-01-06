@@ -11,9 +11,21 @@ export const clientSchema = z.object({
   postal_code: requiredString(100).min(5, "Must be 5 digits long"),
   party_identification_scheme: requiredString(100),
   party_identification_value: requiredString(100),
-  phone: z.string().optional().nullable(),
-  notes: z.string().nullable().optional(),
-  bank_account: z.string().optional().nullable(),
+  phone: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => (val === "" ? null : val)),
+  notes: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => (val === "" ? null : val)),
+  bank_account: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => (val === "" ? null : val)),
   id: z.number(),
   // email: z.string().email("Invalid email"),
 });

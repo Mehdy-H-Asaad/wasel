@@ -18,7 +18,7 @@ export const useCreateStockShortcut = () => {
       default_sale_price: undefined,
       default_buy_price: undefined,
       unit_code: "",
-      description: "",
+      description: null,
     },
   });
 

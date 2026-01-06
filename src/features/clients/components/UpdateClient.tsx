@@ -125,7 +125,11 @@ export const UpdateClient = (client: TClientDTO) => {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Phone" />
+                    <Input
+                      {...field}
+                      placeholder="Phone"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -138,7 +142,11 @@ export const UpdateClient = (client: TClientDTO) => {
                 <FormItem>
                   <FormLabel>Bank Account</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Bank Account" />
+                    <Input
+                      {...field}
+                      placeholder="Bank Account"
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -235,8 +243,10 @@ export const UpdateClient = (client: TClientDTO) => {
                 isUpdatingClient ||
                 !UpdateClientForm.formState.isDirty
               }
+              isLoading={isUpdatingClient}
+              loadingText="Updating Client..."
             >
-              {isUpdatingClient ? "Updating..." : "Update Client"}
+              Update Client
             </MainButton>
           </DialogFooter>
         </form>

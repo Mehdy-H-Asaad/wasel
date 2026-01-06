@@ -8,27 +8,27 @@ import { UPDATE_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { TStockDTO, TUpdateStockDTO } from "../schema/stock.schema";
 
 export const useUpdateStock = (stock: TStockDTO) => {
-	const { mutate, isPending } = useApiMutation<TStockDTO, TUpdateStockDTO>({
-		axiosRequestMethod: "patch",
-		queryKey: [STOCKS],
-		requestURL: `/${STOCKS}/${stock.id}`,
-		successMsg: `Item ${UPDATE_SUCCESS_MESSAGE}`,
-	});
+  const { mutate, isPending } = useApiMutation<TStockDTO, TUpdateStockDTO>({
+    axiosRequestMethod: "patch",
+    queryKey: [STOCKS],
+    requestURL: `/${STOCKS}/${stock.id}`,
+    successMsg: `Item ${UPDATE_SUCCESS_MESSAGE}`,
+  });
 
-	const UpdateStockForm = useForm<TUpdateStockDTO>({
-		resolver: zodResolver(UpdateStockSchema),
-		defaultValues: {
-			name: stock.name,
-			default_sale_price: Number(stock.default_sale_price),
-			default_buy_price: Number(stock.default_buy_price),
-			unit_code: stock.unit_code,
-			description: stock.description ?? "",
-		},
-	});
+  const UpdateStockForm = useForm<TUpdateStockDTO>({
+    resolver: zodResolver(UpdateStockSchema),
+    defaultValues: {
+      name: stock.name,
+      default_sale_price: Number(stock.default_sale_price),
+      default_buy_price: Number(stock.default_buy_price),
+      unit_code: stock.unit_code,
+      description: stock.description ?? null,
+    },
+  });
 
-	const onUpdateStock = (values: TUpdateStockDTO) => {
-		mutate(values);
-	};
+  const onUpdateStock = (values: TUpdateStockDTO) => {
+    mutate(values);
+  };
 
-	return { UpdateStockForm, onUpdateStock, isUpdatingStock: isPending };
+  return { UpdateStockForm, onUpdateStock, isUpdatingStock: isPending };
 };

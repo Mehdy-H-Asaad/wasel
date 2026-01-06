@@ -1,26 +1,18 @@
 "use client";
 import { Form } from "@/components/ui/form";
-import React, { useState } from "react";
+import React from "react";
 import { MainButton } from "@/components/common/MainButton";
 import { InlineInvoiceLinesTable } from "../../invoice-lines/inline-invoice-lines-data-table";
-import { InvoicePreview } from "../../invoice-preview/invoice-preview";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Eye, Save } from "lucide-react";
 import { useCreateSimplifiedSaleTaxInvoice } from "@/features/invoice/hooks/sale-invoice/useCreateSimplifiedSaleTaxInvoice";
 import { CreateSimplifiedSaleTaxInvoiceOptions } from "./CreateSimplifiedSaleTaxInvoiceOptions";
+import { Save } from "lucide-react";
 export const CreateSimplifiedSaleTaxInvoice = () => {
-  const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
-
   const {
     CreateSimplifiedSaleTaxInvoiceForm,
     isCreatingSimplifiedSaleTaxInvoice,
     onCreateSimplifiedSaleTaxInvoice,
   } = useCreateSimplifiedSaleTaxInvoice({ documentType: "INVOICE" });
-
-  const handlePreview = () => {
-    setIsPreviewing(!isPreviewing);
-    window.scrollTo({ top: 0 });
-  };
 
   return (
     <div className=" space-y-6">
@@ -31,25 +23,29 @@ export const CreateSimplifiedSaleTaxInvoice = () => {
           )}
           className="flex flex-col gap-6"
         >
-          {!isPreviewing ? (
-            <>
-              <CreateSimplifiedSaleTaxInvoiceOptions />
-              <InlineInvoiceLinesTable isSaleInvoice={true} />
-              <Card className="border-2 ">
-                <CardContent className="py-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="text-sm text-muted-foreground">
-                      Complete all required fields to preview your invoice
-                    </p>
-                    <MainButton onClick={handlePreview} className="gap-2">
-                      <Eye className="h-4 w-4" />
-                      Preview Invoice
-                      <ArrowRight className="h-4 w-4" />
-                    </MainButton>
-                  </div>
-                </CardContent>
-              </Card>
-            </>
+          {/* {!isPreviewing ? (
+            <> */}
+          <CreateSimplifiedSaleTaxInvoiceOptions />
+          <InlineInvoiceLinesTable isSaleInvoice={true} />
+          <Card className="border-2 ">
+            <CardContent className="py-4">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-sm text-muted-foreground">
+                  Complete all required fields to create your invoice
+                </p>
+                <MainButton
+                  type="submit"
+                  className="gap-2"
+                  isLoading={isCreatingSimplifiedSaleTaxInvoice}
+                  loadingText="Creating Invoice..."
+                >
+                  <Save className="h-4 w-4" />
+                  Create Cash Invoice
+                </MainButton>
+              </div>
+            </CardContent>
+          </Card>
+          {/* </>
           ) : (
             <>
               <InvoicePreview form={CreateSimplifiedSaleTaxInvoiceForm} />
@@ -89,7 +85,7 @@ export const CreateSimplifiedSaleTaxInvoice = () => {
                 </CardContent>
               </Card>
             </>
-          )}
+          )} */}
         </form>
       </Form>
     </div>

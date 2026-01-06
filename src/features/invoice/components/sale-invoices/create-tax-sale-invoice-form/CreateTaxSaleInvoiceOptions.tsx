@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { User, Receipt, CalendarIcon } from "lucide-react";
+import { Receipt, CalendarIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
@@ -66,7 +66,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
       <Card className="border-2">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <User className="h-5 w-5 text-light-green" />
+            {/* <User className="h-5 w-5 text-light-green" /> */}
             <CardTitle>Client & Basic Information</CardTitle>
           </div>
           <CardDescription>

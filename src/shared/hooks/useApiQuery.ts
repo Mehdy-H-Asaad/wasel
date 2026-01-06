@@ -21,7 +21,7 @@ export const useApiQuery = <TResponse>({
   axiosConfig,
   enabled = true,
   errorMessage = "Something went wrong",
-  axiosType = "public",
+  axiosType = "private",
   isZustandPagination = true,
   ...queryOptions
 }: TUseApiQueryOptions<TServerResponse<TResponse>>) => {

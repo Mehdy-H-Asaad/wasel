@@ -36,8 +36,8 @@ export const useCreateClientShortcut = () => {
       postal_code: "",
       party_identification_scheme: "",
       party_identification_value: "",
-      phone: "",
-      bank_account: "",
+      phone: null,
+      bank_account: null,
       notes: null,
     },
   });

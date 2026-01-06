@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { TCreateOrganizationDTO } from "../../schema/organization.schema";
 import {
   FormControl,
@@ -8,33 +8,33 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
+  // FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useEffect } from "react";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import { useEffect } from "react";
 
 export const OrganizationInfoStep = () => {
   const form = useFormContext<TCreateOrganizationDTO>();
 
-  const country_code = useWatch({
-    control: form.control,
-    name: "country_code",
-  });
+  // const country_code = useWatch({
+  //   control: form.control,
+  //   name: "country_code",
+  // });
 
-  useEffect(() => {
-    if (country_code === "SA") {
-      form.setValue("tax_scheme", "ZATCA_PHASE1");
-    } else {
-      form.setValue("tax_scheme", "UAE_TAX");
-    }
-  }, [country_code, form]);
+  // useEffect(() => {
+  //   if (country_code === "SA") {
+  //     form.setValue("tax_scheme", "ZATCA_PHASE1");
+  //   } else {
+  //     form.setValue("tax_scheme", "UAE_TAX");
+  //   }
+  // }, [country_code, form]);
 
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-300">
@@ -45,7 +45,9 @@ export const OrganizationInfoStep = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Organization Name</FormLabel>
+                <FormLabel>
+                  Organization Name <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter organization name" />
                 </FormControl>
@@ -58,7 +60,10 @@ export const OrganizationInfoStep = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel> Organization Email</FormLabel>
+                <FormLabel>
+                  {" "}
+                  Organization Email <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter organization email" />
                 </FormControl>
@@ -66,7 +71,7 @@ export const OrganizationInfoStep = () => {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="country_code"
             render={({ field }) => (
@@ -90,7 +95,7 @@ export const OrganizationInfoStep = () => {
                 </FormDescription>
               </FormItem>
             )}
-          />
+          /> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
@@ -98,7 +103,9 @@ export const OrganizationInfoStep = () => {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel>
+                  Phone Number <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="Enter phone number" />
                 </FormControl>
@@ -112,7 +119,9 @@ export const OrganizationInfoStep = () => {
             name="vat_number"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>VAT Number</FormLabel>
+                <FormLabel>
+                  VAT Number <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -129,7 +138,9 @@ export const OrganizationInfoStep = () => {
             name="business_category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Business Category</FormLabel>
+                <FormLabel>
+                  Business Category <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="e.g., Retail, Services" />
                 </FormControl>

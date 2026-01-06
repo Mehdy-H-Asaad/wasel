@@ -4,6 +4,7 @@ import { useGetSuppliers } from "../../hooks/use-get-suppliers";
 import { SuppliersColumns } from "./suppliers-columns";
 import { MainButton } from "@/components/common/MainButton";
 import Link from "next/link";
+import { Plus } from "lucide-react";
 
 export const SuppliersDataTable = () => {
   const { suppliers, isLoadingSuppliers, metaData } = useGetSuppliers();
@@ -20,7 +21,10 @@ export const SuppliersDataTable = () => {
       searchablePlaceholder="Compnay - Supplier"
     >
       <Link href="/admin/contacts/suppliers/create-supplier">
-        <MainButton>Add Supplier</MainButton>
+        <MainButton>
+          <Plus className="h-4 w-4" />
+          Add Supplier
+        </MainButton>
       </Link>
     </DataTable>
   );

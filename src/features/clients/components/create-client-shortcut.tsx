@@ -7,7 +7,7 @@ import {
   SheetDescription,
   SheetFooter,
 } from "@/components/ui/sheet";
-import { Plus, User, MapPin, Building2, IdCard } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import React, { useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useCreateClientShortcut } from "../hooks/useCreateClientShortcut";
@@ -72,7 +72,7 @@ export const CreateClientShortcut = <T extends FieldValues>({
         <Plus className="h-4 w-4 text-light-green" />
         <span className="text-xs text-light-green">Client</span>
       </SheetTrigger>
-      <SheetContent className="sm:max-w-[800px] w-full dark:bg-main-black">
+      <SheetContent className="sm:max-w-[600px] w-full dark:bg-main-black">
         <SheetHeader className="space-y-3 ">
           <div className="flex items-center gap-3">
             <div className="p-4 bg-light-green/10 rounded-lg">
@@ -85,19 +85,19 @@ export const CreateClientShortcut = <T extends FieldValues>({
               </SheetDescription>
             </div>
           </div>
+          <Separator />
         </SheetHeader>
-        <Separator className="my-4" />
-        <ScrollArea className="h-[calc(100vh-180px)] px-4">
+        <ScrollArea className="h-[calc(100vh-220px)] px-4">
           <Form {...CreateClientForm}>
             <form
-              className="space-y-6"
+              className="space-y-6 "
               onSubmit={CreateClientForm.handleSubmit(onCreateClient)}
             >
               {/* Company Information */}
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-light-green" />
+                    {/* <Building2 className="h-5 w-5 text-light-green" /> */}
                     <CardTitle>Company Information</CardTitle>
                   </div>
                   <CardDescription>
@@ -176,7 +176,7 @@ export const CreateClientShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <IdCard className="h-5 w-5 text-light-green" />
+                    {/* <IdCard className="h-5 w-5 text-light-green" /> */}
                     <CardTitle>Identification Details</CardTitle>
                   </div>
                   <CardDescription>
@@ -251,7 +251,7 @@ export const CreateClientShortcut = <T extends FieldValues>({
               <Card className="border-2">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-light-green" />
+                    {/* <MapPin className="h-5 w-5 text-light-green" /> */}
                     <CardTitle>Address Information</CardTitle>
                   </div>
                   <CardDescription>
@@ -357,7 +357,7 @@ export const CreateClientShortcut = <T extends FieldValues>({
             </form>
           </Form>
         </ScrollArea>
-        <SheetFooter className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t">
+        <SheetFooter className=" bottom-0 p-6 border-t">
           <div className="flex items-center justify-end gap-3 w-full">
             <MainButton
               type="button"

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { TCreateSaleTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -75,6 +75,22 @@ export const InvoiceLineRow = ({
     control: form.control,
     name: "prices_include_tax",
   });
+
+  useEffect(() => {
+    if (
+      classifiedTaxCategory === "Z" ||
+      classifiedTaxCategory === "E" ||
+      classifiedTaxCategory === "O"
+    ) {
+      const reason = TAX_EXEMPTION_REASONS_CODES.find(
+        (tax) => tax.case === classifiedTaxCategory
+      )?.options.find(
+        (tax) => tax.value === invoiceLine.tax_exemption_reason_code
+      )?.label;
+
+      form.setValue(`invoice_lines.${index}.tax_exemption_reason`, reason);
+    }
+  }, [classifiedTaxCategory, form, index]);
 
   const { lineExtensionAmount, taxAmount, roundingAmount } =
     calculateInvoiceLines(invoiceLine, classifiedTaxCategory, pricesIncludeTax);

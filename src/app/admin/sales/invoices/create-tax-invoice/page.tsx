@@ -4,7 +4,15 @@ import React, { Suspense } from "react";
 
 const TaxInvoicePage = () => {
   return (
-    <Suspense fallback={<Skeleton className="h-[500px] w-full" />}>
+    <Suspense
+      fallback={
+        <div className="w-full h-full flex items-center flex-col justify-center gap-4">
+          <Skeleton className="h-[300px] w-full" />
+          <Skeleton className="h-[200px] w-full" />
+          <Skeleton className="h-[100px] w-full" />
+        </div>
+      }
+    >
       <CreateTaxSaleInvoiceForm documentType="INVOICE" />
     </Suspense>
   );

@@ -12,7 +12,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
-import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+// import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 
@@ -56,29 +56,29 @@ export const QuotationColumns: ColumnDef<TInvoiceDTO>[] = [
     accessorKey: "issue_date",
     header: "Issue Date",
   },
-  {
-    accessorKey: "party_identification_scheme",
-    header: "Client Identification",
-    cell: ({ row }) => (
-      <div>
-        {
-          CLIENT_IDENTIFCATIONS.find(
-            (identification) =>
-              identification.value ===
-              row.original.customer.party_identification_scheme
-          )?.label
-        }
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: "party_identification_scheme",
+  //   header: "Client Identification",
+  //   cell: ({ row }) => (
+  //     <div>
+  //       {
+  //         CLIENT_IDENTIFCATIONS.find(
+  //           (identification) =>
+  //             identification.value ===
+  //             row.original.customer.party_identification_scheme
+  //         )?.label
+  //       }
+  //     </div>
+  //   ),
+  // },
 
-  {
-    accessorKey: "party_identification_value",
-    header: "Identification Value",
-    cell: ({ row }) => (
-      <div>{row.original.customer.party_identification_value}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "party_identification_value",
+  //   header: "Identification Value",
+  //   cell: ({ row }) => (
+  //     <div>{row.original.customer.party_identification_value}</div>
+  //   ),
+  // },
 
   {
     accessorKey: "payment_means_code",

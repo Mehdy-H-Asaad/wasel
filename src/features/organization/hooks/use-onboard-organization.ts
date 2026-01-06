@@ -32,10 +32,10 @@ export const useOnboardOrganization = () => {
     defaultValues: {
       name: "",
       email: "",
-      country_code: undefined,
+      country_code: "SA",
       vat_number: "",
       business_category: "",
-      tax_scheme: undefined,
+      tax_scheme: "ZATCA_PHASE1",
       phone: "",
       street: "",
       building_number: "",

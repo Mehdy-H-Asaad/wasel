@@ -9,12 +9,14 @@ import {
   TCreateSimplifiedSaleTaxInvoiceDTO,
   TSimplifiedSaleTaxInvoiceDTO,
 } from "../../schema/simplified-sale-tax-invoice.schema";
+import { useRouter } from "next/navigation";
 
 export const useCreateSimplifiedSaleTaxInvoice = ({
   documentType,
 }: {
   documentType: "INVOICE" | "QUOTATION";
 }) => {
+  const router = useRouter();
   const { mutate, isPending } = useApiMutation<
     TSimplifiedSaleTaxInvoiceDTO,
     TCreateSimplifiedSaleTaxInvoiceDTO
@@ -23,6 +25,10 @@ export const useCreateSimplifiedSaleTaxInvoice = ({
     queryKey: [SALE_INVOICES, documentType],
     requestURL: `/${SALE_INVOICES}`,
     successMsg: `Invoice ${CREATION_SUCCESS_MESSAGE}`,
+    onSuccess: () => {
+      CreateSimplifiedSaleTaxInvoiceForm.reset();
+      router.push(`/admin/sales/cash-invoices`);
+    },
   });
 
   const currentDate = new Date();

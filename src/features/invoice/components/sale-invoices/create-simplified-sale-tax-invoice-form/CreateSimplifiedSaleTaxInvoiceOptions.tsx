@@ -16,15 +16,6 @@ import {
   SelectLabel,
   SelectItem,
 } from "@/components/ui/select";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { useGetClients } from "@/features/clients/hooks/useGetClients";
@@ -35,7 +26,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { User, Receipt, CalendarIcon } from "lucide-react";
+import { Receipt, CalendarIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
@@ -45,13 +36,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
-import { Skeleton } from "@/components/ui/skeleton";
+import { AsyncSelectFormField } from "@/components/common/select/async-select-form-field";
 
 export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
   const form = useFormContext<TCreateSimplifiedSaleTaxInvoiceDTO>();
-  const [clientOpen, setClientOpen] = React.useState(false);
-
-  const { clients, isLoadingClients } = useGetClients();
+  const [clientSearch, setClientSearch] = React.useState<string>("");
+  const { clients, isLoadingClients } = useGetClients({
+    limit: 10,
+    page: 1,
+    filters: {
+      registration_name: clientSearch || undefined,
+    },
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,7 +73,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
       <Card className="border-2">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <User className="h-5 w-5 text-light-green" />
+            {/* <User className="h-5 w-5 text-light-green" /> */}
             <CardTitle>Client & Basic Information</CardTitle>
           </div>
           <CardDescription>
@@ -89,64 +85,26 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
             <FormField
               control={form.control}
               name="customer_id"
-              render={({ field }) => (
+              render={() => (
                 <FormItem className="flex flex-col">
                   <FormLabel className="flex items-center justify-between text-sm font-semibold">
-                    <span>Client - Company *</span>
+                    <span>Client - Company</span>
                     <CreateClientShortcut form={form} name="customer_id" />
                   </FormLabel>
-                  {isLoadingClients ? (
-                    <Skeleton className="w-full h-11" />
-                  ) : (
-                    <Popover open={clientOpen} onOpenChange={setClientOpen}>
-                      <FormControl>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={clientOpen}
-                            className=" justify-between bg-background font-normal"
-                          >
-                            {field.value
-                              ? clients?.find(
-                                  (client) => client.id === field.value
-                                )?.registration_name
-                              : "Select client company"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                      </FormControl>
-                      <PopoverContent className="w-[300px] p-0" align="start">
-                        <Command>
-                          <CommandInput placeholder="Search client..." />
-                          <CommandList>
-                            <CommandEmpty>No client found.</CommandEmpty>
-                            <CommandGroup>
-                              {clients?.map((client) => (
-                                <CommandItem
-                                  key={client.id}
-                                  value={client.registration_name}
-                                  onSelect={() => {
-                                    field.onChange(client.id);
-                                    setClientOpen(false);
-                                  }}
-                                >
-                                  <Check
-                                    className={`  ${
-                                      client.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    }`}
-                                  />
-                                  {client.registration_name}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  )}
+
+                  <AsyncSelectFormField
+                    form={form}
+                    placeholder="Select client company"
+                    name="customer_id"
+                    options={
+                      clients?.map((client) => ({
+                        value: client.id,
+                        label: client.registration_name,
+                      })) ?? []
+                    }
+                    onSearch={setClientSearch}
+                    isLoading={isLoadingClients}
+                  />
 
                   <FormMessage />
                 </FormItem>
@@ -158,7 +116,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Payment Method *
+                    Payment Method <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -194,7 +152,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem className="col-span-1">
                   <FormLabel className="text-sm font-semibold">
-                    Prices Include Tax
+                    Prices Include Tax <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(value === "true")}
@@ -223,7 +181,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    Delivery Date
+                    Delivery Date <span className="text-red-500">*</span>
                   </FormLabel>
                   <Popover>
                     <FormControl>
