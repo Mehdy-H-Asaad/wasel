@@ -1,16 +1,15 @@
 "use client";
-import { useMemo } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { DataTable } from "@/components/common/DataTable";
 import { SaleInvoicesColumns } from "./SaleInvoicesColumns";
 import { useGetSaleInvoices } from "@/features/invoice/hooks/sale-invoice/useGetSalenvoices";
 import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
-import {
-  SaleInvoiceFilters,
-  SaleInvoiceFiltersType,
-} from "./SaleInvoiceFilters";
-import { usePaginationStore } from "@/shared/store/pagination.store";
+import { SaleInvoiceFilters } from "./SaleInvoiceFilters";
+import { Plus } from "lucide-react";
+import { TInvoiceFilters } from "@/features/invoice/hooks/sale-invoice/useGetSalenvoices";
+import { usePaginationParams } from "@/shared/hooks/usePaginationParams";
+import { useFilterParams } from "@/shared/hooks/useFilterParams";
 
 export const SaleInvoicesDataTable = ({
   invoiceType,
@@ -18,77 +17,66 @@ export const SaleInvoicesDataTable = ({
   invoiceType: "tax" | "simplified-tax";
 }) => {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const { pagination, setPagination } = usePaginationStore();
 
-  // Parse filters from URL search params
-  const filters = useMemo<SaleInvoiceFiltersType>(() => {
-    const invoiceTypeCode = searchParams.get("invoice_type_code");
-    const paymentMeansCode = searchParams.get("payment_means_code");
-    const partyIdentificationScheme = searchParams.get(
-      "party_identification_scheme"
-    );
+  // Pagination management
+  const { pagination, setPagination, page, limit } = usePaginationParams({
+    defaultPageSize: 5,
+  });
 
-    return {
-      ...(invoiceTypeCode && { invoice_type_code: invoiceTypeCode }),
-      ...(paymentMeansCode && { payment_means_code: paymentMeansCode }),
-      ...(partyIdentificationScheme && {
-        party_identification_scheme: partyIdentificationScheme,
-      }),
-    };
-  }, [searchParams]);
+  // Filter management
+  const { updateFilters: updateFilterParams, clearFilters } =
+    useFilterParams<TInvoiceFilters>();
 
-  // Update URL search params when filters change
-  const updateFilters = (newFilters: SaleInvoiceFiltersType) => {
-    const params = new URLSearchParams(searchParams.toString());
+  // Parse filters from URL search params with type safety
+  const filters: TInvoiceFilters = {
+    invoice_type_code:
+      (searchParams.get(
+        "invoice_type_code"
+      ) as TInvoiceFilters["invoice_type_code"]) ?? undefined,
+    payment_means_code:
+      (searchParams.get(
+        "payment_means_code"
+      ) as TInvoiceFilters["payment_means_code"]) ?? undefined,
+    classified_tax_category:
+      (searchParams.get(
+        "classified_tax_category"
+      ) as TInvoiceFilters["classified_tax_category"]) ?? undefined,
+    issue_date_range_from:
+      searchParams.get("issue_date_range_from") ?? undefined,
+    issue_date_range_to: searchParams.get("issue_date_range_to") ?? undefined,
+    customer_id: searchParams.get("customer_id") ?? undefined,
+  };
 
-    // Remove filter params if they're undefined
-    if (!newFilters.invoice_type_code) {
-      params.delete("invoice_type_code");
-    } else {
-      params.set("invoice_type_code", newFilters.invoice_type_code);
-    }
-
-    if (!newFilters.payment_means_code) {
-      params.delete("payment_means_code");
-    } else {
-      params.set("payment_means_code", newFilters.payment_means_code);
-    }
-
-    if (!newFilters.party_identification_scheme) {
-      params.delete("party_identification_scheme");
-    } else {
-      params.set(
-        "party_identification_scheme",
-        newFilters.party_identification_scheme
-      );
-    }
-
-    // Reset to first page when filters change
-    setPagination({ pageIndex: 0, pageSize: pagination.pageSize });
-
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  const updateFilters = (newFilters: TInvoiceFilters) => {
+    updateFilterParams(newFilters, { resetPage: true });
   };
 
   const { metaData, invoices, isLoadingInvoices } = useGetSaleInvoices({
     documentType: "INVOICE",
     invoiceType,
     filters,
+    page,
+    limit,
   });
 
   return (
     <DataTable
       columns={SaleInvoicesColumns}
       data={invoices || []}
-      pageCount={metaData.current_page}
+      pageCount={metaData.total_pages}
       searchablePlaceholder="Invoice Number"
       manualPagination={true}
+      pagination={pagination}
+      onPaginationChange={setPagination}
       setSearchableField={() => {}}
       isLoading={isLoadingInvoices}
       totalCount={metaData.total_pages}
       filters={
-        <SaleInvoiceFilters filters={filters} onFiltersChange={updateFilters} />
+        <SaleInvoiceFilters
+          filters={filters}
+          onFiltersChange={updateFilters}
+          onClearFilters={clearFilters}
+        />
       }
     >
       <Link
@@ -96,7 +84,10 @@ export const SaleInvoicesDataTable = ({
           invoiceType === "tax" ? "tax" : "cash"
         }-invoice`}
       >
-        <MainButton>Create Sale Invoice</MainButton>
+        <MainButton>
+          <Plus className="h-4 w-4" />
+          Create {invoiceType === "tax" ? "Sale" : "Cash"} Invoice
+        </MainButton>
       </Link>
     </DataTable>
   );

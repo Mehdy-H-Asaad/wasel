@@ -1,36 +1,44 @@
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { SALE_INVOICES } from "../../constants/invoice.constants";
 import { TInvoiceDTO } from "../../schema/invoice.schema";
-import { SaleInvoiceFiltersType } from "../../components/sale-invoices/data-table/SaleInvoiceFilters";
+
+export type TInvoiceFilters = {
+  document_type?: "INVOICE" | "QUOTATION";
+  customer_id?: string;
+  invoice_type?: "0100000" | "0200000";
+  invoice_type_code?: "388" | "383" | "381" | "386";
+  issue_date_range_from?: string;
+  issue_date_range_to?: string;
+  payment_means_code?: "10" | "20" | "30" | "31" | "42" | "48";
+  classified_tax_category?: "S" | "Z" | "E" | "O";
+};
 
 type TUseGetSaleInvoicesProps = {
   documentType: "INVOICE" | "QUOTATION";
   invoiceType: "tax" | "simplified-tax";
-  filters?: SaleInvoiceFiltersType;
+  filters?: TInvoiceFilters;
+  page?: number;
+  limit?: number;
 };
 
 export const useGetSaleInvoices = ({
   documentType,
   invoiceType,
   filters,
+  page = 1,
+  limit = 10,
 }: TUseGetSaleInvoicesProps) => {
   const { data, isFetching, metaData } = useApiQuery<TInvoiceDTO[]>({
-    queryKey: [SALE_INVOICES, documentType, invoiceType, filters],
+    queryKey: [SALE_INVOICES, filters, page, limit],
     requestURL: `/${SALE_INVOICES}?document_type=${documentType}`,
     axiosType: "private",
+    isZustandPagination: false,
     axiosConfig: {
       params: {
         invoice_type: invoiceType === "tax" ? "0100000" : "0200000",
+        page,
+        limit,
         ...filters,
-        // ...(filters?.invoice_type_code && {
-        //   invoice_type_code: filters.invoice_type_code,
-        // }),
-        // ...(filters?.payment_means_code && {
-        //   payment_means_code: filters.payment_means_code,
-        // }),
-        // ...(filters?.party_identification_scheme && {
-        //   party_identification_scheme: filters.party_identification_scheme,
-        // }),
       },
     },
   });

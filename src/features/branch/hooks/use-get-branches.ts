@@ -13,7 +13,7 @@ type TUseGetBranchesOptions = {
 export const useGetBranches = (options?: TUseGetBranchesOptions) => {
   const { data, isFetching, metaData } = useApiQuery<TBranchDTO[]>({
     queryKey: [BRANCHES_QUERY_KEY, options],
-    requestURL: `branches`,
+    requestURL: `/branches/`,
     axiosConfig: {
       params: {
         limit: options?.limit || 10,

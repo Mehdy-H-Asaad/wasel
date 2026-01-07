@@ -4,6 +4,8 @@ import { useGetPurchaseInvoices } from "../../../hooks/buy-invoice/use-get-purch
 import { PurchaseInvoicesColumns } from "./purchase-invoices-columns";
 import { MainButton } from "@/components/common/MainButton";
 import Link from "next/link";
+import { Plus } from "lucide-react";
+// import { PurchaseInvoiceFilters } from "./purchase-invoice-filters";
 // import { CreateBuyInvoiceDialog } from "../create-buy-invoice/CreateBuyInvoiceDialog";
 
 export const PurchaseInvoicesDataTable = () => {
@@ -20,9 +22,13 @@ export const PurchaseInvoicesDataTable = () => {
       setSearchableField={() => {}}
       isLoading={isLoadingPurchaseInvoices}
       totalCount={metaData.total_pages}
+      // filters={<PurchaseInvoiceFilters filters={filters} onFiltersChange={updateFilters} />}
     >
       <Link href="/admin/purchases/purchase-invoices/create-purchase-invoice">
-        <MainButton>Create Purchase Invoice</MainButton>
+        <MainButton>
+          <Plus className="h-4 w-4" />
+          Create Purchase Invoice
+        </MainButton>
       </Link>
     </DataTable>
   );

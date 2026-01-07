@@ -52,7 +52,7 @@ export const CreateTaxSaleInvoiceForm = ({
         >
           {/* {!isPreviewing ? (
             <> */}
-          <CreateTaxSaleInvoiceOptions />
+          <CreateTaxSaleInvoiceOptions documentType={documentType} />
           <InlineInvoiceLinesTable isSaleInvoice />
           <Card className="border-2 ">
             <CardContent className="py-4">

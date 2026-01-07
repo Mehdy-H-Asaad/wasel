@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pagination?: PaginationState;
+  onPaginationChange?: (pagination: PaginationState) => void;
   isLoading?: boolean;
   pageCount?: number;
   totalCount?: number;
@@ -52,12 +53,19 @@ export function DataTable<TData, TValue>({
   manualPagination = true,
   setSearchableField,
   filters,
+  pagination: paginationProp,
+  onPaginationChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-  const { pagination, setPagination } = usePaginationStore();
+  const { pagination: zustandPagination, setPagination: setZustandPagination } =
+    usePaginationStore();
+
+  // Use prop pagination if provided, otherwise use Zustand store
+  const pagination = paginationProp || zustandPagination;
+  const setPagination = onPaginationChange || setZustandPagination;
 
   // Create a debounced search function
   const debouncedSearch = useDebounce({
@@ -153,16 +161,16 @@ export function DataTable<TData, TValue>({
               </TableHeader>
               <TableBody>
                 {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row, index) => (
+                  table.getRowModel().rows.map((row) => (
                     <TableRow
                       className="border-b border-border/30 hover:bg-muted/30 transition-colors duration-150"
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      style={{
-                        animationDelay: `${index * 0.05}s`,
-                        animation: "fadeIn 0.3s ease-in-out forwards",
-                        opacity: 0,
-                      }}
+                      // style={{
+                      //   animationDelay: `${index * 0.05}s`,
+                      //   animation: "fadeIn 0.3s ease-in-out forwards",
+                      //   opacity: 0,
+                      // }}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell className="py-4 px-4" key={cell.id}>

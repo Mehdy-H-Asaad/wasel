@@ -7,15 +7,6 @@ import {
 } from "@/components/ui/form";
 import { PAYMENTS_TYPES } from "@/features/invoice/constants/invoice.constants";
 import { TCreateSimplifiedSaleTaxInvoiceDTO } from "@/features/invoice/schema/simplified-sale-tax-invoice.schema";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectItem,
-} from "@/components/ui/select";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { useGetClients } from "@/features/clients/hooks/useGetClients";
@@ -37,6 +28,7 @@ import {
 } from "@/components/ui/card";
 import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
 import { AsyncSelectFormField } from "@/components/common/select/async-select-form-field";
+import { SelectFormField } from "@/components/common/select/select-form-field";
 
 export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
   const form = useFormContext<TCreateSimplifiedSaleTaxInvoiceDTO>();
@@ -118,29 +110,15 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                   <FormLabel className="text-sm font-semibold">
                     Payment Method <span className="text-red-500">*</span>
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full h-11 bg-background">
-                        <SelectValue placeholder="Select payment type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Payment Types</SelectLabel>
-                        {PAYMENTS_TYPES.map((payment) => (
-                          <SelectItem
-                            value={payment.value.toString()}
-                            key={payment.value}
-                          >
-                            {payment.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <SelectFormField
+                    field={field}
+                    placeholder="Select payment method"
+                    label="Payment Method"
+                    options={PAYMENTS_TYPES.map((payment) => ({
+                      label: payment.label,
+                      value: payment.value.toString(),
+                    }))}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -154,23 +132,15 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                   <FormLabel className="text-sm font-semibold">
                     Prices Include Tax <span className="text-red-500">*</span>
                   </FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(value === "true")}
-                    // defaultValue={field.value ? "true" : "false"}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full h-11 bg-background">
-                        <SelectValue placeholder="Prices include tax" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Prices Include Tax</SelectLabel>
-                        <SelectItem value="true">Yes</SelectItem>
-                        <SelectItem value="false">No</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <SelectFormField
+                    field={field}
+                    placeholder="Select prices include tax"
+                    label="Prices Include Tax"
+                    options={[
+                      { label: "Yes", value: true },
+                      { label: "No", value: false },
+                    ]}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -238,7 +208,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
             name="note"
             render={({ field }) => (
               <FormItem className="mt-4">
-                <FormLabel className="text-sm font-semibold">Notes</FormLabel>
+                <FormLabel className="text-sm font-semibold">Note</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}

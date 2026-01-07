@@ -30,7 +30,11 @@ import { CreateClientShortcut } from "@/features/clients/components/create-clien
 import { AsyncSelectFormField } from "@/components/common/select/async-select-form-field";
 import { SelectFormField } from "@/components/common/select/select-form-field";
 
-export const CreateTaxSaleInvoiceOptions = () => {
+export const CreateTaxSaleInvoiceOptions = ({
+  documentType,
+}: {
+  documentType: "INVOICE" | "QUOTATION";
+}) => {
   const form = useFormContext<TCreateSaleTaxInvoiceDTO>();
   const [clientSearch, setClientSearch] = React.useState<string>("");
 
@@ -58,7 +62,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
           </div>
         </div>
         <div className="w-fit self-end text-light-green font-bold text-sm border-2 border-light-green py-2 px-6 rounded-full bg-light-green/5">
-          Sale Invoice
+          {documentType === "INVOICE" ? "Sale Invoice" : "Quotation"}
         </div>
       </div>
 
@@ -115,6 +119,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
                   </FormLabel>
                   <SelectFormField
                     field={field}
+                    placeholder="Select payment method"
                     label="Payment Method"
                     options={PAYMENTS_TYPES.map((payment) => ({
                       label: payment.label,
@@ -137,6 +142,7 @@ export const CreateTaxSaleInvoiceOptions = () => {
 
                   <SelectFormField
                     field={field}
+                    placeholder="Select prices include tax"
                     label="Prices Include Tax"
                     options={[
                       { label: "Yes", value: true },

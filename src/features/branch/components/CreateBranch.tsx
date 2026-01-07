@@ -20,14 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Building2 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { BranchStatus } from "../schema/branch.schema";
 
 export const CreateBranch = () => {
   const router = useRouter();
@@ -40,8 +32,7 @@ export const CreateBranch = () => {
       <Card className="dark:bg-main-black">
         <CardHeader>
           <CardTitle className="text-3xl flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-light-green" /> Create New
-            Branch
+            <Building2 className="h-6 w-6 text-light-green" /> Create New Branch
           </CardTitle>
           <CardDescription>
             Add a new branch to your system by filling out the form below
@@ -81,37 +72,6 @@ export const CreateBranch = () => {
                       <FormControl>
                         <Input {...field} placeholder="Phone Number" />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={CreateBranchForm.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Status <span className="text-red-500">*</span>
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Status" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value={BranchStatus.PENDING}>
-                            Pending
-                          </SelectItem>
-                          <SelectItem value={BranchStatus.COMPLETED}>
-                            Completed
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -211,7 +171,7 @@ export const CreateBranch = () => {
                   control={CreateBranchForm.control}
                   name="address"
                   render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                    <FormItem>
                       <FormLabel>Full Address</FormLabel>
                       <FormControl>
                         <Input

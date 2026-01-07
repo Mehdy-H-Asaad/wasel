@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
+// import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
 // import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
@@ -132,8 +132,8 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      const invoice = row.original;
+    cell: () => {
+      // const invoice = row.original;
 
       return (
         <DropdownMenu>
@@ -147,9 +147,9 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
             <DropdownMenuLabel>Options</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <Link href={`/admin/invoices/invoice-details/${invoice.id}`}>
-              <MainButton>Invoice Details</MainButton>
-            </Link>
+            {/* <Link href={`/admin/invoices/invoice-details/${invoice.id}`}> */}
+            <MainButton>Preview Invoice</MainButton>
+            {/* </Link> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

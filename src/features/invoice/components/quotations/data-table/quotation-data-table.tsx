@@ -4,6 +4,7 @@ import { QuotationColumns } from "./quotation-columns";
 import { useGetSaleInvoices } from "@/features/invoice/hooks/sale-invoice/useGetSalenvoices";
 import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
+import { Plus } from "lucide-react";
 
 export const QuotationsDataTable = () => {
   const { metaData, invoices, isLoadingInvoices } = useGetSaleInvoices({
@@ -23,7 +24,10 @@ export const QuotationsDataTable = () => {
       totalCount={metaData.total_pages}
     >
       <Link href={"/admin/sales/quotations/create-quotation"}>
-        <MainButton>Create Quotation</MainButton>
+        <MainButton>
+          <Plus className="h-4 w-4" />
+          Create Quotation
+        </MainButton>
       </Link>
     </DataTable>
   );
