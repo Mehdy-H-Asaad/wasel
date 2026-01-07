@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/collapsible";
 import { X, Filter, ChevronDown, Calendar as CalendarIcon } from "lucide-react";
 import {
-	VAT_DOCUMENTS,
+	// VAT_DOCUMENTS,
 	PAYMENTS_TYPES,
 	// TAX_CATEGORIES,
 } from "@/features/invoice/constants/invoice.constants";
@@ -29,33 +29,34 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { formatDate } from "date-fns";
 import { AsyncSelect } from "@/components/common/select/async-select";
-import { useGetClients } from "@/features/clients/hooks/useGetClients";
+import { useGetSuppliers } from "@/features/suppliers/hooks/use-get-suppliers";
+import { TPurchaseInvoiceFilters } from "@/features/invoice/hooks/buy-invoice/use-get-purchase-invoices";
 
-interface SaleInvoiceFiltersProps {
-	filters: TInvoiceFilters;
-	onFiltersChange: (filters: TInvoiceFilters) => void;
+interface PurchaseInvoiceFiltersProps {
+	filters: TPurchaseInvoiceFilters;
+	onFiltersChange: (filters: TPurchaseInvoiceFilters) => void;
 	onClearFilters: () => void;
 }
 
-export const SaleInvoiceFilters = ({
+export const PurchaseInvoiceFilters = ({
 	filters,
 	onFiltersChange,
 	onClearFilters,
-}: SaleInvoiceFiltersProps) => {
+}: PurchaseInvoiceFiltersProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [clientSearch, setClientSearch] = useState<string>("");
+	const [supplierSearch, setSupplierSearch] = useState<string>("");
 
 	const clearAllFilters = () => {
 		onClearFilters();
-		setClientSearch("");
+		setSupplierSearch("");
 	};
 
 	const activeFiltersCount = Object.values(filters).filter(
 		value => value !== undefined
 	).length;
 
-	const { clients, isLoadingClients } = useGetClients({
-		filters: { registration_name: clientSearch },
+	const { suppliers, isLoadingSuppliers } = useGetSuppliers({
+		filters: { registration_name: supplierSearch },
 	});
 
 	return (
@@ -92,26 +93,26 @@ export const SaleInvoiceFilters = ({
 						<div className="flex items-center gap-2 flex-wrap pt-3 pb-1 border-t border-border/50 mt-2">
 							<div>
 								<AsyncSelect
-									placeholder="Client"
+									placeholder="Supplier"
 									options={
-										clients?.map(client => ({
-											label: client.registration_name,
-											value: client.id,
+										suppliers?.map(supplier => ({
+											label: supplier.registration_name,
+											value: supplier.id,
 										})) ?? []
 									}
-									onSearch={setClientSearch}
-									isLoading={isLoadingClients}
+									onSearch={setSupplierSearch}
+									isLoading={isLoadingSuppliers}
 									onChange={value =>
-										onFiltersChange({ customer_id: value?.toString() || "" })
+										onFiltersChange({ supplier_id: value?.toString() || "" })
 									}
 									value={
-										filters.customer_id ? Number(filters.customer_id) : null
+										filters.supplier_id ? Number(filters.supplier_id) : null
 									}
 								/>
 							</div>
 
 							{/* Invoice Type Code Filter */}
-							<Select
+							{/* <Select
 								value={filters.invoice_type_code || "all"}
 								onValueChange={value =>
 									onFiltersChange({
@@ -131,7 +132,7 @@ export const SaleInvoiceFilters = ({
 										</SelectItem>
 									))}
 								</SelectContent>
-							</Select>
+							</Select> */}
 
 							{/* Payment Type Filter */}
 							<Select

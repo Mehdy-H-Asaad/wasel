@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -5,20 +6,27 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
+	DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { Row } from "@tanstack/react-table";
 import { TSupplierDTO } from "../../../schema/supplier.schema";
 import { useDeleteSupplier } from "../../../hooks/use-delete-supplier";
-import { UpdateSupplier } from "../../update-supplier/update-supplier";
+import { useRouter } from "next/navigation";
 
 export const SuppliersActionCell = ({ row }: { row: Row<TSupplierDTO> }) => {
 	const supplier = row.original;
+	const router = useRouter();
 
 	const { onDeleteSupplier, isDeletingSupplier } = useDeleteSupplier({
 		id: supplier.id,
 	});
+
+	const handleEdit = () => {
+		router.push(`/admin/contacts/suppliers/${supplier.id}`);
+	};
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -31,7 +39,9 @@ export const SuppliersActionCell = ({ row }: { row: Row<TSupplierDTO> }) => {
 				<DropdownMenuLabel>Options</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<div className="flex flex-col gap-2">
-					<UpdateSupplier supplier={supplier} />
+					<DropdownMenuItem onClick={handleEdit}>
+						Update Supplier
+					</DropdownMenuItem>
 					<DeleteDialog
 						deleteFunc={onDeleteSupplier}
 						isLoading={isDeletingSupplier}

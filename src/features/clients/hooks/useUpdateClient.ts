@@ -29,6 +29,8 @@ export const useUpdateClient = (client: TClientDTO) => {
 			phone: client.phone,
 			notes: client.notes,
 			bank_account: client.bank_account,
+			email: client.email,
+			whatsapp: client.whatsapp,
 		},
 	});
 

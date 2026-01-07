@@ -8,48 +8,50 @@ import { TClientDTO } from "../schema/client.schema";
 import { useRouter } from "next/navigation";
 
 export const useCreateClient = () => {
-  const router = useRouter();
-  const {
-    data: client,
-    mutate,
-    isPending,
-  } = useApiMutation<TClientDTO, TCreateClientDTO>({
-    axiosRequestMethod: "post",
-    queryKey: [CLIENTS],
-    requestURL: `/${CLIENTS}`,
-    successMsg: `Client ${CREATION_SUCCESS_MESSAGE}`,
-    onSuccess: () => {
-      CreateClientForm.reset();
-      router.push(`/admin/contacts/clients`);
-    },
-  });
+	const router = useRouter();
+	const {
+		data: client,
+		mutate,
+		isPending,
+	} = useApiMutation<TClientDTO, TCreateClientDTO>({
+		axiosRequestMethod: "post",
+		queryKey: [CLIENTS],
+		requestURL: `/${CLIENTS}`,
+		successMsg: `Client ${CREATION_SUCCESS_MESSAGE}`,
+		onSuccess: () => {
+			CreateClientForm.reset();
+			router.push(`/admin/contacts/clients`);
+		},
+	});
 
-  const CreateClientForm = useForm<TCreateClientDTO>({
-    resolver: zodResolver(CreateClientSchema),
-    defaultValues: {
-      registration_name: "",
-      vat_number: "",
-      street: "",
-      building_number: "",
-      division: "",
-      city: "",
-      postal_code: "",
-      party_identification_scheme: "",
-      party_identification_value: "",
-      phone: null,
-      bank_account: null,
-      notes: null,
-    },
-  });
+	const CreateClientForm = useForm<TCreateClientDTO>({
+		resolver: zodResolver(CreateClientSchema),
+		defaultValues: {
+			registration_name: "",
+			vat_number: "",
+			street: "",
+			building_number: "",
+			division: "",
+			city: "",
+			email: null,
+			whatsapp: null,
+			postal_code: "",
+			party_identification_scheme: "",
+			party_identification_value: "",
+			phone: null,
+			bank_account: null,
+			notes: null,
+		},
+	});
 
-  const onCreateClient = (values: TCreateClientDTO) => {
-    mutate(values);
-  };
+	const onCreateClient = (values: TCreateClientDTO) => {
+		mutate(values);
+	};
 
-  return {
-    onCreateClient,
-    CreateClientForm,
-    isCreatingClient: isPending,
-    client,
-  };
+	return {
+		onCreateClient,
+		CreateClientForm,
+		isCreatingClient: isPending,
+		client,
+	};
 };

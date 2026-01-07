@@ -31,17 +31,17 @@ import { formatDate } from "date-fns";
 import { AsyncSelect } from "@/components/common/select/async-select";
 import { useGetClients } from "@/features/clients/hooks/useGetClients";
 
-interface SaleInvoiceFiltersProps {
+interface QuotationsFiltersProps {
 	filters: TInvoiceFilters;
 	onFiltersChange: (filters: TInvoiceFilters) => void;
 	onClearFilters: () => void;
 }
 
-export const SaleInvoiceFilters = ({
+export const QuotationsFilters = ({
 	filters,
 	onFiltersChange,
 	onClearFilters,
-}: SaleInvoiceFiltersProps) => {
+}: QuotationsFiltersProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [clientSearch, setClientSearch] = useState<string>("");
 
