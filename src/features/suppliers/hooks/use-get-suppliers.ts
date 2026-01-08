@@ -5,24 +5,26 @@ import {
 import { TSupplierDTO } from "../schema/supplier.schema";
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 
-type TUseGetSuppliersOptions = {
+export type TSupplierFilters = {
+  registration_name?: string;
+  vat_number?: string;
+  phone?: string;
   limit?: number;
   page?: number;
-  filters?: {
-    registration_name?: string;
-  };
 };
 
-export const useGetSuppliers = (options?: TUseGetSuppliersOptions) => {
+type TUseGetSuppliersOptions = {
+  filters?: TSupplierFilters;
+};
+
+export const useGetSuppliers = ({ filters }: TUseGetSuppliersOptions) => {
   const { data, isFetching, metaData } = useApiQuery<TSupplierDTO[]>({
-    queryKey: [SUPPLIERS_QUERY_KEY, options],
+    queryKey: [SUPPLIERS_QUERY_KEY, filters],
     requestURL: `/${SUPPLIERS}`,
     axiosType: "private",
     axiosConfig: {
       params: {
-        limit: options?.limit,
-        page: options?.page,
-        ...options?.filters,
+        ...filters,
       },
     },
   });

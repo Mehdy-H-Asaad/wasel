@@ -54,7 +54,7 @@ export const CreateClient = () => {
               className="grid gap-6"
               onSubmit={CreateClientForm.handleSubmit(onCreateClient)}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormField
                   control={CreateClientForm.control}
                   name="registration_name"
@@ -231,6 +231,40 @@ export const CreateClient = () => {
                         <Input
                           {...field}
                           placeholder="Phone"
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={CreateClientForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Email"
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={CreateClientForm.control}
+                  name="whatsapp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>WhatsApp</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="WhatsApp"
                           value={field.value ?? ""}
                         />
                       </FormControl>

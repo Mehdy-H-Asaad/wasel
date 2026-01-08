@@ -2,7 +2,7 @@ import { TClientDTO } from "../schema/client.schema";
 import { CLIENTS } from "../constants/client.constant";
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 
-export const useGetSingleClient = ({ id }: { id: number }) => {
+export const useGetSingleClient = ({ id }: { id: string }) => {
   const { data, isFetching, metaData } = useApiQuery<TClientDTO>({
     queryKey: [CLIENTS, id],
     requestURL: `/${CLIENTS}/${id}`,

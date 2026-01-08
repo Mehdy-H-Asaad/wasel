@@ -29,6 +29,14 @@ export const ClientsColumns: ColumnDef<TClientDTO>[] = [
 		header: "Phone",
 	},
 	{
+		accessorKey: "email",
+		header: "Email",
+	},
+	{
+		accessorKey: "whatsapp",
+		header: "Whatsapp",
+	},
+	{
 		accessorKey: "city",
 		header: "City",
 	},
