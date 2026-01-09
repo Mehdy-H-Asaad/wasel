@@ -10,6 +10,7 @@ import {
 import { X, Filter, ChevronDown } from "lucide-react";
 import { TClientFilters } from "../../hooks/useGetClients";
 import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/shared/hooks/use-debounce";
 
 interface ClientsFiltersProps {
   filters: TClientFilters;
@@ -24,13 +25,24 @@ export const ClientsFilters = ({
 }: ClientsFiltersProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [vatNumber, setVatNumber] = useState(filters.vat_number || "");
+  const [phone, setPhone] = useState(filters.phone || "");
   const clearAllFilters = () => {
     onClearFilters();
+    setVatNumber("");
+    setPhone("");
   };
 
   const activeFiltersCount = Object.values(filters).filter(
     (value) => value !== undefined
   ).length;
+
+  const handleSearch = useDebounce({
+    callback: (value: string, key: string) => {
+      onFiltersChange({ [key]: value });
+    },
+    delay: 500,
+  });
 
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -66,17 +78,21 @@ export const ClientsFilters = ({
             <div className="flex items-center gap-2 flex-wrap pt-3 pb-1 border-t border-border/50 mt-2">
               <div className="flex items-center gap-2">
                 <Input
-                  value={filters.vat_number || ""}
-                  onChange={(e) =>
-                    onFiltersChange({ vat_number: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setVatNumber(e.target.value);
+                    handleSearch(e.target.value, "vat_number");
+                  }}
                   placeholder="VAT Number"
+                  value={vatNumber}
                 />
 
                 <Input
-                  value={filters.phone || ""}
-                  onChange={(e) => onFiltersChange({ phone: e.target.value })}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    handleSearch(e.target.value, "phone");
+                  }}
                   placeholder="Phone Number"
+                  value={phone}
                 />
               </div>
               {/* Clear All Button */}

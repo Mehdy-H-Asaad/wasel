@@ -8,28 +8,37 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { X, Filter, ChevronDown } from "lucide-react";
-import { TSupplierFilters } from "../../hooks/use-get-suppliers";
 import { Input } from "@/components/ui/input";
+import { TUserFilters } from "../../hooks/use-get-users";
+import { USER_ROLES } from "../../constants/user.constants";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 
-interface SuppliersFiltersProps {
-  filters: TSupplierFilters;
-  onFiltersChange: (filters: TSupplierFilters) => void;
+interface UserFiltersProps {
+  filters: TUserFilters;
+  onFiltersChange: (filters: TUserFilters) => void;
   onClearFilters: () => void;
 }
 
-export const SuppliersFilters = ({
+export const UserFilters = ({
   filters,
   onFiltersChange,
   onClearFilters,
-}: SuppliersFiltersProps) => {
+}: UserFiltersProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [vatNumber, setVatNumber] = useState(filters.vat_number || "");
-  const [phone, setPhone] = useState(filters.phone || "");
+  const [localEmail, setLocalEmail] = useState(filters.email || "");
+  const [localPhone, setLocalPhone] = useState(filters.phone || "");
+
   const clearAllFilters = () => {
+    setLocalEmail("");
+    setLocalPhone("");
     onClearFilters();
-    setVatNumber("");
-    setPhone("");
   };
 
   const activeFiltersCount = Object.values(filters).filter(
@@ -77,22 +86,46 @@ export const SuppliersFilters = ({
             <div className="flex items-center gap-2 flex-wrap pt-3 pb-1 border-t border-border/50 mt-2">
               <div className="flex items-center gap-2">
                 <Input
-                  value={vatNumber}
+                  value={localEmail}
                   onChange={(e) => {
-                    setVatNumber(e.target.value);
-                    handleSearch(e.target.value, "vat_number");
+                    setLocalEmail(e.target.value);
+                    handleSearch("email", e.target.value);
                   }}
-                  placeholder="VAT Number"
+                  placeholder="Email"
                 />
 
                 <Input
-                  value={phone}
+                  value={localPhone}
                   onChange={(e) => {
-                    setPhone(e.target.value);
-                    handleSearch(e.target.value, "phone");
+                    setLocalPhone(e.target.value);
+                    handleSearch("phone", e.target.value);
                   }}
-                  placeholder="Phone Number"
+                  placeholder="Phone"
                 />
+              </div>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={filters.role || ""}
+                  onValueChange={(value) =>
+                    onFiltersChange({ role: value as USER_ROLES })
+                  }
+                >
+                  <SelectTrigger className="w-full capitalize">
+                    <SelectValue placeholder="Select Role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={USER_ROLES.SUPER_ADMIN}>
+                      Super Admin
+                    </SelectItem>
+                    <SelectItem value={USER_ROLES.ADMIN}>Admin</SelectItem>
+                    <SelectItem value={USER_ROLES.SALESMAN}>
+                      Salesman
+                    </SelectItem>
+                    <SelectItem value={USER_ROLES.ACCOUNTANT}>
+                      Accountant
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               {/* Clear All Button */}
 

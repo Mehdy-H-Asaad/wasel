@@ -1,7 +1,7 @@
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useCallback } from "react";
 
-export const useFilterParams = <TFilters extends Record<string, any>>() => {
+export const useFilterParams = <TFilters extends Record<string, unknown>>() => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

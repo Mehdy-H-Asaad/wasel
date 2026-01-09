@@ -39,6 +39,13 @@ export const InlineInvoiceLinesTable = ({
 
   // Check if any line has a tax category that requires exemption fields
   const { showExemptionCode, showExemptionReason } = useMemo(() => {
+    // if (!invoiceLines || !Array.isArray(invoiceLines)) {
+    //   return {
+    //     showExemptionCode: false,
+    //     showExemptionReason: false,
+    //   };
+    // }
+
     const hasExemptionCategory = invoiceLines.some(
       (line) =>
         (line.classified_tax_category === "Z" ||

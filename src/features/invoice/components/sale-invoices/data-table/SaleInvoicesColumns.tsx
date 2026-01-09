@@ -7,12 +7,12 @@ import {
 	DropdownMenuContent,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
+	DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-// import Link from "next/link";
+import { MoreHorizontal, FileText } from "lucide-react";
+import Link from "next/link";
 import { MainButton } from "@/components/common/MainButton";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
-// import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
@@ -135,8 +135,8 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
 		id: "actions",
 		header: "Actions",
-		cell: () => {
-			// const invoice = row.original;
+		cell: ({ row }) => {
+			const invoice = row.original;
 
 			return (
 				<DropdownMenu>
@@ -153,6 +153,17 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 						{/* <Link href={`/admin/invoices/invoice-details/${invoice.id}`}> */}
 						<MainButton>Preview Invoice</MainButton>
 						{/* </Link> */}
+						
+						<DropdownMenuSeparator />
+						
+						<Link
+							href={`/admin/sales/invoices/create-credit-note?original_invoice_id=${invoice.id}`}
+						>
+							<DropdownMenuItem className="cursor-pointer">
+								<FileText className="mr-2 h-4 w-4" />
+								<span>Create Credit Note</span>
+							</DropdownMenuItem>
+						</Link>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			);

@@ -6,7 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PAYMENTS_TYPES } from "@/features/invoice/constants/invoice.constants";
-import { TCreateSimplifiedSaleTaxInvoiceDTO } from "@/features/invoice/schema/simplified-sale-tax-invoice.schema";
+import { TCreateCreditNoteDTO } from "@/features/invoice/schema/credit-note.schema";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { useGetClients } from "@/features/clients/hooks/useGetClients";
@@ -29,15 +29,17 @@ import {
 import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
 import { AsyncSelectFormField } from "@/components/common/select/async-select-form-field";
 import { SelectFormField } from "@/components/common/select/select-form-field";
+import { Input } from "@/components/ui/input";
 
-export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
-  const form = useFormContext<TCreateSimplifiedSaleTaxInvoiceDTO>();
+export const CreateCreditNoteOptions = () => {
+  const form = useFormContext<TCreateCreditNoteDTO>();
   const [clientSearch, setClientSearch] = React.useState<string>("");
+
   const { clients, isLoadingClients } = useGetClients({
     filters: {
-      limit: 10,
-      page: 1,
       registration_name: clientSearch || undefined,
+      limit: 30,
+      page: 1,
     },
   });
 
@@ -46,18 +48,18 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
       {/* Header Section */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-light-green/10 rounded-lg">
-            <Receipt className="h-6 w-6 text-light-green" />
+          <div className="p-3 bg-red-500/10 rounded-lg">
+            <Receipt className="h-6 w-6 text-red-500" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">Invoice Information</h2>
+            <h2 className="text-2xl font-bold">Credit Note Information</h2>
             <p className="text-sm text-muted-foreground">
-              Configure your cash invoice details
+              Create a credit note for a previous invoice
             </p>
           </div>
         </div>
-        <div className="w-fit self-end text-light-green font-bold text-sm border-2 border-light-green py-2 px-6 rounded-full bg-light-green/5">
-          Cash Invoice
+        <div className="w-fit self-end text-red-500 font-bold text-sm border-2 border-red-500 py-2 px-6 rounded-full bg-red-500/5">
+          Credit Note
         </div>
       </div>
 
@@ -65,22 +67,45 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
       <Card className="border-2">
         <CardHeader>
           <div className="flex items-center gap-2">
-            {/* <User className="h-5 w-5 text-light-green" /> */}
             <CardTitle>Client & Basic Information</CardTitle>
           </div>
           <CardDescription>
-            Select client and configure invoice basic settings
+            Select client and configure credit note basic settings
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FormField
               control={form.control}
+              name="original_invoice_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold">
+                    Original Invoice Number{" "}
+                    <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Original invoice number"
+                      className="h-11"
+                      value={field.value || ""}
+                      readOnly
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="customer_id"
               render={() => (
                 <FormItem className="flex flex-col">
                   <FormLabel className="flex items-center justify-between text-sm font-semibold">
-                    <span>Client - Company</span>
+                    <span>
+                      Client - Company <span className="text-red-500">*</span>
+                    </span>
                     <CreateClientShortcut form={form} name="customer_id" />
                   </FormLabel>
 
@@ -132,6 +157,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                   <FormLabel className="text-sm font-semibold">
                     Prices Include Tax <span className="text-red-500">*</span>
                   </FormLabel>
+
                   <SelectFormField
                     field={field}
                     placeholder="Select prices include tax"
@@ -212,7 +238,7 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder="Enter additional notes, comments, or instructions..."
+                    placeholder="Enter reason for credit note or additional notes..."
                     className="min-h-32 resize-none bg-background"
                     value={field.value ?? ""}
                   />

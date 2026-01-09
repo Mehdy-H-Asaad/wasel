@@ -165,7 +165,7 @@ const data = {
         {
           title: "System Users",
           url: "/admin/users",
-          canAddShortcut: true,
+          // canAddShortcut: true,
         },
       ],
     },

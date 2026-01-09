@@ -18,6 +18,9 @@ export const useInviteUser = () => {
     requestURL: `/users/invitations`,
     successMsg: "User invited successfully",
     axiosType: "private",
+    onSuccess: () => {
+      InviteUserForm.reset();
+    },
   });
 
   const InviteUserForm = useForm<TInviteUserDTO>({
@@ -27,6 +30,7 @@ export const useInviteUser = () => {
       name: "",
       phone: "",
       role: undefined,
+      branch_id: undefined,
     },
   });
 

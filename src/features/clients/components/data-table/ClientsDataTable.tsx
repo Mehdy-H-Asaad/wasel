@@ -11,6 +11,7 @@ import { ClientsFilters } from "./clients-filters";
 
 export const ClientsDataTable = () => {
   const searchParams = useSearchParams();
+
   const { updateFilters: updateFilterParams, clearFilters } =
     useFilterParams<TClientFilters>();
 

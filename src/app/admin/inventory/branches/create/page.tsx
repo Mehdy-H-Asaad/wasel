@@ -1,4 +1,4 @@
-import { CreateBranch } from "@/features/branch/components/CreateBranch";
+import { CreateBranch } from "@/features/branch/components/create-branch";
 import React from "react";
 
 const CreateBranchPage = () => {
@@ -6,7 +6,3 @@ const CreateBranchPage = () => {
 };
 
 export default CreateBranchPage;
-
-
-
-

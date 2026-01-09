@@ -4,6 +4,12 @@ import {
 } from "@/shared/schema/validation.schema";
 import z from "zod";
 
+export enum TaxIntegrationStatus {
+  COMPLETED = "COMPLETED",
+  NOT_STARTED = "NOT_STARTED",
+  PENDING_OTP = "PENDING_OTP",
+}
+
 export enum BranchStatus {
   COMPLETED = "COMPLETED",
   PENDING = "PENDING",
@@ -25,9 +31,20 @@ export const BranchSchema = z.object({
     BranchStatus.PENDING,
     BranchStatus.DELETED,
   ]),
+  tax_integration_status: z.enum([
+    TaxIntegrationStatus.COMPLETED,
+    TaxIntegrationStatus.NOT_STARTED,
+    TaxIntegrationStatus.PENDING_OTP,
+  ]),
 });
 
-export const CreateBranchSchema = BranchSchema.omit({ id: true });
+export const CreateBranchSchema = BranchSchema.omit({
+  id: true,
+  tax_integration_status: true,
+});
+
+export const UpdateBranchSchema = CreateBranchSchema;
 
 export type TBranchDTO = z.infer<typeof BranchSchema>;
 export type TCreateBranchDTO = z.infer<typeof CreateBranchSchema>;
+export type TUpdateBranchDTO = z.infer<typeof UpdateBranchSchema>;

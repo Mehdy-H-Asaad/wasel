@@ -44,10 +44,10 @@ export const CreatePurchaseInvoiceOptions = () => {
   const form = useFormContext<TCreatePurchaseInvoiceDTO>();
   const [supplierSearch, setSupplierSearch] = React.useState<string>("");
   const { suppliers, isLoadingSuppliers } = useGetSuppliers({
-    limit: 10,
-    page: 1,
     filters: {
       registration_name: supplierSearch || undefined,
+      limit: 10,
+      page: 1,
     },
   });
 

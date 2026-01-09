@@ -92,10 +92,10 @@ export const AcceptInvitationForm = () => {
                 type="submit"
                 disabled={isAcceptingInvitation}
                 className="w-full"
+                isLoading={isAcceptingInvitation}
+                loadingText="Accepting Invitation..."
               >
-                {isAcceptingInvitation
-                  ? "Accepting Invitation..."
-                  : "Accept Invitation"}
+                Accept Invitation
               </MainButton>
             </form>
           </Form>

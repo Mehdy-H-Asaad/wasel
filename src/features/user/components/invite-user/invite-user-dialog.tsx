@@ -20,6 +20,8 @@ import { useInviteUser } from "../../hooks/use-invite-user";
 import { USER_ROLES } from "../../constants/user.constants";
 import { useEffect, useState } from "react";
 import { MainButton } from "@/components/common/MainButton";
+import { useGetBranches } from "@/features/branch/hooks/use-get-branches";
+import { Loader } from "lucide-react";
 
 export const InviteUserDialog = () => {
   const [open, setOpen] = useState(false);
@@ -36,6 +38,11 @@ export const InviteUserDialog = () => {
       InviteUserForm.reset();
     }
   }, [isInvitingUserSuccess, InviteUserForm]);
+
+  const { branches, isLoadingBranches } = useGetBranches({
+    limit: 100,
+    page: 1,
+  });
 
   return (
     <CustomDialog
@@ -102,6 +109,46 @@ export const InviteUserDialog = () => {
           />
           <FormField
             control={InviteUserForm.control}
+            name="branch_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Branch<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full capitalize">
+                        <SelectValue placeholder="Select a branch" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {isLoadingBranches ? (
+                        <SelectItem value="loading" disabled>
+                          <Loader className="w-4 h-4 animate-spin" />
+                        </SelectItem>
+                      ) : (
+                        branches?.map((branch) => (
+                          <SelectItem
+                            key={branch.id}
+                            value={branch.id.toString()}
+                          >
+                            {branch.name}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={InviteUserForm.control}
             name="role"
             render={({ field }) => (
               <FormItem>
@@ -138,6 +185,7 @@ export const InviteUserDialog = () => {
             className="w-full mt-4"
             isLoading={isInvitingUser}
             loadingText="Inviting user..."
+            type="submit"
           >
             Send Invitation
           </MainButton>

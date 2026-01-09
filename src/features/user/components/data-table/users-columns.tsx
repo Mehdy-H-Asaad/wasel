@@ -52,6 +52,8 @@ export const UsersColumns: ColumnDef<TUserDTO>[] = [
       const statusBadgeColor =
         USER_STATUS[status] === USER_STATUS.ACTIVE
           ? "bg-green-50 border-green-500 text-green-500 dark:bg-green-900 dark:border-green-900 dark:text-green-500"
+          : USER_STATUS[status] === USER_STATUS.PENDING
+          ? "bg-yellow-50 border-yellow-500 text-yellow-500 dark:bg-yellow-900 dark:border-yellow-900 dark:text-yellow-500"
           : USER_STATUS[status] === USER_STATUS.BLOCKED
           ? "bg-blue-50 border-blue-500 text-blue-500 dark:bg-blue-900 dark:border-blue-900 dark:text-blue-500"
           : USER_STATUS[status] === USER_STATUS.DISABLED
@@ -61,6 +63,22 @@ export const UsersColumns: ColumnDef<TUserDTO>[] = [
           : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
 
       return <Badge className={statusBadgeColor}>{status}</Badge>;
+    },
+  },
+  {
+    accessorKey: "organization",
+    header: "Organization",
+    cell: ({ row }) => {
+      const organization = row.original.organization;
+      return organization ? organization.name : "None";
+    },
+  },
+  {
+    accessorKey: "branch",
+    header: "Branch",
+    cell: ({ row }) => {
+      const branch = row.original.branch;
+      return branch ? branch.name : "None";
     },
   },
   {
