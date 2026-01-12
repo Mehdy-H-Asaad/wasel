@@ -8,6 +8,15 @@ import { TAX_RATE, NO_TAX_RATE } from "../constants/invoice.constants";
 import { TClientDTO } from "@/features/clients/schema/client.schema";
 import { TSupplierDTO } from "@/features/suppliers/schema/supplier.schema";
 
+export enum INVOICE_STATUS {
+  DRAFT = "DRAFT",
+  ISSUED = "ISSUED",
+  PARTIALLY_PAID = "PARTIALLY_PAID",
+  PAID = "PAID",
+  OVERDUE = "OVERDUE",
+  CANCELLED = "CANCELLED",
+}
+
 export const invoiceSchema = (isSaleInvoice: boolean) =>
   z.object({
     id: z.number(),
@@ -40,6 +49,14 @@ export const invoiceSchema = (isSaleInvoice: boolean) =>
     party_identification_scheme: z.string().max(50).optional(),
     party_identification_value: z.string().max(50).optional(),
     prices_include_tax: z.boolean(),
+    status: z.enum([
+      INVOICE_STATUS.DRAFT,
+      INVOICE_STATUS.ISSUED,
+      INVOICE_STATUS.PARTIALLY_PAID,
+      INVOICE_STATUS.PAID,
+      INVOICE_STATUS.OVERDUE,
+      INVOICE_STATUS.CANCELLED,
+    ]),
   });
 
 export type TInvoiceDTO = Omit<

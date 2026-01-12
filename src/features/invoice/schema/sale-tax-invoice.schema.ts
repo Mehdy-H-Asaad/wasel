@@ -21,6 +21,7 @@ export const saleTaxInvoiceSchema = invoiceSchema(true).pick({
 
   invoice_lines: true,
   prices_include_tax: true,
+  status: true,
 });
 
 export const CreateSaleTaxInvoiceSchema = saleTaxInvoiceSchema.omit({

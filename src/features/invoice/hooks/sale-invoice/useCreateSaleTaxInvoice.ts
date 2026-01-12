@@ -13,6 +13,7 @@ import {
   TSaleTaxInvoiceDTO,
 } from "../../schema/sale-tax-invoice.schema";
 import { useRouter } from "next/navigation";
+import { INVOICE_STATUS } from "../../schema/invoice.schema";
 
 export const useCreateSaleTaxInvoice = ({
   documentType,
@@ -71,6 +72,7 @@ export const useCreateSaleTaxInvoice = ({
           discount_amount: 0,
         },
       ],
+      status: INVOICE_STATUS.DRAFT,
     },
   });
 
