@@ -1,51 +1,42 @@
 "use client";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import {
-	SALE_INVOICES,
-	// TAX_EXEMPTION_REASONS_CODES,
-} from "../../constants/invoice.constants";
+import { SALE_INVOICES } from "../../constants/invoice.constants";
 import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	CreateSaleTaxInvoiceSchema,
-	TCreateSaleTaxInvoiceDTO,
-	TSaleTaxInvoiceDTO,
-} from "../../schema/sale-tax-invoice.schema";
+	CreateQuotationSchema,
+	TCreateQuotationDTO,
+	TQuotationDTO,
+} from "../../schema/quotation.schema";
 import { useRouter } from "next/navigation";
 import { EINVOICE_STATUS } from "../../schema/invoice.schema";
 
-export const useCreateSaleTaxInvoice = ({
-	documentType,
-}: {
-	documentType: "INVOICE" | "QUOTATION";
-	isCreate?: boolean;
-}) => {
+export const useCreateQuotation = () => {
 	const router = useRouter();
 	const { mutate, isPending } = useApiMutation<
-		TSaleTaxInvoiceDTO,
-		TCreateSaleTaxInvoiceDTO
+		TQuotationDTO,
+		TCreateQuotationDTO
 	>({
 		axiosRequestMethod: "post",
 		queryKey: [SALE_INVOICES],
 		requestURL: `/${SALE_INVOICES}`,
-		successMsg: `Invoice ${CREATION_SUCCESS_MESSAGE}`,
+		successMsg: `Quotation ${CREATION_SUCCESS_MESSAGE}`,
 		axiosType: "private",
 		onSuccess: () => {
-			CreateSaleTaxInvoiceForm.reset();
-			router.push(`/admin/sales/${documentType.toLowerCase()}s`);
+			CreateQuotationForm.reset();
+			router.push(`/admin/sales/quotations`);
 		},
 	});
 
 	const currentDate = new Date();
 
-	const CreateSaleTaxInvoiceForm = useForm<TCreateSaleTaxInvoiceDTO>({
-		resolver: zodResolver(CreateSaleTaxInvoiceSchema),
+	const CreateQuotationForm = useForm<TCreateQuotationDTO>({
+		resolver: zodResolver(CreateQuotationSchema),
 		mode: "onChange",
 		defaultValues: {
-			document_type: documentType,
+			document_type: "QUOTATION",
 			actual_delivery_date: currentDate.toISOString().split("T")[0],
-			//   tax_rate: undefined,
 			discount_amount: 0,
 			customer_id: undefined,
 
@@ -63,7 +54,6 @@ export const useCreateSaleTaxInvoice = ({
 				{
 					description: null,
 					item_id: undefined,
-					// item_name: "",
 					item_price: undefined,
 					quantity: 1,
 					price_discount: 0,
@@ -74,29 +64,17 @@ export const useCreateSaleTaxInvoice = ({
 				},
 			],
 			status: EINVOICE_STATUS.DRAFT,
+			is_locked: false,
 		},
 	});
 
-	const onCreateSaleTaxInvoice = (values: TCreateSaleTaxInvoiceDTO) => {
-		mutate({
-			...values,
-			// invoice_lines: values.invoice_lines.map((line) => ({
-			//   ...line,
-			//   tax_exemption_reason:
-			//     line.classified_tax_category === "O"
-			//       ? line.tax_exemption_reason
-			//       : line.tax_exemption_reason_code
-			//       ? TAX_EXEMPTION_REASONS_CODES.find(
-			//           (code) => code.value === line.tax_exemption_reason_code
-			//         )?.label
-			//       : undefined,
-			// })),
-		});
+	const onCreateQuotation = (values: TCreateQuotationDTO) => {
+		mutate({ ...values });
 	};
 
 	return {
-		onCreateSaleTaxInvoice,
-		CreateSaleTaxInvoiceForm,
-		isCreatingSaleTaxInvoice: isPending,
+		onCreateQuotation,
+		CreateQuotationForm,
+		isCreatingQuotation: isPending,
 	};
 };

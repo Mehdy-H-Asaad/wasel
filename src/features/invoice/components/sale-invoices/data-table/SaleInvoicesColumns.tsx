@@ -1,26 +1,33 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, FileText } from "lucide-react";
-import Link from "next/link";
-import { MainButton } from "@/components/common/MainButton";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+import { InvoiceStatusBadge } from "../../invoice-status-badge";
+import { TaxAuthorityStatusBadge } from "../../tax-authority-status-badge";
+import { SaleInvoiceActionCell } from "./actions/sale-invoice-action-cell";
 
 export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
 		accessorKey: "invoice_number",
 		header: "#Invoice",
+	},
+	{
+		accessorKey: "status",
+		header: "Status",
+		cell: ({ row }) => {
+			const status = row.original.status;
+			return <InvoiceStatusBadge status={status} />;
+		},
+	},
+	{
+		accessorKey: "tax_authority_status",
+		header: "Tax Authority",
+		cell: ({ row }) => {
+			const status = row.original.tax_authority_status;
+			return <TaxAuthorityStatusBadge status={status} />;
+		},
 	},
 	{
 		accessorFn: row =>
@@ -135,38 +142,6 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
 		id: "actions",
 		header: "Actions",
-		cell: ({ row }) => {
-			const invoice = row.original;
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Options</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-
-						{/* <Link href={`/admin/invoices/invoice-details/${invoice.id}`}> */}
-						<MainButton>Preview Invoice</MainButton>
-						{/* </Link> */}
-						
-						<DropdownMenuSeparator />
-						
-						<Link
-							href={`/admin/sales/invoices/create-credit-note?original_invoice_id=${invoice.id}`}
-						>
-							<DropdownMenuItem className="cursor-pointer">
-								<FileText className="mr-2 h-4 w-4" />
-								<span>Create Credit Note</span>
-							</DropdownMenuItem>
-						</Link>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		},
+		cell: ({ row }) => <SaleInvoiceActionCell row={row} />,
 	},
 ];

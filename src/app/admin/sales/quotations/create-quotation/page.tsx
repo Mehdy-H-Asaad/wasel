@@ -1,8 +1,8 @@
 import React from "react";
-import { CreateTaxSaleInvoiceForm } from "@/features/invoice/components/sale-invoices/create-tax-sale-invoice-form/CreateTaxSaleInvoice";
+import { CreateQuotationForm } from "@/features/invoice/components/quotations/create-quotation-form/create-quotation-form";
 
 const page = () => {
-  return <CreateTaxSaleInvoiceForm documentType="QUOTATION" />;
+  return <CreateQuotationForm formType="CREATE" />;
 };
 
 export default page;

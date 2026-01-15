@@ -1,26 +1,19 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-// import Link from "next/link";
-import { MainButton } from "@/components/common/MainButton";
 import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 import { TInvoiceDTO } from "@/features/invoice/schema/invoice.schema";
+// import { InvoiceStatusBadge } from "../../invoice-status-badge";
+// import { TaxAuthorityStatusBadge } from "../../tax-authority-status-badge";
+import { PurchaseInvoiceActionCell } from "./actions/purchase-invoice-action-cell";
 
 export const PurchaseInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
 		accessorKey: "invoice_number",
 		header: "#Invoice",
 	},
+
 	{
 		accessorFn: row =>
 			row.supplier ? row.supplier.registration_name : "Supplier",
@@ -131,27 +124,6 @@ export const PurchaseInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
 		id: "actions",
 		header: "Actions",
-		cell: () => {
-			// const invoice = row.original;
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Options</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-
-						{/* <Link href={`/admin/invoices/invoice-details/${invoice.id}`}> */}
-						<MainButton>Preview Purchase Invoice</MainButton>
-						{/* </Link> */}
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		},
+		cell: ({ row }) => <PurchaseInvoiceActionCell row={row} />,
 	},
 ];

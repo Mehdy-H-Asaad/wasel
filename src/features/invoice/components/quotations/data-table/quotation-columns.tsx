@@ -1,21 +1,12 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
-// import Link from "next/link";
-import { MainButton } from "@/components/common/MainButton";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
-// import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
+import { InvoiceStatusBadge } from "../../invoice-status-badge";
+import { TaxAuthorityStatusBadge } from "../../tax-authority-status-badge";
+import { QuotationActionCell } from "./actions/quotation-action-cell";
 
 export const QuotationColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
@@ -23,7 +14,23 @@ export const QuotationColumns: ColumnDef<TInvoiceDTO>[] = [
 		header: "#Quotation",
 	},
 	{
-		accessorFn: row =>
+		accessorKey: "status",
+		header: "Status",
+		cell: ({ row }) => {
+			const status = row.original.status;
+			return <InvoiceStatusBadge status={status} />;
+		},
+	},
+	{
+		accessorKey: "tax_authority_status",
+		header: "Tax Authority",
+		cell: ({ row }) => {
+			const status = row.original.tax_authority_status;
+			return <TaxAuthorityStatusBadge status={status} />;
+		},
+	},
+	{
+		accessorFn: (row) =>
 			row.customer ? row.customer.registration_name : "Customer",
 		id: "buyer-company",
 		header: "Client Company",
@@ -143,27 +150,6 @@ export const QuotationColumns: ColumnDef<TInvoiceDTO>[] = [
 	{
 		id: "actions",
 		header: "Actions",
-		cell: () => {
-			// const invoice = row.original;
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Options</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-
-						{/* <Link href={`/admin/invoices/invoice-details/${invoice.id}`}> */}
-						<MainButton>Preview Quotation</MainButton>
-						{/* </Link> */}
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		},
+		cell: ({ row }) => <QuotationActionCell row={row} />,
 	},
 ];

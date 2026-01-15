@@ -9,6 +9,7 @@ import { CREATION_SUCCESS_MESSAGE } from "@/shared/data/constants";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { EINVOICE_STATUS } from "../../schema/invoice.schema";
 
 export const useCreatePurchaseInvoice = () => {
 	const router = useRouter();
@@ -20,7 +21,9 @@ export const useCreatePurchaseInvoice = () => {
 		queryKey: [PURCHASE_INVOICES],
 		requestURL: `/${PURCHASE_INVOICES}`,
 		successMsg: `Purchase Invoice ${CREATION_SUCCESS_MESSAGE}`,
+		axiosType: "private",
 		onSuccess: () => {
+			CreatePurchaseInvoiceForm.reset();
 			router.push(`/admin/purchases/purchase-invoices`);
 		},
 	});
@@ -61,6 +64,7 @@ export const useCreatePurchaseInvoice = () => {
 					discount_amount: 0,
 				},
 			],
+			status: EINVOICE_STATUS.DRAFT,
 		},
 	});
 
