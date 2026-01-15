@@ -56,7 +56,10 @@ export const InlineInvoiceLinesTable = ({
 		append({
 			item_id: 0,
 			quantity: 1,
-			classified_tax_category: undefined as unknown as "Z" | "S" | "E" | "O",
+			classified_tax_category:
+				invoiceLines && invoiceLines.length > 0
+					? invoiceLines[0]?.classified_tax_category
+					: (undefined as unknown as "Z" | "S" | "E" | "O"),
 			discount_amount: 0,
 			description: undefined,
 			price_discount: 0,
