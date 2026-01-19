@@ -20,8 +20,10 @@ import { InvoiceLineRow } from "./invoice-line-row";
 
 export const InlineInvoiceLinesTable = ({
 	isSaleInvoice,
+	isNote = false,
 }: {
 	isSaleInvoice: boolean;
+	isNote: boolean;
 }) => {
 	const form = useFormContext<TCreateSaleTaxInvoiceDTO>();
 
@@ -82,15 +84,17 @@ export const InlineInvoiceLinesTable = ({
 							Add products or services to this invoice
 						</CardDescription>
 					</div>
-					<Button
-						type="button"
-						onClick={addNewLine}
-						className="gap-2"
-						variant="outline"
-					>
-						<Plus className="h-4 w-4" />
-						Add New Line
-					</Button>
+					{!isNote && (
+						<Button
+							type="button"
+							onClick={addNewLine}
+							className="gap-2"
+							variant="outline"
+						>
+							<Plus className="h-4 w-4" />
+							Add New Line
+						</Button>
+					)}
 				</div>
 			</CardHeader>
 			<CardContent>

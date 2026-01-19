@@ -70,11 +70,11 @@ const data = {
           canAddShortcut: true,
           shortCutLink: "/admin/sales/quotations/create-quotation",
         },
-        // {
-        //   title: "Recurring Invoices",
-        //   url: "/admin/sales/recurring-invoices",
-        //   canAddShortcut: true,
-        // },
+        {
+          title: "Credit Notes",
+          url: "/admin/sales/invoices/credit-notes",
+          canAddShortcut: true,
+        },
       ],
     },
     {

@@ -13,8 +13,11 @@ import { useFilterParams } from "@/shared/hooks/useFilterParams";
 
 export const SaleInvoicesDataTable = ({
   invoiceType,
+  VATDocument,
+
 }: {
   invoiceType: "tax" | "simplified-tax";
+  VATDocument: "TAX_INVOICE" | "CREDIT_NOTE" | undefined;
 }) => {
   const searchParams = useSearchParams();
 
@@ -53,7 +56,7 @@ export const SaleInvoicesDataTable = ({
   const { metaData, invoices, isLoadingInvoices } = useGetSaleInvoices({
     documentType: "INVOICE",
     invoiceType,
-    filters,
+    filters: { ...filters, invoice_type_code: (VATDocument && (VATDocument === "TAX_INVOICE" ? "388" : VATDocument === "CREDIT_NOTE" ? "381" : undefined)) ?? filters.invoice_type_code },
   });
 
   return (
@@ -75,9 +78,8 @@ export const SaleInvoicesDataTable = ({
       }
     >
       <Link
-        href={`/admin/sales/invoices/create-${
-          invoiceType === "tax" ? "tax" : "cash"
-        }-invoice`}
+        href={`/admin/sales/invoices/create-${invoiceType === "tax" ? "tax" : "cash"
+          }-invoice`}
       >
         <MainButton>
           <Plus className="h-4 w-4" />

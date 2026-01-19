@@ -1,6 +1,6 @@
 "use client";
 import { Form } from "@/components/ui/form";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCreateCreditNote } from "../../../hooks/sale-invoice/useCreateCreditNote";
 import { MainButton } from "@/components/common/MainButton";
 import { InlineInvoiceLinesTable } from "../../invoice-lines/inline-invoice-lines-data-table";
@@ -24,8 +24,38 @@ export const CreateCreditNote = () => {
 		CreateCreditNoteForm,
 		isCreatingCreditNote,
 		onCreateCreditNote,
-		originalInvoice,
-	} = useCreateCreditNote({ invoice });
+	} = useCreateCreditNote();
+
+	useEffect(() => {
+		if (invoice && originalInvoiceId) {
+			CreateCreditNoteForm.reset({
+				...invoice,
+				invoice_type_code: "381",
+				original_invoice_id: originalInvoiceId,
+				discount_amount: Number(invoice.discount_amount),
+				customer_id: invoice.customer?.id,
+				invoice_lines: invoice.invoice_lines.map(line => ({
+					...line,
+					price_discount: Number(line.price_discount),
+					tax_exemption_reason: line.tax_exemption_reason_code
+						? line.tax_exemption_reason_code
+						: line.tax_exemption_reason,
+					tax_exemption_reason_code: line.tax_exemption_reason_code
+						? line.tax_exemption_reason_code
+						: null,
+					classified_tax_category: line.classified_tax_category,
+					description: line.description,
+
+					item_id: Number(line.item?.id),
+					item_price: Number(line.item_price),
+					discount_amount: Number(line.discount_amount),
+					quantity: Number(line.quantity),
+				})),
+			});
+		}
+	}, [invoice, originalInvoiceId, CreateCreditNoteForm]);
+
+
 
 	if (isLoadingInvoice) {
 		return (
@@ -37,15 +67,18 @@ export const CreateCreditNote = () => {
 		);
 	}
 
+
+
+
 	return (
-		<div className=" space-y-6" key={originalInvoice?.id || "new"}>
+		<div className=" space-y-6" key={originalInvoiceId || "new"}>
 			<Form {...CreateCreditNoteForm}>
 				<form
 					onSubmit={CreateCreditNoteForm.handleSubmit(onCreateCreditNote)}
 					className="flex flex-col gap-6"
 				>
 					<CreditNoteOptions />
-					<InlineInvoiceLinesTable isSaleInvoice />
+					<InlineInvoiceLinesTable isSaleInvoice isNote />
 					<Card className="border-2 ">
 						<CardContent className="py-4">
 							<div className="flex items-center justify-between gap-4">
@@ -54,9 +87,6 @@ export const CreateCreditNote = () => {
 								</p>
 								<MainButton
 									type="submit"
-									onClick={() => {
-										console.log(CreateCreditNoteForm.getValues());
-									}}
 									className="gap-2"
 									isLoading={isCreatingCreditNote}
 									loadingText="Creating Credit Note..."

@@ -112,7 +112,7 @@ export const CreateTaxSaleInvoiceForm = ({
 					{/* {!isPreviewing ? (
             <> */}
 					<CreateTaxSaleInvoiceOptions documentType={documentType} />
-					<InlineInvoiceLinesTable isSaleInvoice />
+					<InlineInvoiceLinesTable isSaleInvoice isCreditNote={false} />
 					<Card className="border-2 ">
 						<CardContent className="py-4">
 							<div className="flex items-center justify-between gap-4">

@@ -45,8 +45,8 @@ export const CreditNoteOptions = () => {
 		pricesIncludeTax === true
 			? "Yes"
 			: pricesIncludeTax === false
-			? "No"
-			: "Not selected";
+				? "No"
+				: "Not selected";
 
 	// Format delivery date
 	const deliveryDateLabel = actualDeliveryDate
@@ -58,8 +58,8 @@ export const CreditNoteOptions = () => {
 			{/* Header Section */}
 			<div className="flex justify-between items-center">
 				<div className="flex items-center gap-3">
-					<div className="p-3 bg-red-500/10 rounded-lg">
-						<Receipt className="h-6 w-6 text-red-500" />
+					<div className="p-3 bg-light-green/10 rounded-lg">
+						<Receipt className="h-6 w-6 text-light-green" />
 					</div>
 					<div>
 						<h2 className="text-2xl font-bold">Credit Note Information</h2>
@@ -68,7 +68,7 @@ export const CreditNoteOptions = () => {
 						</p>
 					</div>
 				</div>
-				<div className="w-fit self-end text-red-500 font-bold text-sm border-2 border-red-500 py-2 px-6 rounded-full bg-red-500/5">
+				<div className="w-fit self-end text-light-green font-bold text-sm border-2 border-light-green py-2 px-6 rounded-full bg-light-green/5">
 					Credit Note
 				</div>
 			</div>

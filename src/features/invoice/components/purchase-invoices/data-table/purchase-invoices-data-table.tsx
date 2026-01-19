@@ -14,7 +14,11 @@ import { PurchaseInvoiceFilters } from "./purchase-invoices-filters";
 // import { PurchaseInvoiceFilters } from "./purchase-invoice-filters";
 // import { CreateBuyInvoiceDialog } from "../create-buy-invoice/CreateBuyInvoiceDialog";
 
-export const PurchaseInvoicesDataTable = () => {
+export const PurchaseInvoicesDataTable = ({
+	VATDocument,
+}: {
+	VATDocument: "TAX_INVOICE" | "DEBIT_NOTE" | undefined;
+}) => {
 	const searchParams = useSearchParams();
 	const { updateFilters: updateFilterParams, clearFilters } =
 		useFilterParams<TPurchaseInvoiceFilters>();
@@ -55,7 +59,7 @@ export const PurchaseInvoicesDataTable = () => {
 	};
 
 	const { metaData, purchaseInvoices, isLoadingPurchaseInvoices } =
-		useGetPurchaseInvoices({ filters });
+		useGetPurchaseInvoices({ filters: { ...filters, invoice_type_code: (VATDocument && (VATDocument === "TAX_INVOICE" ? "388" : VATDocument === "DEBIT_NOTE" ? "383" : undefined)) ?? filters.invoice_type_code } });
 	return (
 		<DataTable
 			columns={PurchaseInvoicesColumns}

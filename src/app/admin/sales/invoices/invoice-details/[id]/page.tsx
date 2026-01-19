@@ -2,7 +2,7 @@ import { InvoiceDetails } from "@/features/invoice/components/invoice-details/in
 import React from "react";
 
 const page = () => {
-  return <InvoiceDetails />;
+  return <InvoiceDetails type="sale" />;
 };
 
 export default page;

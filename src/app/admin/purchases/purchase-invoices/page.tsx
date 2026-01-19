@@ -2,7 +2,7 @@ import { PurchaseInvoicesDataTable } from "@/features/invoice/components/purchas
 import React from "react";
 
 const page = () => {
-  return <PurchaseInvoicesDataTable />;
+  return <PurchaseInvoicesDataTable VATDocument="TAX_INVOICE" />;
 };
 
 export default page;

@@ -15,6 +15,7 @@ export const creditNoteSchema = invoiceSchema(true).pick({
   payment_means_code: true,
   note: true,
   original_invoice_id: true,
+  status: true,
   invoice_lines: true,
   prices_include_tax: true,
 });

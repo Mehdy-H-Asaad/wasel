@@ -37,6 +37,8 @@ export const CreatePurchaseInvoice = ({
 		isUpdatingPurchaseInvoice,
 	} = useUpdatePurchaseInvoice({ invoiceId: id });
 
+
+	console.log(UpdatePurchaseInvoiceForm.formState.errors);
 	useEffect(() => {
 		if (purchaseInvoice && formType === "UPDATE" && UpdatePurchaseInvoiceForm) {
 			UpdatePurchaseInvoiceForm.reset({
@@ -74,6 +76,7 @@ export const CreatePurchaseInvoice = ({
 		);
 	}
 
+
 	return (
 		<div className=" space-y-6">
 			<Form
@@ -92,7 +95,7 @@ export const CreatePurchaseInvoice = ({
 					{/* {!isPreviewing ? (
             <> */}
 					<CreatePurchaseInvoiceOptions />
-					<InlineInvoiceLinesTable isSaleInvoice={false} />
+					<InlineInvoiceLinesTable isSaleInvoice={false} isCreditNote={false} />
 					<Card className="border-2 ">
 						<CardContent className="py-4">
 							<div className="flex items-center justify-between gap-4">
@@ -100,6 +103,7 @@ export const CreatePurchaseInvoice = ({
 									Complete all required fields to create your invoice
 								</p>
 								<MainButton
+
 									type="submit"
 									className="gap-2"
 									isLoading={

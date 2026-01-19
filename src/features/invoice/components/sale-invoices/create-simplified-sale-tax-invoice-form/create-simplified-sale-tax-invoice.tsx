@@ -84,18 +84,18 @@ export const CreateSimplifiedSaleTaxInvoice = ({
 					onSubmit={
 						formType === "CREATE"
 							? CreateSimplifiedSaleTaxInvoiceForm.handleSubmit(
-									onCreateSimplifiedSaleTaxInvoice
-							  )
+								onCreateSimplifiedSaleTaxInvoice
+							)
 							: UpdateSimplifiedSaleInvoiceForm.handleSubmit(
-									onUpdateSimplifiedSaleInvoice
-							  )
+								onUpdateSimplifiedSaleInvoice
+							)
 					}
 					className="flex flex-col gap-6"
 				>
 					{/* {!isPreviewing ? (
             <> */}
 					<CreateSimplifiedSaleTaxInvoiceOptions />
-					<InlineInvoiceLinesTable isSaleInvoice={true} />
+					<InlineInvoiceLinesTable isSaleInvoice={true} isCreditNote={false} />
 					<Card className="border-2 ">
 						<CardContent className="py-4">
 							<div className="flex items-center justify-between gap-4">

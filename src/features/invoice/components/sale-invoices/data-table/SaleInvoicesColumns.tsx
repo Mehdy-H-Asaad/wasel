@@ -1,14 +1,20 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { TInvoiceDTO } from "../../../schema/invoice.schema";
-import { PAYMENTS_TYPES } from "../../../constants/invoice.constants";
+import { PAYMENTS_TYPES, VAT_DOCUMENTS } from "../../../constants/invoice.constants";
 import { FormatRiyal } from "@/components/common/format-riyal";
 import { CLIENT_IDENTIFCATIONS } from "@/features/clients/constants/client.constant";
 import { InvoiceStatusBadge } from "../../invoice-status-badge";
 import { TaxAuthorityStatusBadge } from "../../tax-authority-status-badge";
-import { SaleInvoiceActionCell } from "./actions/sale-invoice-action-cell";
+import { SaleInvoiceActionCell } from "./actions/sale-invoice-actions-cell";
+import { Badge } from "@/components/ui/badge";
 
 export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
+	{
+		id: "actions",
+		header: "Actions",
+		cell: ({ row }) => <SaleInvoiceActionCell row={row} />,
+	},
 	{
 		accessorKey: "invoice_number",
 		header: "#Invoice",
@@ -47,23 +53,27 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 		cell: ({ row }) => (
 			<div>
 				{row.original.invoice_type === "0100000"
-					? "Tax Invoice"
-					: "Simplified Tax Invoice"}
+					? "Sale Invoice"
+					: "Cash Invoice"}
 			</div>
 		),
 	},
 	{
 		accessorKey: "invoice_type_code",
 		header: "Type",
-		cell: ({ row }) => (
-			<div>
-				{row.original.invoice_type_code === "388"
-					? "Tax Invoice"
-					: row.original.invoice_type_code === "383"
-					? "Debit Note"
-					: "Credit Note"}
-			</div>
-		),
+		cell: ({ row }) => {
+			const invoiceTypeCode = row.original.invoice_type_code;
+
+			const label = VAT_DOCUMENTS.find(document => document.value === Number(invoiceTypeCode))?.label;
+
+			const badgeColor = invoiceTypeCode === "388" ? "bg-green-700 border-green-700 text-white" : invoiceTypeCode === "383" ? "bg-red-700 border-red-700 text-white" : "bg-blue-700 border-blue-700 text-white";
+
+			return (
+				<Badge className={badgeColor}>
+					{label}
+				</Badge>
+			)
+		},
 	},
 	{
 		accessorKey: "issue_date",
@@ -125,6 +135,11 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 			<div>{row.original.prices_include_tax ? "Yes" : "No"}</div>
 		),
 	},
+	{
+		accessorKey: "line_extension_amount",
+		header: "Subtotal Before Tax",
+		cell: ({ row }) => <FormatRiyal value={row.original.line_extension_amount} />,
+	},
 
 	{
 		accessorKey: "tax_amount",
@@ -139,9 +154,5 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 		),
 	},
 
-	{
-		id: "actions",
-		header: "Actions",
-		cell: ({ row }) => <SaleInvoiceActionCell row={row} />,
-	},
+
 ];
