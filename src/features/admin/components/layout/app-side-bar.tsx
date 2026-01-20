@@ -8,6 +8,7 @@ import {
   ChartLine,
   DollarSign,
   FileText,
+  FolderKanban,
   // Settings,
   Users,
 } from "lucide-react";
@@ -119,6 +120,13 @@ const data = {
       ],
     },
     {
+      title: "Projects",
+      url: "/admin/projects",
+      icon: FolderKanban,
+      canAddShortcut: true,
+      shortCutLink: "/admin/projects/create",
+    },
+    {
       title: "Inventory",
       icon: Box,
       children: [
@@ -132,6 +140,10 @@ const data = {
           title: "Branches",
           url: "/admin/inventory/branches",
           canAddShortcut: true,
+        },
+        {
+          title: "POS",
+          url: "/admin/inventory/point-of-sale",
         },
       ],
     },

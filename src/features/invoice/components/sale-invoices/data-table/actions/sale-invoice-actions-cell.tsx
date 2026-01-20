@@ -15,6 +15,7 @@ import { DeleteDialog } from "@/components/common/DeleteDialog";
 import { useDeleteSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-delete-sale-invoice";
 import { IssueInvoiceDialog } from "./issue-invoice-dialog";
 import { useIssueSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-issue-sale-invoice";
+import { useConvertToSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-convert-to-sale-invoice";
 // import { useUpdateSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-update-sale-invoice";
 
 export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
@@ -24,6 +25,7 @@ export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
 	// const { onUpdateSaleInvoice, isUpdatingSaleInvoice } = useUpdateSaleInvoice({ invoiceId: String(invoice.id), documentType: invoice.document_type as "INVOICE" | "QUOTATION" })
 	const { onIssueSaleInvoice, isIssuingSaleInvoice } = useIssueSaleInvoice({ invoiceId: String(invoice.id) });
 	const { onDeleteSaleInvoice, isDeletingSaleInvoice } = useDeleteSaleInvoice({ id: invoice.id });
+	const { onConvertToSaleInvoice, isConvertingToSaleInvoice } = useConvertToSaleInvoice({ invoiceId: String(invoice.id) });
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -57,8 +59,9 @@ export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
 						</Link>
 					)}
 					{invoice.status === EINVOICE_STATUS.DRAFT && (
-
-						<IssueInvoiceDialog onIssueInvoice={onIssueSaleInvoice} isLoading={isIssuingSaleInvoice} dialogTriggerText="Issue Invoice" />
+						invoice.document_type === "INVOICE" && (
+							<IssueInvoiceDialog onIssueInvoice={onIssueSaleInvoice} isLoading={isIssuingSaleInvoice} dialogTriggerText="Issue Invoice" />
+						)
 					)}
 					{invoice.status !== EINVOICE_STATUS.DRAFT &&
 						<Link
@@ -73,8 +76,11 @@ export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
 							</Button>
 						</Link>
 					}
-					{invoice.status === EINVOICE_STATUS.ISSUED && (
+					{invoice.status === EINVOICE_STATUS.ISSUED && invoice.document_type === "INVOICE" && (
 						<IssueInvoiceDialog onIssueInvoice={onIssueSaleInvoice} isLoading={isIssuingSaleInvoice} dialogTriggerText="Submit to ZATCA" />
+					)}
+					{invoice.document_type === "QUOTATION" && (
+						<IssueInvoiceDialog onIssueInvoice={onConvertToSaleInvoice} isLoading={isConvertingToSaleInvoice} dialogTriggerText="Convert to Invoice" />
 					)}
 					{invoice.status === EINVOICE_STATUS.DRAFT && (
 						<DeleteDialog deleteFunc={onDeleteSaleInvoice} trigger="Delete Invoice" isLoading={isDeletingSaleInvoice} />

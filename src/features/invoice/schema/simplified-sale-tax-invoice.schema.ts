@@ -20,6 +20,8 @@ export const simplifiedSaleTaxInvoiceSchema = invoiceSchema(true)
     prices_include_tax: true,
     status: true,
     tax_authority_status: true,
+    project_id: true,
+    point_of_sale_id: true,
   })
   .extend({
     customer_id: z.number().optional(),

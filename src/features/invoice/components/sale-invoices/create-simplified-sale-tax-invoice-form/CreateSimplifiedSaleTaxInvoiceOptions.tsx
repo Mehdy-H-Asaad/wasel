@@ -29,10 +29,32 @@ import {
 import { CreateClientShortcut } from "@/features/clients/components/create-client-shortcut";
 import { AsyncSelectFormField } from "@/components/common/select/async-select-form-field";
 import { SelectFormField } from "@/components/common/select/select-form-field";
+import { CreateProjectShortcut } from "@/features/project/components/create-project-shortcut";
+import { CreatePointOfSaleShortcut } from "@/features/point-of-sale/components/create-point-of-sale-shortcut";
+import { useGetProjects } from "@/features/project/hooks/use-get-projects";
+import { useGetPointOfSales } from "@/features/point-of-sale/hooks/use-get-point-of-sales";
 
 export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
   const form = useFormContext<TCreateSimplifiedSaleTaxInvoiceDTO>();
   const [clientSearch, setClientSearch] = React.useState<string>("");
+  const [projectSearch, setProjectSearch] = React.useState<string>("");
+  const [posSearch, setPosSearch] = React.useState<string>("");
+
+  const { projects, isLoadingProjects } = useGetProjects({
+    filters: {
+      name: projectSearch || undefined,
+    },
+    limit: 30,
+    page: 1,
+  });
+
+  const { pointOfSales, isLoadingPointOfSales } = useGetPointOfSales({
+    filters: {
+      name: posSearch || undefined,
+    },
+    limit: 30,
+    page: 1,
+  });
   const { clients, isLoadingClients } = useGetClients({
     filters: {
       limit: 10,
@@ -96,6 +118,65 @@ export const CreateSimplifiedSaleTaxInvoiceOptions = () => {
                     }
                     onSearch={setClientSearch}
                     isLoading={isLoadingClients}
+                  />
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="project_id"
+              render={() => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="flex items-center justify-between text-sm font-semibold">
+                    <span>Project</span>
+                    <CreateProjectShortcut form={form} name="project_id" />
+                  </FormLabel>
+
+                  <AsyncSelectFormField
+                    form={form}
+                    placeholder="Select project"
+                    name="project_id"
+                    options={
+                      projects?.map(project => ({
+                        value: project.id,
+                        label: project.name,
+                      })) ?? []
+                    }
+                    onSearch={setProjectSearch}
+                    isLoading={isLoadingProjects}
+                  />
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="point_of_sale_id"
+              render={() => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="flex items-center justify-between text-sm font-semibold">
+                    <span>Point of Sale</span>
+                    <CreatePointOfSaleShortcut
+                      form={form}
+                      name="point_of_sale_id"
+                    />
+                  </FormLabel>
+
+                  <AsyncSelectFormField
+                    form={form}
+                    placeholder="Select POS"
+                    name="point_of_sale_id"
+                    options={
+                      pointOfSales?.map(pos => ({
+                        value: pos.id,
+                        label: pos.name,
+                      })) ?? []
+                    }
+                    onSearch={setPosSearch}
+                    isLoading={isLoadingPointOfSales}
                   />
 
                   <FormMessage />

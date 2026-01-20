@@ -26,18 +26,18 @@ export const UsersColumns: ColumnDef<TUserDTO>[] = [
 
       const roleBadgeColor =
         USER_ROLES[role] === USER_ROLES.SUPER_ADMIN
-          ? "bg-green-50 border-green-500 text-green-500 dark:bg-green-900 dark:border-green-900 dark:text-green-500"
+          ? "bg-green-50 border-green-500 text-black dark:bg-green-900 dark:border-green-900 dark:text-white"
           : USER_ROLES[role] === USER_ROLES.ADMIN
-          ? "bg-blue-50 border-blue-500 text-blue-500 dark:bg-blue-900 dark:border-blue-900 dark:text-blue-500"
-          : USER_ROLES[role] === USER_ROLES.SALESMAN
-          ? "bg-orange-50 border-orange-500 text-orange-500 dark:bg-orange-900 dark:border-orange-900 dark:text-orange-500"
-          : USER_ROLES[role] === USER_ROLES.ACCOUNTANT
-          ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-900 dark:border-red-900 dark:text-red-500"
-          : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
+            ? "bg-blue-50 border-blue-500 text-black dark:bg-blue-900 dark:border-blue-900 dark:text-white"
+            : USER_ROLES[role] === USER_ROLES.SALESMAN
+              ? "bg-orange-50 border-orange-500 text-black dark:bg-orange-900 dark:border-orange-900 dark:text-white"
+              : USER_ROLES[role] === USER_ROLES.ACCOUNTANT
+                ? "bg-red-50 border-red-500 text-black dark:bg-red-900 dark:border-red-900 dark:text-white"
+                : "bg-secondary border-secondary text-black dark:bg-secondary-900 dark:border-secondary-900 dark:text-white";
 
       return (
         <Badge className={`${roleBadgeColor} capitalize`}>
-          {role.split("_").join(" ").toLowerCase()}
+          {role.split("_").join(" ").toUpperCase()}
         </Badge>
       );
     },
@@ -51,16 +51,16 @@ export const UsersColumns: ColumnDef<TUserDTO>[] = [
 
       const statusBadgeColor =
         USER_STATUS[status] === USER_STATUS.ACTIVE
-          ? "bg-green-50 border-green-500 text-green-500 dark:bg-green-900 dark:border-green-900 dark:text-green-500"
+          ? "bg-green-50 border-green-500 text-black dark:bg-green-900 dark:border-green-900 dark:text-white"
           : USER_STATUS[status] === USER_STATUS.PENDING
-          ? "bg-yellow-50 border-yellow-500 text-yellow-500 dark:bg-yellow-900 dark:border-yellow-900 dark:text-yellow-500"
-          : USER_STATUS[status] === USER_STATUS.BLOCKED
-          ? "bg-blue-50 border-blue-500 text-blue-500 dark:bg-blue-900 dark:border-blue-900 dark:text-blue-500"
-          : USER_STATUS[status] === USER_STATUS.DISABLED
-          ? "bg-orange-50 border-orange-500 text-orange-500 dark:bg-orange-900 dark:border-orange-900 dark:text-orange-500"
-          : USER_STATUS[status] === USER_STATUS.DELETED
-          ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-900 dark:border-red-900 dark:text-red-500"
-          : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
+            ? "bg-yellow-50 border-yellow-500 text-black dark:bg-yellow-900 dark:border-yellow-900 dark:text-white"
+            : USER_STATUS[status] === USER_STATUS.BLOCKED
+              ? "bg-blue-50 border-blue-500 text-black dark:bg-blue-900 dark:border-blue-900 dark:text-white"
+              : USER_STATUS[status] === USER_STATUS.DISABLED
+                ? "bg-orange-50 border-orange-500 text-black dark:bg-orange-900 dark:border-orange-900 dark:text-white"
+                : USER_STATUS[status] === USER_STATUS.DELETED
+                  ? "bg-red-50 border-red-500 text-black dark:bg-red-900 dark:border-red-900 dark:text-white"
+                  : "bg-secondary border-secondary text-black dark:bg-secondary-900 dark:border-secondary-900 dark:text-white";
 
       return <Badge className={statusBadgeColor}>{status}</Badge>;
     },

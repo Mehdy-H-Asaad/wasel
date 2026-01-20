@@ -19,15 +19,15 @@ export const IssueInvoiceDialog = ({ onIssueInvoice, isLoading, dialogTriggerTex
                 <DialogHeader>
                     <DialogTitle>{dialogTriggerText}</DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to issue this invoice?
+                        Are you sure you want to {dialogTriggerText.toLowerCase()}?
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <Button variant="outline" className="w-fit justify-center items-center cursor-pointer" onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
-                    <MainButton className="w-fit justify-center items-center cursor-pointer" isLoading={isLoading} loadingText="Issuing Invoice" onClick={() => onIssueInvoice()}>
-                        Issue Invoice
+                    <MainButton className="w-fit justify-center items-center cursor-pointer" isLoading={isLoading} loadingText={`${dialogTriggerText.toLowerCase()} Invoice`} onClick={() => onIssueInvoice()}>
+                        {dialogTriggerText}
                     </MainButton>
                 </DialogFooter>
             </DialogContent>

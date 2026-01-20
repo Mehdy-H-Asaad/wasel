@@ -26,6 +26,7 @@ export function NavMain({
   items: {
     title: string;
     url?: string;
+    shortCutLink?: string;
     icon?: LucideIcon;
     isActive?: boolean;
     canAddShortcut?: boolean;
@@ -65,11 +66,15 @@ export function NavMain({
                   <Link
                     href={item.url}
                     className={cn(
-                      pathname === item.url && "bg-main-green text-white"
+                      pathname === item.url && "bg-main-green text-white w-full flex items-center justify-between"
                     )}
                   >
-                    {item.icon && <item.icon />}
-                    <span className="text-base font-medium">{item.title}</span>
+                    <span className="text-sm font-medium flex items-center gap-2 flex-1">{item.icon && <item.icon size={16} />} <span className="text-base font-medium">{item.title}</span></span>
+                    {item.canAddShortcut && <Plus className="h-4 w-4 cursor-pointer" onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      router.push(item.shortCutLink ?? "");
+                    }} />}
                   </Link>
                 </SidebarMenuButton>
               ) : (
@@ -80,7 +85,7 @@ export function NavMain({
                     )}
                   >
                     {item.icon && <item.icon />}
-                    <span className="text-base font-medium">{item.title}</span>
+                    <span className="text-base font-medium">{item.title} </span>
                   </div>
                 </SidebarMenuButton>
               )}

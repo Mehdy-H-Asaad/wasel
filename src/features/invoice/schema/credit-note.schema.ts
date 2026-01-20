@@ -13,6 +13,8 @@ export const creditNoteSchema = invoiceSchema(true).pick({
   discount_amount: true,
   actual_delivery_date: true,
   payment_means_code: true,
+  project_id: true,
+  point_of_sale_id: true,
   note: true,
   original_invoice_id: true,
   status: true,

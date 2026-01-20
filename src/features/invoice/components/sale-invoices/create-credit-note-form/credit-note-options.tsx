@@ -2,7 +2,6 @@ import { PAYMENTS_TYPES } from "@/features/invoice/constants/invoice.constants";
 import { TCreateCreditNoteDTO } from "@/features/invoice/schema/credit-note.schema";
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { useGetClients } from "@/features/clients/hooks/useGetClients";
 import { Receipt } from "lucide-react";
 import {
 	Card,
@@ -11,28 +10,28 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { useGetSinglePointOfSale } from "@/features/point-of-sale/hooks/use-get-single-point-of-sale";
+import { useGetSingleClient } from "@/features/clients/hooks/use-get-single-client";
+import { useGetSingleProject } from "@/features/project/hooks/use-get-single-project";
 
 export const CreditNoteOptions = () => {
 	const form = useFormContext<TCreateCreditNoteDTO>();
 
 	// Watch form values for display
 	const customerId = form.watch("customer_id");
+	const projectId = form.watch("project_id");
+	const pointOfSaleId = form.watch("point_of_sale_id");
 	const paymentMeansCode = form.watch("payment_means_code");
 	const pricesIncludeTax = form.watch("prices_include_tax");
 	const actualDeliveryDate = form.watch("actual_delivery_date");
 	const note = form.watch("note");
 
-	// Get client data for display
-	const { clients } = useGetClients({
-		filters: {
-			limit: 30,
-			page: 1,
-		},
-	});
 
-	// Find selected client name
-	const selectedClient = clients?.find(client => client.id === customerId);
-	const clientName = selectedClient?.registration_name || "Not selected";
+
+	const { project } = useGetSingleProject(projectId ?? 0);
+	const { pointOfSale } = useGetSinglePointOfSale(pointOfSaleId ?? 0);
+	const { client } = useGetSingleClient({ id: customerId?.toString() ?? "" });
+
 
 	// Find selected payment method
 	const selectedPayment = PAYMENTS_TYPES.find(
@@ -90,9 +89,24 @@ export const CreditNoteOptions = () => {
 							<label className="text-sm font-semibold text-muted-foreground">
 								Client - Company
 							</label>
-							<p className="text-base font-medium">{clientName}</p>
+							<p className="text-base font-medium">{client?.registration_name}</p>
 						</div>
 
+						{/* Project */}
+						<div className="flex flex-col space-y-2">
+							<label className="text-sm font-semibold text-muted-foreground">
+								Project
+							</label>
+							<p className="text-base font-medium">{project?.name}</p>
+						</div>
+
+						{/* Point of Sale */}
+						<div className="flex flex-col space-y-2">
+							<label className="text-sm font-semibold text-muted-foreground">
+								Point of Sale
+							</label>
+							<p className="text-base font-medium">{pointOfSale?.name}</p>
+						</div>
 						{/* Payment Method */}
 						<div className="flex flex-col space-y-2">
 							<label className="text-sm font-semibold text-muted-foreground">

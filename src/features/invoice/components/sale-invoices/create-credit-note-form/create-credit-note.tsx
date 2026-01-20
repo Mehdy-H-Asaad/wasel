@@ -34,6 +34,8 @@ export const CreateCreditNote = () => {
 				original_invoice_id: originalInvoiceId,
 				discount_amount: Number(invoice.discount_amount),
 				customer_id: invoice.customer?.id,
+				project_id: invoice.project?.id,
+				point_of_sale_id: invoice.point_of_sale?.id,
 				invoice_lines: invoice.invoice_lines.map(line => ({
 					...line,
 					price_discount: Number(line.price_discount),

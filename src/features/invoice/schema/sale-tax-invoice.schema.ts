@@ -19,6 +19,8 @@ export const saleTaxInvoiceSchema = invoiceSchema(true).pick({
   prices_include_tax: true,
   status: true,
   tax_authority_status: true,
+  project_id: true,
+  point_of_sale_id: true,
 });
 
 export const CreateSaleTaxInvoiceSchema = saleTaxInvoiceSchema.omit({

@@ -45,6 +45,8 @@ export const CreateTaxSaleInvoiceForm = ({
 				...invoice,
 				discount_amount: Number(invoice.discount_amount),
 				customer_id: invoice.customer?.id,
+				project_id: invoice.project?.id,
+				point_of_sale_id: invoice.point_of_sale?.id,
 				invoice_lines: invoice.invoice_lines.map(line => ({
 					...line,
 					price_discount: Number(line.price_discount),
@@ -112,7 +114,7 @@ export const CreateTaxSaleInvoiceForm = ({
 					{/* {!isPreviewing ? (
             <> */}
 					<CreateTaxSaleInvoiceOptions documentType={documentType} />
-					<InlineInvoiceLinesTable isSaleInvoice isCreditNote={false} />
+					<InlineInvoiceLinesTable isSaleInvoice isNote={false} />
 					<Card className="border-2 ">
 						<CardContent className="py-4">
 							<div className="flex items-center justify-between gap-4">

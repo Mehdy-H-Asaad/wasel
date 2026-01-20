@@ -84,6 +84,20 @@ export const SaleInvoicesColumns: ColumnDef<TInvoiceDTO>[] = [
 		header: "Issue Time",
 	},
 	{
+		accessorKey: "project",
+		header: "Project",
+		cell: ({ row }) => (
+			<div>{row.original.project?.name}</div>
+		),
+	},
+	{
+		accessorKey: "point_of_sale",
+		header: "Point of Sale",
+		cell: ({ row }) => (
+			<div>{row.original.point_of_sale?.name}</div>
+		),
+	},
+	{
 		accessorKey: "party_identification_scheme",
 		header: "Client Identification",
 		cell: ({ row }) =>

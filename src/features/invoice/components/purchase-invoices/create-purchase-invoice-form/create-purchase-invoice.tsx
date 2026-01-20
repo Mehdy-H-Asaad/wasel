@@ -95,7 +95,7 @@ export const CreatePurchaseInvoice = ({
 					{/* {!isPreviewing ? (
             <> */}
 					<CreatePurchaseInvoiceOptions />
-					<InlineInvoiceLinesTable isSaleInvoice={false} isCreditNote={false} />
+					<InlineInvoiceLinesTable isSaleInvoice={false} isNote={false} />
 					<Card className="border-2 ">
 						<CardContent className="py-4">
 							<div className="flex items-center justify-between gap-4">
