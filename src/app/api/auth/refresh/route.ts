@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     });
 
     return res;
-  } catch (error) {
+  } catch {
     const response = NextResponse.redirect(new URL("/login", request.url));
     response.cookies.delete("access_token");
     response.cookies.delete("refresh_token");

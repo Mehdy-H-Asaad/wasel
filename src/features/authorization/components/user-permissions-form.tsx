@@ -22,7 +22,6 @@ import {
   UpdateUserPermissionsSchema,
   TUpdateUserPermissions,
   PERMISSION_RESOURCE,
-  PERMISSION_ACTION,
   createPermissionString,
 } from "../schema/permission.schema";
 import {
