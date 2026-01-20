@@ -65,7 +65,10 @@ export function LoginForm({
 									name="password"
 									render={({ field }) => (
 										<FormItem className="grid gap-3">
-											<FormLabel>Password</FormLabel>
+											<div className="flex items-center justify-between">
+												<FormLabel>Password</FormLabel>
+												<Link href="/forgot-password" className="text-sm text-gray-400 hover:text-gray-200 focus:outline-none underline">Forgot Password?</Link>
+											</div>
 											<FormControl>
 												<div className="relative">
 													<Input

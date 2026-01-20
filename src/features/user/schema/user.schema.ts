@@ -39,6 +39,7 @@ export const UserSchema = z.object({
   ]),
   type: z.string().min(1, "Required"),
   last_login: z.string().nullable(),
+  permissions: z.array(z.string()),
 });
 export type TUserDTO = z.infer<typeof UserSchema>;
 

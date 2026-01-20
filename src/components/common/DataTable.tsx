@@ -62,8 +62,8 @@ export function DataTable<TData, TValue>({
   setSearchableField,
   filters,
 }: // pagination: paginationProp,
-// onPaginationChange,
-DataTableProps<TData, TValue>) {
+  // onPaginationChange,
+  DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -187,9 +187,9 @@ DataTableProps<TData, TValue>) {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -202,11 +202,11 @@ DataTableProps<TData, TValue>) {
                       className="border-b border-border/30 hover:bg-muted/30 transition-colors duration-150"
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      // style={{
-                      //   animationDelay: `${index * 0.05}s`,
-                      //   animation: "fadeIn 0.3s ease-in-out forwards",
-                      //   opacity: 0,
-                      // }}
+                    // style={{
+                    //   animationDelay: `${index * 0.05}s`,
+                    //   animation: "fadeIn 0.3s ease-in-out forwards",
+                    //   opacity: 0,
+                    // }}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell className="py-4 px-4" key={cell.id}>

@@ -4,6 +4,19 @@
 @custom-variant dark (&:is(.dark *));
 @custom-variant dark (&:is(.dark *));
 
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #504f4f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #504f4f;
+}
+
 @theme colors {
   --color-main-green: #006239;
   --color-secondary-green: #003d23;

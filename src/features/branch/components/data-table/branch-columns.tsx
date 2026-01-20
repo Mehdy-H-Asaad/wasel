@@ -10,6 +10,13 @@ import { Badge } from "@/components/ui/badge";
 
 export const BranchColumns: ColumnDef<TBranchDTO>[] = [
   {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return <BranchActionsCell row={row} />;
+    },
+  },
+  {
     accessorKey: "name",
     header: "Branch Name",
   },
@@ -22,10 +29,10 @@ export const BranchColumns: ColumnDef<TBranchDTO>[] = [
         status === BranchStatus.COMPLETED
           ? "bg-green-50 border-green-500 text-green-500 dark:bg-green-900 dark:border-green-900 dark:text-green-500"
           : status === BranchStatus.PENDING
-          ? "bg-yellow-50 border-yellow-500 text-yellow-500 dark:bg-yellow-900 dark:border-yellow-900 dark:text-yellow-500"
-          : status === BranchStatus.DELETED
-          ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-900 dark:border-red-900 dark:text-red-500"
-          : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
+            ? "bg-blue-50 border-blue-500 text-blue-500 dark:bg-blue-900 dark:border-blue-900 dark:text-blue-500"
+            : status === BranchStatus.DELETED
+              ? "bg-red-50 border-red-500 text-red-500 dark:bg-red-900 dark:border-red-900 dark:text-red-500"
+              : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
       return (
         <Badge className={statusBadgeColor}>
           {row.original.status.split("_").join(" ")}
@@ -42,10 +49,10 @@ export const BranchColumns: ColumnDef<TBranchDTO>[] = [
         taxIntegrationStatus === TaxIntegrationStatus.COMPLETED
           ? "bg-green-50 border-green-500 text-green-500 dark:bg-green-900 dark:border-green-900 dark:text-green-500"
           : taxIntegrationStatus === TaxIntegrationStatus.NOT_STARTED
-          ? "bg-yellow-50 border-yellow-500 text-yellow-500 dark:bg-yellow-900 dark:border-yellow-900 dark:text-yellow-500"
-          : taxIntegrationStatus === TaxIntegrationStatus.PENDING_OTP
-          ? "bg-blue-50 border-blue-500 text-blue-500 dark:bg-blue-900 dark:border-blue-900 dark:text-blue-500"
-          : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
+            ? "bg-yellow-50 border-yellow-500 text-yellow-500 dark:bg-yellow-900 dark:border-yellow-900 dark:text-yellow-500"
+            : taxIntegrationStatus === TaxIntegrationStatus.PENDING_OTP
+              ? "bg-blue-50 border-blue-500 text-blue-500 dark:bg-blue-900 dark:border-blue-900 dark:text-blue-500"
+              : "bg-secondary border-secondary text-secondary dark:bg-secondary-900 dark:border-secondary-900 dark:text-secondary";
       return (
         <Badge className={taxIntegrationStatusBadgeColor}>
           {taxIntegrationStatus.split("_").join(" ")}
@@ -82,11 +89,5 @@ export const BranchColumns: ColumnDef<TBranchDTO>[] = [
     header: "Address",
   },
 
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      return <BranchActionsCell row={row} />;
-    },
-  },
+
 ];

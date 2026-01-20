@@ -1,5 +1,5 @@
 "use client";
-import { TBranchDTO } from "../../../schema/branch.schema";
+import { TaxIntegrationStatus, TBranchDTO } from "../../../schema/branch.schema";
 import { useDeleteBranch } from "../../../hooks/use-delete-branch";
 import {
   DropdownMenu,
@@ -18,6 +18,8 @@ export const BranchActionsCell = ({ row }: { row: Row<TBranchDTO> }) => {
   const branch = row.original;
   const { deleteBranch, isDeletingBranch } = useDeleteBranch(branch.id);
 
+  const TaxAuthorityDataRedirectLink = branch.tax_integration_status === TaxIntegrationStatus.NOT_STARTED ? `/admin/inventory/branches/tax-authority-data/${branch.id}` : `/tax-authority-data/otp/${branch.id}`;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,6 +33,13 @@ export const BranchActionsCell = ({ row }: { row: Row<TBranchDTO> }) => {
         <DropdownMenuSeparator />
 
         <div className="flex flex-col gap-2">
+          {branch.tax_integration_status !== TaxIntegrationStatus.COMPLETED && (
+            <Link href={TaxAuthorityDataRedirectLink}>
+              <Button variant="outline" className="w-full justify-start">
+                ZATCA Phase 2
+              </Button>
+            </Link>
+          )}
           <Link href={`/admin/inventory/branches/update-branch/${branch.id}`}>
             <Button variant="outline" className="w-full justify-start">
               Update Branch
@@ -43,6 +52,6 @@ export const BranchActionsCell = ({ row }: { row: Row<TBranchDTO> }) => {
           />
         </div>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu >
   );
 };
