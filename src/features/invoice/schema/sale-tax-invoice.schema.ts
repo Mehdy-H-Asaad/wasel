@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { invoiceSchema } from "./invoice.schema";
+import { EINVOICE_STATUS, invoiceSchema } from "./invoice.schema";
 // import { NO_TAX_RATE, TAX_RATE } from "../constants/invoice.constants";
 
 export const saleTaxInvoiceSchema = invoiceSchema(true).pick({
@@ -32,8 +32,14 @@ export const UpdateSaleInvoiceSchema = saleTaxInvoiceSchema.omit({
   id: true,
   tax_authority_status: true,
 });
+
+export const UpdateSaleInvoiceStatusSchema = z.object({
+  status: z.enum([EINVOICE_STATUS.DRAFT,EINVOICE_STATUS.ISSUED]),
+  send_to_tax_authority: z.boolean(),
+});
 export type TCreateSaleTaxInvoiceDTO = z.infer<
   typeof CreateSaleTaxInvoiceSchema
 >;
 export type TUpdateSaleInvoiceDTO = z.infer<typeof UpdateSaleInvoiceSchema>;
 export type TSaleTaxInvoiceDTO = z.infer<typeof saleTaxInvoiceSchema>;
+export type TUpdateSaleInvoiceStatusDTO = z.infer<typeof UpdateSaleInvoiceStatusSchema>;

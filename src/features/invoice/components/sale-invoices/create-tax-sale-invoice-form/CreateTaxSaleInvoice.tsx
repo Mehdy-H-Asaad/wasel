@@ -92,6 +92,7 @@ export const CreateTaxSaleInvoiceForm = ({
 	//   }
 	// };
 
+	console.log(CreateSaleTaxInvoiceForm.getValues());
 	return (
 		<div className=" space-y-6">
 			<Form

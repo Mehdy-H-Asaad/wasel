@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { TCreateSaleTaxInvoiceDTO } from "@/features/invoice/schema/sale-tax-invoice.schema";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -53,6 +53,11 @@ export const InvoiceLineRow = ({
 		name: `invoice_lines.${index}.classified_tax_category`,
 	});
 
+	const itemId = useWatch({
+		control: form.control,
+		name: `invoice_lines.${index}.item_id`,
+	});
+
 	const { stocks, isLoadingStocks } = useGetStocks({
 		filters: {
 			name: itemSearch,
@@ -60,6 +65,19 @@ export const InvoiceLineRow = ({
 			page: 1,
 		},
 	});
+
+	// Auto-populate item price when an item is selected
+	useEffect(() => {
+		if (itemId && stocks && stocks.length > 0) {
+			const selectedStock = stocks.find(stock => stock.id.toString() === itemId.toString());
+			if (selectedStock) {
+				form.setValue(
+					`invoice_lines.${index}.item_price`,
+					Number(selectedStock.default_sale_price),
+				);
+			}
+		}
+	}, [itemId, stocks, form, index]);
 
 	const showTaxExemption =
 		classifiedTaxCategory === "Z" ||
@@ -149,6 +167,7 @@ export const InvoiceLineRow = ({
 							<CreateStockShortcut
 								form={form}
 								name={`invoice_lines.${index}.item_id`}
+								onStockCreated={() => setItemSearch("")}
 							/>
 							<FormMessage />
 						</FormItem>

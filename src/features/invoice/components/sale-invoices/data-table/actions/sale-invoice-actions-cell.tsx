@@ -16,6 +16,8 @@ import { useDeleteSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-
 import { IssueInvoiceDialog } from "./issue-invoice-dialog";
 import { useIssueSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-issue-sale-invoice";
 import { useConvertToSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-convert-to-sale-invoice";
+import { UpdateSaleInvoiceStatus } from "./update-sale-invoice-status";
+import { useUpdateSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-update-sale-invoice";
 // import { useUpdateSaleInvoice } from "@/features/invoice/hooks/sale-invoice/use-update-sale-invoice";
 
 export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
@@ -23,9 +25,10 @@ export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
 
 
 	// const { onUpdateSaleInvoice, isUpdatingSaleInvoice } = useUpdateSaleInvoice({ invoiceId: String(invoice.id), documentType: invoice.document_type as "INVOICE" | "QUOTATION" })
-	const { onIssueSaleInvoice, isIssuingSaleInvoice } = useIssueSaleInvoice({ invoiceId: String(invoice.id) });
+	const { onUpdateSaleInvoice, isUpdatingSaleInvoice } = useUpdateSaleInvoice({ invoiceId: String(invoice.id), documentType: invoice.document_type as "INVOICE" | "QUOTATION" })
 	const { onDeleteSaleInvoice, isDeletingSaleInvoice } = useDeleteSaleInvoice({ id: invoice.id });
 	const { onConvertToSaleInvoice, isConvertingToSaleInvoice } = useConvertToSaleInvoice({ invoiceId: String(invoice.id) });
+	const { onIssueSaleInvoice, isIssuingSaleInvoice } = useIssueSaleInvoice({ invoiceId: String(invoice.id) });
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -60,8 +63,11 @@ export const SaleInvoiceActionCell = ({ row }: { row: Row<TInvoiceDTO> }) => {
 					)}
 					{invoice.status === EINVOICE_STATUS.DRAFT && (
 						invoice.document_type === "INVOICE" && (
-							<IssueInvoiceDialog onIssueInvoice={onIssueSaleInvoice} isLoading={isIssuingSaleInvoice} dialogTriggerText="Issue Invoice" />
+							<IssueInvoiceDialog onIssueInvoice={() => onUpdateSaleInvoice({ status: EINVOICE_STATUS.ISSUED })} isLoading={isUpdatingSaleInvoice} dialogTriggerText="Issue Invoice" />
 						)
+					)}
+					{invoice.status !== EINVOICE_STATUS.ISSUED && invoice.document_type === "INVOICE" && (
+						<UpdateSaleInvoiceStatus invoice={invoice} />
 					)}
 					{invoice.status !== EINVOICE_STATUS.DRAFT &&
 						<Link

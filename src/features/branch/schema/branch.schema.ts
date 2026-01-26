@@ -72,6 +72,7 @@ export const BranchSchema = z.object({
 
 export const CreateBranchSchema = BranchSchema.omit({
   id: true,
+  tax_authority_data: true,
   tax_integration_status: true,
 });
 

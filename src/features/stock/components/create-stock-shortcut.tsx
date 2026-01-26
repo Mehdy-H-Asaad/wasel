@@ -45,11 +45,13 @@ import { Separator } from "@/components/ui/separator";
 type TCreateStockShortcutProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
   name: Path<T>;
+  onStockCreated?: () => void;
 };
 
 export const CreateStockShortcut = <T extends FieldValues>({
   form,
   name,
+  onStockCreated,
 }: TCreateStockShortcutProps<T>) => {
   const {
     stock,
@@ -67,6 +69,8 @@ export const CreateStockShortcut = <T extends FieldValues>({
         shouldDirty: true,
         shouldValidate: true,
       });
+      // Call the callback to clear search filter and refetch stocks
+      onStockCreated?.();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stock]);

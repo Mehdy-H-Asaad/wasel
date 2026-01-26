@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   const AppDomain = new URL(request.url);
   const redirectPath = AppDomain.searchParams.get("redirect") ?? "/admin";
   const cookieStore = await cookies();
@@ -14,7 +14,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`;
+    // Server-side calls need to use the actual backend URL, not the proxied one
+    // The rewrite in next.config.ts only works for client-side requests
+    const backendUrl = process.env.BACKEND_API_URL || "https://wasel-black.vercel.app/api/v1";
+    const apiUrl = `${backendUrl}/auth/refresh`;
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
